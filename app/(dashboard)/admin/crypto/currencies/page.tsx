@@ -44,6 +44,8 @@ interface CryptoCurrency {
   minWithdraw: string
   withdrawFee: string
   maxWithdrawFee: string
+  feePercentage: string
+  gasEnabled: boolean
   depositEnabled: boolean
   withdrawEnabled: boolean
   visible: boolean
@@ -52,20 +54,28 @@ interface CryptoCurrency {
   logoUrl?: string
 }
 
+const ALL_NETWORKS = ['TRC20', 'ERC20', 'BSC', 'Polygon', 'Solana', 'Bitcoin', 'Ethereum', 'Arbitrum', 'Optimism', 'Dogecoin', 'Ripple']
+
 export default function DepositWithdrawalCurrenciesPage() {
   const { searchInput, setSearchInput, searchTerm } = useDeferredSearch()
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency | null>(null)
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
   const [showAddDialog, setShowAddDialog] = useState(false)
+  const [showFeeDialog, setShowFeeDialog] = useState(false)
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
   const [categoryTab, setCategoryTab] = useState("all")
   const [networkTab, setNetworkTab] = useState("all")
   const logoInputRef = useRef<HTMLInputElement>(null)
   const [editingMinWithdraw, setEditingMinWithdraw] = useState<string | null>(null)
-  const [editingWithdrawFee, setEditingWithdrawFee] = useState<string | null>(null)
   const [tempMinWithdraw, setTempMinWithdraw] = useState("")
-  const [tempWithdrawFee, setTempWithdrawFee] = useState("")
+  const [editingNetworks, setEditingNetworks] = useState<string[]>([])
+  const [editingFee, setEditingFee] = useState({
+    minFee: "",
+    maxFee: "",
+    feePercentage: "",
+    gasEnabled: false
+  })
   const [newCurrency, setNewCurrency] = useState<Partial<CryptoCurrency>>({
     name: "",
     symbol: "",
@@ -75,6 +85,8 @@ export default function DepositWithdrawalCurrenciesPage() {
     minWithdraw: "",
     withdrawFee: "",
     maxWithdrawFee: "",
+    feePercentage: "0",
+    gasEnabled: false,
     depositEnabled: true,
     withdrawEnabled: true,
     visible: true,
@@ -116,6 +128,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '20.00',
       withdrawFee: '1.00',
       maxWithdrawFee: '50.00',
+      feePercentage: '0.1',
+      gasEnabled: true,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -132,6 +146,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '0.001',
       withdrawFee: '0.0005',
       maxWithdrawFee: '0.01',
+      feePercentage: '0.05',
+      gasEnabled: true,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -148,6 +164,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '0.02',
       withdrawFee: '0.005',
       maxWithdrawFee: '0.05',
+      feePercentage: '0.1',
+      gasEnabled: true,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -164,6 +182,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '0.02',
       withdrawFee: '0.001',
       maxWithdrawFee: '0.01',
+      feePercentage: '0.08',
+      gasEnabled: false,
       depositEnabled: true,
       withdrawEnabled: false,
       visible: true,
@@ -180,6 +200,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '20.00',
       withdrawFee: '1.00',
       maxWithdrawFee: '50.00',
+      feePercentage: '0.1',
+      gasEnabled: true,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -196,6 +218,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '0.2',
       withdrawFee: '0.01',
       maxWithdrawFee: '0.1',
+      feePercentage: '0.05',
+      gasEnabled: false,
       depositEnabled: false,
       withdrawEnabled: false,
       visible: false,
@@ -212,6 +236,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '20',
       withdrawFee: '5',
       maxWithdrawFee: '50',
+      feePercentage: '0.2',
+      gasEnabled: false,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -228,6 +254,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '2000000',
       withdrawFee: '500000',
       maxWithdrawFee: '5000000',
+      feePercentage: '0.15',
+      gasEnabled: true,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -244,6 +272,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: '20',
       withdrawFee: '0.5',
       maxWithdrawFee: '5',
+      feePercentage: '0.1',
+      gasEnabled: false,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -362,7 +392,67 @@ export default function DepositWithdrawalCurrenciesPage() {
 
   const handleViewNetworks = (currency: CryptoCurrency) => {
     setSelectedCurrency(currency)
+    setEditingNetworks([...currency.networks])
     setShowNetworksDialog(true)
+  }
+
+  const handleEditFee = (currency: CryptoCurrency) => {
+    setSelectedCurrency(currency)
+    setEditingFee({
+      minFee: currency.withdrawFee,
+      maxFee: currency.maxWithdrawFee,
+      feePercentage: currency.feePercentage,
+      gasEnabled: currency.gasEnabled
+    })
+    setShowFeeDialog(true)
+  }
+
+  const handleSaveFee = () => {
+    if (!selectedCurrency) return
+    
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === selectedCurrency.id) {
+        return {
+          ...currency,
+          withdrawFee: editingFee.minFee,
+          maxWithdrawFee: editingFee.maxFee,
+          feePercentage: editingFee.feePercentage,
+          gasEnabled: editingFee.gasEnabled
+        }
+      }
+      return currency
+    }))
+    
+    toast.success("手续费配置已保存", {
+      description: `${selectedCurrency.symbol} 的手续费配置已成功更新`,
+    })
+    setShowFeeDialog(false)
+  }
+
+  const handleSaveNetworks = () => {
+    if (!selectedCurrency) return
+    
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === selectedCurrency.id) {
+        return { ...currency, networks: editingNetworks }
+      }
+      return currency
+    }))
+    
+    toast.success("网络配置已保存", {
+      description: `${selectedCurrency.symbol} 的支持网络已成功更新`,
+    })
+    setShowNetworksDialog(false)
+  }
+
+  const toggleNetwork = (network: string) => {
+    setEditingNetworks(prev => {
+      if (prev.includes(network)) {
+        return prev.filter(n => n !== network)
+      } else {
+        return [...prev, network]
+      }
+    })
   }
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -425,19 +515,6 @@ export default function DepositWithdrawalCurrenciesPage() {
     setEditingMinWithdraw(null)
   }
 
-  const saveWithdrawFee = (id: string) => {
-    setCurrencies(prev => prev.map(currency => {
-      if (currency.id === id) {
-        toast.success("提现手续费已更新", {
-          description: `${currency.symbol} 提现手续费已更新为 ${tempWithdrawFee}`,
-        })
-        return { ...currency, withdrawFee: tempWithdrawFee }
-      }
-      return currency
-    }))
-    setEditingWithdrawFee(null)
-  }
-
   const handleAddCurrency = () => {
     if (!newCurrency.name || !newCurrency.symbol) {
       toast.error("请填写完整信息", { description: "币种名称和代码为必填项" })
@@ -454,6 +531,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: newCurrency.minWithdraw || "0",
       withdrawFee: newCurrency.withdrawFee || "0",
       maxWithdrawFee: newCurrency.maxWithdrawFee || "0",
+      feePercentage: newCurrency.feePercentage || "0",
+      gasEnabled: newCurrency.gasEnabled ?? false,
       depositEnabled: newCurrency.depositEnabled ?? true,
       withdrawEnabled: newCurrency.withdrawEnabled ?? true,
       visible: newCurrency.visible ?? true,
@@ -472,6 +551,8 @@ export default function DepositWithdrawalCurrenciesPage() {
       minWithdraw: "",
       withdrawFee: "",
       maxWithdrawFee: "",
+      feePercentage: "0",
+      gasEnabled: false,
       depositEnabled: true,
       withdrawEnabled: true,
       visible: true,
@@ -682,50 +763,20 @@ export default function DepositWithdrawalCurrenciesPage() {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {editingWithdrawFee === currency.id ? (
+                    <button
+                      onClick={() => handleEditFee(currency)}
+                      className="flex flex-col items-start text-left cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 group"
+                    >
                       <div className="flex items-center gap-1">
-                        <Input
-                          type="text"
-                          value={tempWithdrawFee}
-                          onChange={(e) => setTempWithdrawFee(e.target.value)}
-                          className="w-24 h-7 text-sm"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') saveWithdrawFee(currency.id)
-                            if (e.key === 'Escape') setEditingWithdrawFee(null)
-                          }}
-                          autoFocus
-                        />
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
-                          onClick={() => saveWithdrawFee(currency.id)}
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
-                          onClick={() => setEditingWithdrawFee(null)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div
-                        className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
-                        onClick={() => {
-                          setEditingWithdrawFee(currency.id)
-                          setTempWithdrawFee(currency.withdrawFee)
-                        }}
-                      >
                         <span className="text-gray-900 dark:text-white font-medium">
-                          {currency.withdrawFee}
+                          {currency.withdrawFee} - {currency.maxWithdrawFee}
                         </span>
-                        <Edit2 className="h-3 w-3 text-gray-400" />
+                        <Edit2 className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
-                    )}
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {currency.feePercentage}% {currency.gasEnabled && <span className="text-green-600 dark:text-green-400">· Gas开</span>}
+                      </div>
+                    </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Switch
@@ -953,30 +1004,127 @@ export default function DepositWithdrawalCurrenciesPage() {
 
       {/* 网络列表对话框 */}
       <Dialog open={showNetworksDialog} onOpenChange={setShowNetworksDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>{selectedCurrency?.symbol} 支持的网络</DialogTitle>
             <DialogDescription>
-              查看和管理 {selectedCurrency?.name} 支持的区块链网络
+              选择 {selectedCurrency?.name} 支持的区块链网络
             </DialogDescription>
           </DialogHeader>
 
           {selectedCurrency && (
-            <div className="space-y-2">
-              {selectedCurrency.networks.map((network, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <Network className="w-5 h-5 text-blue-500" />
-                    <span className="font-medium text-gray-900 dark:text-white">{network}</span>
+            <div className="space-y-4">
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {ALL_NETWORKS.map((network) => (
+                  <div
+                    key={network}
+                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Network className="w-5 h-5 text-blue-500" />
+                      <span className="font-medium text-gray-900 dark:text-white">{network}</span>
+                    </div>
+                    <Switch
+                      checked={editingNetworks.includes(network)}
+                      onCheckedChange={() => toggleNetwork(network)}
+                    />
                   </div>
-                  <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                    已启用
-                  </span>
+                ))}
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
+                  onClick={handleSaveNetworks}
+                >
+                  保存
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowNetworksDialog(false)}
+                >
+                  取消
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 提现手续费编辑对话框 */}
+      <Dialog open={showFeeDialog} onOpenChange={setShowFeeDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{selectedCurrency?.symbol} 提现手续费配置</DialogTitle>
+            <DialogDescription>
+              配置 {selectedCurrency?.name} 的提现手续费参数
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedCurrency && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>单笔最低手续费</Label>
+                  <Input
+                    value={editingFee.minFee}
+                    onChange={(e) => setEditingFee({ ...editingFee, minFee: e.target.value })}
+                    placeholder="0.001"
+                    className="mt-2"
+                  />
                 </div>
-              ))}
+                <div>
+                  <Label>单笔最高手续费</Label>
+                  <Input
+                    value={editingFee.maxFee}
+                    onChange={(e) => setEditingFee({ ...editingFee, maxFee: e.target.value })}
+                    placeholder="0.01"
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>百分比手续费 (%)</Label>
+                <Input
+                  value={editingFee.feePercentage}
+                  onChange={(e) => setEditingFee({ ...editingFee, feePercentage: e.target.value })}
+                  placeholder="0.1"
+                  className="mt-2"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  按提现金额的百分比收取手续费
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div>
+                  <Label className="text-base">提币Gas开关</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    开启后将额外收取网络Gas费用
+                  </p>
+                </div>
+                <Switch
+                  checked={editingFee.gasEnabled}
+                  onCheckedChange={(checked) => setEditingFee({ ...editingFee, gasEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
+                  onClick={handleSaveFee}
+                >
+                  保存
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowFeeDialog(false)}
+                >
+                  取消
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>
