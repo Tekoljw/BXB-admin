@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect, useRef } from "react"
-import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays } from "lucide-react"
+import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays, Search } from "lucide-react"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
 import { Button } from "@/components/ui/button"
@@ -99,7 +99,7 @@ const mockMarkets: SpotMarket[] = [
 
 export default function SpotMarketManagementPage() {
   const [markets, setMarkets] = useState<SpotMarket[]>(mockMarkets)
-  const [marketFilter, setMarketFilter] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditSheet, setShowEditSheet] = useState(false)
@@ -132,14 +132,17 @@ export default function SpotMarketManagementPage() {
 
   const filteredMarkets = useMemo(() => {
     return markets.filter(market => {
-      const matchesMarket = marketFilter === "all" || market.quoteCurrency === marketFilter
+      const matchesSearch = !searchQuery || 
+        market.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        market.baseCurrency.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        market.quoteCurrency.toLowerCase().includes(searchQuery.toLowerCase())
       const matchesStatus = statusFilter === "all" || market.tradingStatus === statusFilter
-      return matchesMarket && matchesStatus
+      return matchesSearch && matchesStatus
     })
-  }, [markets, marketFilter, statusFilter])
+  }, [markets, searchQuery, statusFilter])
 
   const handleReset = () => {
-    setMarketFilter("all")
+    setSearchQuery("")
     setStatusFilter("all")
   }
 
@@ -341,34 +344,23 @@ export default function SpotMarketManagementPage() {
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">市场</Label>
-            <Select value={marketFilter} onValueChange={setMarketFilter}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="请选择" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部</SelectItem>
-                {quoteCurrencies.map(currency => (
-                  <SelectItem key={currency} value={currency}>{currency}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input 
+              placeholder="搜索市场名称、币种..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-[240px]"
+            />
           </div>
 
-          <div className="flex items-center gap-2">
-            <Label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">开盘状态</Label>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="请选择" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">全部</SelectItem>
-                <SelectItem value="open">开盘</SelectItem>
-                <SelectItem value="closed">停盘</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-auto">
+            <TabsList className="h-9">
+              <TabsTrigger value="all" className="text-sm px-4">全部</TabsTrigger>
+              <TabsTrigger value="open" className="text-sm px-4">开盘</TabsTrigger>
+              <TabsTrigger value="closed" className="text-sm px-4">停盘</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           <div className="flex items-center gap-2 ml-auto">
             <Button variant="outline" onClick={handleReset}>
