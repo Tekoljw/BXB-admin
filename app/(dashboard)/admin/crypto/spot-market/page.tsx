@@ -340,11 +340,24 @@ export default function SpotMarketManagementPage() {
             管理现货交易市场、交易对和开盘配置
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            className="bg-custom-green hover:bg-custom-green-dark text-white"
+            onClick={() => setShowAddDialog(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            添加
+          </Button>
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="w-4 h-4 mr-2" />
+            导出
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-wrap items-center gap-4">
-          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-auto">
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-auto flex-shrink-0">
             <TabsList className="h-9">
               <TabsTrigger value="all" className="text-sm px-4">全部</TabsTrigger>
               <TabsTrigger value="open" className="text-sm px-4">开盘</TabsTrigger>
@@ -352,33 +365,19 @@ export default function SpotMarketManagementPage() {
             </TabsList>
           </Tabs>
 
-          <div className="flex items-center gap-2">
-            <div className="relative">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input 
                 placeholder="搜索市场名称、币种..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 w-[240px]"
+                className="pl-9 w-full"
               />
             </div>
-            <Button variant="outline" className="h-9">
+            <Button variant="outline" className="h-9 flex-shrink-0">
               <Search className="w-4 h-4 mr-2" />
               搜索
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2 ml-auto">
-            <Button 
-              className="bg-custom-green hover:bg-custom-green-dark text-white"
-              onClick={() => setShowAddDialog(true)}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              添加
-            </Button>
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="w-4 h-4 mr-2" />
-              导出
             </Button>
           </div>
         </div>
