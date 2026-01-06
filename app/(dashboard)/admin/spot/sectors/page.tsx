@@ -3,9 +3,11 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { Layers, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function SectorsManagementPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const sectors = [
     { id: 1, name: "DeFi", description: "去中心化金融", coins: 45, status: "启用" },
@@ -13,6 +15,17 @@ export default function SectorsManagementPage() {
     { id: 3, name: "Layer 1", description: "第一层区块链", coins: 18, status: "启用" },
     { id: 4, name: "Meme", description: "模因币", coins: 32, status: "启用" },
   ]
+
+  const filteredSectors = sectors.filter(sector =>
+    sector.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedSectors = filteredSectors.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredSectors.length))
+  }
 
   return (
     <SpotLayout>
@@ -59,7 +72,7 @@ export default function SectorsManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {sectors.map((sector) => (
+                {displayedSectors.map((sector) => (
                   <tr key={sector.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{sector.name}</div>
@@ -86,6 +99,12 @@ export default function SectorsManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedSectors.length}
+            totalCount={filteredSectors.length}
+            disabled={displayedSectors.length >= filteredSectors.length}
+          />
         </div>
       </div>
     </SpotLayout>

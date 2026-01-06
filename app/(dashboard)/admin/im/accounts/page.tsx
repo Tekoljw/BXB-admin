@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { Users, UserCheck, UserX, Shield } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMAccountsPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const accounts = [
     { id: 1, username: "user001", nickname: "张三", status: "在线", lastLogin: "2024-10-17 15:30:20", deviceCount: 2, role: "普通用户" },
     { id: 2, username: "user002", nickname: "李四", status: "离线", lastLogin: "2024-10-17 14:20:15", deviceCount: 1, role: "VIP用户" },
@@ -12,6 +15,13 @@ export default function IMAccountsPage() {
     { id: 4, username: "admin001", nickname: "管理员", status: "在线", lastLogin: "2024-10-17 15:50:45", deviceCount: 1, role: "管理员" },
     { id: 5, username: "user004", nickname: "赵六", status: "封禁", lastLogin: "2024-10-16 18:30:45", deviceCount: 0, role: "普通用户" },
   ]
+
+  const displayedAccounts = accounts.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, accounts.length))
+  }
 
   return (
     <IMLayout>
@@ -76,7 +86,7 @@ export default function IMAccountsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {accounts.map((account) => (
+                {displayedAccounts.map((account) => (
                   <tr key={account.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{account.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{account.username}</td>
@@ -101,6 +111,12 @@ export default function IMAccountsPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedAccounts.length}
+            totalCount={accounts.length}
+            disabled={displayedAccounts.length >= accounts.length}
+          />
         </div>
       </div>
     </IMLayout>

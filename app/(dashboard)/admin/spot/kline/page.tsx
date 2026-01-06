@@ -3,9 +3,11 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { BarChart3, Search, RefreshCw } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function KlineManagementPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const klines = [
     { id: 1, pair: "BTC/USDT", interval: "1分钟", lastUpdate: "2024-03-15 10:30:45", status: "正常" },
@@ -13,6 +15,17 @@ export default function KlineManagementPage() {
     { id: 3, pair: "BNB/USDT", interval: "1小时", lastUpdate: "2024-03-15 10:00:15", status: "正常" },
     { id: 4, pair: "ADA/USDT", interval: "1天", lastUpdate: "2024-03-15 00:00:00", status: "延迟" },
   ]
+
+  const filteredKlines = klines.filter(kline =>
+    kline.pair.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedKlines = filteredKlines.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredKlines.length))
+  }
 
   return (
     <SpotLayout>
@@ -59,7 +72,7 @@ export default function KlineManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {klines.map((kline) => (
+                {displayedKlines.map((kline) => (
                   <tr key={kline.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{kline.pair}</div>
@@ -85,6 +98,12 @@ export default function KlineManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedKlines.length}
+            totalCount={filteredKlines.length}
+            disabled={displayedKlines.length >= filteredKlines.length}
+          />
         </div>
       </div>
     </SpotLayout>

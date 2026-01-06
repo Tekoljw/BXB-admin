@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { UserPlus, Users, CheckCircle, XCircle } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMAutoJoinPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const rules = [
     { id: 1, name: "新用户自动加入", targetGroup: "新手指引群", condition: "注册后24小时内", status: "启用", joinedCount: 1234 },
     { id: 2, name: "VIP用户自动加入", targetGroup: "VIP专属群", condition: "VIP等级≥1", status: "启用", joinedCount: 567 },
@@ -12,6 +15,13 @@ export default function IMAutoJoinPage() {
     { id: 4, name: "测试规则", targetGroup: "测试群", condition: "用户ID=test", status: "禁用", joinedCount: 0 },
     { id: 5, name: "活跃用户自动加入", targetGroup: "活跃用户群", condition: "连续登录7天", status: "启用", joinedCount: 2345 },
   ]
+
+  const displayedRules = rules.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, rules.length))
+  }
 
   return (
     <IMLayout>
@@ -75,7 +85,7 @@ export default function IMAutoJoinPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {rules.map((rule) => (
+                {displayedRules.map((rule) => (
                   <tr key={rule.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{rule.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{rule.name}</td>
@@ -98,6 +108,12 @@ export default function IMAutoJoinPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedRules.length}
+            totalCount={rules.length}
+            disabled={displayedRules.length >= rules.length}
+          />
         </div>
       </div>
     </IMLayout>

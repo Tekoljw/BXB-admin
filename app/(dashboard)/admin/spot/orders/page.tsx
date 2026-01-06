@@ -3,15 +3,29 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { FileText, Search } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function OrdersManagementPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const orders = [
     { id: 1, orderId: "O2024030112345", pair: "BTC/USDT", type: "买入", price: "65,432.10", amount: "0.5", status: "未成交" },
     { id: 2, orderId: "O2024030112346", pair: "ETH/USDT", type: "卖出", price: "3,245.67", amount: "2.0", status: "部分成交" },
     { id: 3, orderId: "O2024030112347", pair: "BNB/USDT", type: "买入", price: "543.21", amount: "10", status: "已完成" },
   ]
+
+  const filteredOrders = orders.filter(order =>
+    order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.pair.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedOrders = filteredOrders.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredOrders.length))
+  }
 
   return (
     <SpotLayout>
@@ -55,7 +69,7 @@ export default function OrdersManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {orders.map((order) => (
+                {displayedOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{order.orderId}</div>
@@ -88,6 +102,12 @@ export default function OrdersManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedOrders.length}
+            totalCount={filteredOrders.length}
+            disabled={displayedOrders.length >= filteredOrders.length}
+          />
         </div>
       </div>
     </SpotLayout>

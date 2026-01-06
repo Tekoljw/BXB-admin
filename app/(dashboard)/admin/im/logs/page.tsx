@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { FileSearch, LogIn, LogOut, Settings } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMLogsPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const logs = [
     { id: 1, type: "登录", user: "user001", action: "用户登录", ip: "192.168.1.100", device: "iPhone 14", time: "2024-10-17 15:30:20" },
     { id: 2, type: "消息", user: "user002", action: "发送群消息", ip: "192.168.1.101", device: "Android", time: "2024-10-17 15:28:15" },
@@ -12,6 +15,13 @@ export default function IMLogsPage() {
     { id: 4, type: "设置", user: "user004", action: "修改昵称", ip: "192.168.1.103", device: "iPad", time: "2024-10-17 15:20:45" },
     { id: 5, type: "消息", user: "user005", action: "发送私聊消息", ip: "192.168.1.104", device: "Web", time: "2024-10-17 15:15:20" },
   ]
+
+  const displayedLogs = logs.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, logs.length))
+  }
 
   return (
     <IMLayout>
@@ -75,7 +85,7 @@ export default function IMLogsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {logs.map((log) => (
+                {displayedLogs.map((log) => (
                   <tr key={log.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{log.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -98,6 +108,12 @@ export default function IMLogsPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedLogs.length}
+            totalCount={logs.length}
+            disabled={displayedLogs.length >= logs.length}
+          />
         </div>
       </div>
     </IMLayout>

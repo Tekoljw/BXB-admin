@@ -3,15 +3,29 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { TrendingUp, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function MarketMakersPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const marketMakers = [
     { id: 1, accountId: "MM001", name: "做市账户A", balance: "1,000,000", pairs: 15, status: "活跃" },
     { id: 2, accountId: "MM002", name: "做市账户B", balance: "500,000", pairs: 8, status: "活跃" },
     { id: 3, accountId: "MM003", name: "做市账户C", balance: "750,000", pairs: 12, status: "暂停" },
   ]
+
+  const filteredMakers = marketMakers.filter(maker =>
+    maker.accountId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    maker.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedMakers = filteredMakers.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredMakers.length))
+  }
 
   return (
     <SpotLayout>
@@ -59,7 +73,7 @@ export default function MarketMakersPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {marketMakers.map((maker) => (
+                {displayedMakers.map((maker) => (
                   <tr key={maker.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{maker.accountId}</div>
@@ -91,6 +105,12 @@ export default function MarketMakersPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedMakers.length}
+            totalCount={filteredMakers.length}
+            disabled={displayedMakers.length >= filteredMakers.length}
+          />
         </div>
       </div>
     </SpotLayout>

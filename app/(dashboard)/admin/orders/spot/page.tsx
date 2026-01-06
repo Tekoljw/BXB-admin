@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import OrdersLayout from "@/components/orders-layout"
 import { ShoppingCart } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function SpotOrdersPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const orders = [
     { id: 1, pair: "BTC/USDT", type: "买入", price: "67,500.00", amount: "0.5", total: "33,750.00", time: "2024-10-17 15:30:20", status: "已成交" },
     { id: 2, pair: "ETH/USDT", type: "卖出", price: "3,200.00", amount: "2.0", total: "6,400.00", time: "2024-10-17 14:20:15", status: "已成交" },
@@ -12,6 +15,13 @@ export default function SpotOrdersPage() {
     { id: 4, pair: "SOL/USDT", type: "买入", price: "145.50", amount: "10.0", total: "1,455.00", time: "2024-10-16 18:30:45", status: "已成交" },
     { id: 5, pair: "ETH/USDT", type: "卖出", price: "3,250.00", amount: "1.5", total: "4,875.00", time: "2024-10-16 16:15:20", status: "已取消" },
   ]
+
+  const displayedOrders = orders.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, orders.length))
+  }
 
   return (
     <OrdersLayout>
@@ -66,7 +76,7 @@ export default function SpotOrdersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {orders.map((order) => (
+                {displayedOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{order.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{order.pair}</td>
@@ -96,6 +106,12 @@ export default function SpotOrdersPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedOrders.length}
+            totalCount={orders.length}
+            disabled={displayedOrders.length >= orders.length}
+          />
         </div>
       </div>
     </OrdersLayout>

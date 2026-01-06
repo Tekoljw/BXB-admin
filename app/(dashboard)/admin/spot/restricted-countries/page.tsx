@@ -3,15 +3,29 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { Globe, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function RestrictedCountriesPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const countries = [
     { id: 1, code: "US", name: "美国", reason: "监管限制", addedDate: "2024-01-15" },
     { id: 2, code: "CN", name: "中国", reason: "政策限制", addedDate: "2024-01-20" },
     { id: 3, code: "KP", name: "朝鲜", reason: "制裁", addedDate: "2024-02-01" },
   ]
+
+  const filteredCountries = countries.filter(country =>
+    country.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    country.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedCountries = filteredCountries.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredCountries.length))
+  }
 
   return (
     <SpotLayout>
@@ -58,7 +72,7 @@ export default function RestrictedCountriesPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {countries.map((country) => (
+                {displayedCountries.map((country) => (
                   <tr key={country.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{country.code}</div>
@@ -81,6 +95,12 @@ export default function RestrictedCountriesPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedCountries.length}
+            totalCount={filteredCountries.length}
+            disabled={displayedCountries.length >= filteredCountries.length}
+          />
         </div>
       </div>
     </SpotLayout>

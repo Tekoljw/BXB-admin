@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { CheckCircle, Clock, XCircle, AlertCircle } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMReviewPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const reviews = [
     { id: 1, type: "群组创建", submitter: "user001", groupName: "新交易群", reason: "申请创建公开交流群", time: "2024-10-17 15:30:20", status: "待审核" },
     { id: 2, type: "内容举报", submitter: "user002", target: "user123", reason: "发送违规广告信息", time: "2024-10-17 15:20:15", status: "待审核" },
@@ -12,6 +15,13 @@ export default function IMReviewPage() {
     { id: 4, type: "申诉处理", submitter: "user456", target: "封禁申诉", reason: "账号被误封，申请解封", time: "2024-10-17 14:20:45", status: "已拒绝" },
     { id: 5, type: "内容举报", submitter: "user789", target: "user999", reason: "恶意刷屏", time: "2024-10-17 13:15:20", status: "已通过" },
   ]
+
+  const displayedReviews = reviews.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, reviews.length))
+  }
 
   return (
     <IMLayout>
@@ -76,7 +86,7 @@ export default function IMReviewPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {reviews.map((review) => (
+                {displayedReviews.map((review) => (
                   <tr key={review.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{review.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{review.type}</td>
@@ -103,6 +113,12 @@ export default function IMReviewPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedReviews.length}
+            totalCount={reviews.length}
+            disabled={displayedReviews.length >= reviews.length}
+          />
         </div>
       </div>
     </IMLayout>

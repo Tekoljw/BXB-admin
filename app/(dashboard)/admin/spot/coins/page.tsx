@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { LoadMoreButton } from "@/components/load-more-button"
 import { toast } from "sonner"
 
 type Sector = 'defi' | 'gamefi' | 'nft' | 'layer1' | 'layer2' | 'meme' | 'other'
@@ -58,6 +59,7 @@ export default function CoinsManagementPage() {
   const [tempPrecision, setTempPrecision] = useState("")
   const [editingWeight, setEditingWeight] = useState<string | null>(null)
   const [tempWeight, setTempWeight] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const [coins, setCoins] = useState<SpotCoin[]>([
     { id: '1', coinId: 'BTC001', symbol: "BTC", name: "Bitcoin", listedName: "比特币", precision: 8, displayWeight: 100, onChainExists: true, sector: 'layer1', transferEnabled: true, status: "启用" },
@@ -75,6 +77,13 @@ export default function CoinsManagementPage() {
     coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     coin.listedName.includes(searchQuery)
   )
+
+  const displayedCoins = filteredCoins.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredCoins.length))
+  }
 
   const handleSavePrecision = (id: string) => {
     const precision = parseInt(tempPrecision)
@@ -169,7 +178,7 @@ export default function CoinsManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredCoins.map((coin) => (
+                {displayedCoins.map((coin) => (
                   <tr key={coin.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className="text-xs font-mono text-gray-500 dark:text-gray-400">{coin.coinId}</span>
@@ -311,6 +320,12 @@ export default function CoinsManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedCoins.length}
+            totalCount={filteredCoins.length}
+            disabled={displayedCoins.length >= filteredCoins.length}
+          />
         </div>
       </div>
     </SpotLayout>

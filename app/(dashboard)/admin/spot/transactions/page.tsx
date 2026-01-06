@@ -3,15 +3,29 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { CheckCircle, Search } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const transactions = [
     { id: 1, tradeId: "T20240315001", pair: "BTC/USDT", type: "买入", price: "65,432.10", amount: "0.5", total: "32,716.05", time: "2024-03-15 10:30:45" },
     { id: 2, tradeId: "T20240315002", pair: "ETH/USDT", type: "卖出", price: "3,245.67", amount: "2.0", total: "6,491.34", time: "2024-03-15 10:28:32" },
     { id: 3, tradeId: "T20240315003", pair: "BNB/USDT", type: "买入", price: "543.21", amount: "10", total: "5,432.10", time: "2024-03-15 10:25:15" },
   ]
+
+  const filteredTransactions = transactions.filter(tx =>
+    tx.tradeId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tx.pair.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedTransactions = filteredTransactions.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredTransactions.length))
+  }
 
   return (
     <SpotLayout>
@@ -56,7 +70,7 @@ export default function TransactionsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {transactions.map((tx) => (
+                {displayedTransactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{tx.tradeId}</div>
@@ -80,6 +94,12 @@ export default function TransactionsPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedTransactions.length}
+            totalCount={filteredTransactions.length}
+            disabled={displayedTransactions.length >= filteredTransactions.length}
+          />
         </div>
       </div>
     </SpotLayout>

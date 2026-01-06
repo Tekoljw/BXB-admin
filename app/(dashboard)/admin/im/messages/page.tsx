@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { MessageSquare, Image, FileText, AlertTriangle } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMMessagesPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const messages = [
     { id: 1, type: "文本", sender: "user001", receiver: "user002", content: "你好，请问USDT今天汇率多少？", time: "2024-10-17 15:30:20", status: "已发送" },
     { id: 2, type: "图片", sender: "user003", receiver: "群聊001", content: "[图片消息]", time: "2024-10-17 15:28:15", status: "已发送" },
@@ -12,6 +15,13 @@ export default function IMMessagesPage() {
     { id: 4, type: "文件", sender: "user006", receiver: "群聊002", content: "[文件: 交易策略.pdf]", time: "2024-10-17 15:20:45", status: "已发送" },
     { id: 5, type: "文本", sender: "user007", receiver: "user008", content: "违规内容测试", time: "2024-10-17 15:15:20", status: "已拦截" },
   ]
+
+  const displayedMessages = messages.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, messages.length))
+  }
 
   return (
     <IMLayout>
@@ -76,7 +86,7 @@ export default function IMMessagesPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {messages.map((message) => (
+                {displayedMessages.map((message) => (
                   <tr key={message.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{message.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{message.type}</td>
@@ -100,6 +110,12 @@ export default function IMMessagesPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedMessages.length}
+            totalCount={messages.length}
+            disabled={displayedMessages.length >= messages.length}
+          />
         </div>
       </div>
     </IMLayout>

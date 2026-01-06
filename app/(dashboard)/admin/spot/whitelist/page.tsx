@@ -3,15 +3,29 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { UserCheck, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function WhitelistPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const whitelist = [
     { id: 1, userId: "U10001", email: "vip1@example.com", addedDate: "2024-03-01", reason: "VIP用户" },
     { id: 2, userId: "U10002", email: "vip2@example.com", addedDate: "2024-03-05", reason: "大客户" },
     { id: 3, userId: "U10003", email: "partner@example.com", addedDate: "2024-03-10", reason: "合作伙伴" },
   ]
+
+  const filteredWhitelist = whitelist.filter(user =>
+    user.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedWhitelist = filteredWhitelist.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredWhitelist.length))
+  }
 
   return (
     <SpotLayout>
@@ -58,7 +72,7 @@ export default function WhitelistPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {whitelist.map((user) => (
+                {displayedWhitelist.map((user) => (
                   <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{user.userId}</div>
@@ -81,6 +95,12 @@ export default function WhitelistPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedWhitelist.length}
+            totalCount={filteredWhitelist.length}
+            disabled={displayedWhitelist.length >= filteredWhitelist.length}
+          />
         </div>
       </div>
     </SpotLayout>

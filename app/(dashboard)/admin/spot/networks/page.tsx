@@ -3,9 +3,11 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { Network, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function NetworksManagementPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const networks = [
     { id: 1, name: "BTC", fullName: "Bitcoin Network", confirmations: 3, fee: 0.0005, status: "启用" },
@@ -13,6 +15,18 @@ export default function NetworksManagementPage() {
     { id: 3, name: "TRC20", fullName: "Tron Network", confirmations: 19, fee: 1, status: "启用" },
     { id: 4, name: "BSC", fullName: "Binance Smart Chain", confirmations: 15, fee: 0.0005, status: "启用" },
   ]
+
+  const filteredNetworks = networks.filter(network =>
+    network.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    network.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedNetworks = filteredNetworks.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredNetworks.length))
+  }
 
   return (
     <SpotLayout>
@@ -60,7 +74,7 @@ export default function NetworksManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {networks.map((network) => (
+                {displayedNetworks.map((network) => (
                   <tr key={network.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{network.name}</div>
@@ -88,6 +102,12 @@ export default function NetworksManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedNetworks.length}
+            totalCount={filteredNetworks.length}
+            disabled={displayedNetworks.length >= filteredNetworks.length}
+          />
         </div>
       </div>
     </SpotLayout>

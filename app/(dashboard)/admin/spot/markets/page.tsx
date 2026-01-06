@@ -3,9 +3,11 @@
 import React, { useState } from "react"
 import SpotLayout from "@/components/spot-layout"
 import { Store, Plus, Search, Edit, Trash2 } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function MarketsManagementPage() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [displayedCount, setDisplayedCount] = useState(20)
 
   const markets = [
     { id: 1, pair: "BTC/USDT", baseAsset: "BTC", quoteAsset: "USDT", volume24h: "1,234,567", status: "启用" },
@@ -13,6 +15,17 @@ export default function MarketsManagementPage() {
     { id: 3, pair: "BNB/USDT", baseAsset: "BNB", quoteAsset: "USDT", volume24h: "543,210", status: "启用" },
     { id: 4, pair: "ADA/USDT", baseAsset: "ADA", quoteAsset: "USDT", volume24h: "321,098", status: "禁用" },
   ]
+
+  const filteredMarkets = markets.filter(market =>
+    market.pair.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  const displayedMarkets = filteredMarkets.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, filteredMarkets.length))
+  }
 
   return (
     <SpotLayout>
@@ -60,7 +73,7 @@ export default function MarketsManagementPage() {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {markets.map((market) => (
+                {displayedMarkets.map((market) => (
                   <tr key={market.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900 dark:text-white">{market.pair}</div>
@@ -92,6 +105,12 @@ export default function MarketsManagementPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedMarkets.length}
+            totalCount={filteredMarkets.length}
+            disabled={displayedMarkets.length >= filteredMarkets.length}
+          />
         </div>
       </div>
     </SpotLayout>

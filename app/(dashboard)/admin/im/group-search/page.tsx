@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { Search, TrendingUp, Users, Star } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMGroupSearchPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const searchResults = [
     { id: 1, name: "BTC交流群", type: "公开群", members: 1234, category: "交易讨论", hotScore: 95, status: "活跃" },
     { id: 2, name: "ETH爱好者", type: "公开群", members: 856, category: "交易讨论", hotScore: 88, status: "活跃" },
@@ -12,6 +15,13 @@ export default function IMGroupSearchPage() {
     { id: 4, name: "新手学习群", type: "公开群", members: 2345, category: "新手教育", hotScore: 78, status: "活跃" },
     { id: 5, name: "量化策略群", type: "私密群", members: 123, category: "量化交易", hotScore: 85, status: "活跃" },
   ]
+
+  const displayedResults = searchResults.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, searchResults.length))
+  }
 
   return (
     <IMLayout>
@@ -87,7 +97,7 @@ export default function IMGroupSearchPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {searchResults.map((group) => (
+                {displayedResults.map((group) => (
                   <tr key={group.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{group.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{group.name}</td>
@@ -118,6 +128,12 @@ export default function IMGroupSearchPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedResults.length}
+            totalCount={searchResults.length}
+            disabled={displayedResults.length >= searchResults.length}
+          />
         </div>
       </div>
     </IMLayout>

@@ -1,10 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import IMLayout from "@/components/im-layout"
 import { UsersRound, Crown, Lock, Globe } from "lucide-react"
+import { LoadMoreButton } from "@/components/load-more-button"
 
 export default function IMGroupsPage() {
+  const [displayedCount, setDisplayedCount] = useState(20)
+  
   const groups = [
     { id: 1, name: "BTC交流群", type: "公开群", members: 1234, owner: "admin001", created: "2024-01-15", status: "正常" },
     { id: 2, name: "ETH爱好者", type: "公开群", members: 856, owner: "user001", created: "2024-02-20", status: "正常" },
@@ -12,6 +15,13 @@ export default function IMGroupsPage() {
     { id: 4, name: "合约交易群", type: "公开群", members: 2345, owner: "user123", created: "2024-04-05", status: "正常" },
     { id: 5, name: "违规群组", type: "公开群", members: 123, owner: "user456", created: "2024-05-12", status: "封禁" },
   ]
+
+  const displayedGroups = groups.slice(0, displayedCount)
+
+  const handleLoadMore = async () => {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    setDisplayedCount(prev => Math.min(prev + 20, groups.length))
+  }
 
   return (
     <IMLayout>
@@ -76,7 +86,7 @@ export default function IMGroupsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {groups.map((group) => (
+                {displayedGroups.map((group) => (
                   <tr key={group.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{group.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{group.name}</td>
@@ -100,6 +110,12 @@ export default function IMGroupsPage() {
               </tbody>
             </table>
           </div>
+          <LoadMoreButton
+            onLoadMore={handleLoadMore}
+            currentCount={displayedGroups.length}
+            totalCount={groups.length}
+            disabled={displayedGroups.length >= groups.length}
+          />
         </div>
       </div>
     </IMLayout>
