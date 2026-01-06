@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Select,
   SelectContent,
@@ -17,9 +18,17 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 import { Switch } from "@/components/ui/switch"
-import { Search, Plus, Download, RotateCcw } from "lucide-react"
+import { Search, Plus, Download, CalendarIcon } from "lucide-react"
 import { toast } from "sonner"
+import { format } from "date-fns"
+import { zhCN } from "date-fns/locale"
 
 interface MarketMaker {
   id: string
@@ -28,7 +37,8 @@ interface MarketMaker {
   marketName: string
   makerFeeDiscount: number
   takerFeeDiscount: number
-  effectiveTime: string
+  effectiveStartTime: Date | null
+  effectiveEndTime: Date | null
   enabled: boolean
 }
 
@@ -40,7 +50,8 @@ const mockMarketMakers: MarketMaker[] = [
     marketName: "",
     makerFeeDiscount: 0,
     takerFeeDiscount: 0,
-    effectiveTime: "2025-05-31 08:00:00 - 2030-05-31 08:00:00",
+    effectiveStartTime: new Date("2025-05-31T08:00:00"),
+    effectiveEndTime: new Date("2030-05-31T08:00:00"),
     enabled: true,
   },
   {
@@ -50,19 +61,19 @@ const mockMarketMakers: MarketMaker[] = [
     marketName: "",
     makerFeeDiscount: 0,
     takerFeeDiscount: 0,
-    effectiveTime: "2025-05-29 00:00:00 - 2030-06-05 00:00:00",
+    effectiveStartTime: new Date("2025-05-29T00:00:00"),
+    effectiveEndTime: new Date("2030-06-05T00:00:00"),
     enabled: true,
   },
 ]
 
-const roleOptions = ["内部", "外部", "VIP"]
-const marketOptions = ["BTC/USDT", "ETH/USDT", "BNB/USDT", "SOL/USDT", "XRP/USDT"]
+const roleOptions = ["内部", "外部"]
 
 export default function SpotMarketMakerPage() {
   const [marketMakers, setMarketMakers] = useState<MarketMaker[]>(mockMarketMakers)
   const [makerIdFilter, setMakerIdFilter] = useState("")
   const [roleFilter, setRoleFilter] = useState("all")
-  const [marketFilter, setMarketFilter] = useState("all")
+  const [marketFilter, setMarketFilter] = useState("")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [editingMaker, setEditingMaker] = useState<MarketMaker | null>(null)
@@ -73,15 +84,24 @@ export default function SpotMarketMakerPage() {
     marketName: "",
     makerFeeDiscount: 0,
     takerFeeDiscount: 0,
-    effectiveStartTime: "",
-    effectiveEndTime: "",
+    effectiveStartTime: null as Date | null,
+    effectiveEndTime: null as Date | null,
+    startTimeHour: "00",
+    startTimeMinute: "00",
+    endTimeHour: "00",
+    endTimeMinute: "00",
     enabled: true,
   })
+
+  const [editStartTimeHour, setEditStartTimeHour] = useState("00")
+  const [editStartTimeMinute, setEditStartTimeMinute] = useState("00")
+  const [editEndTimeHour, setEditEndTimeHour] = useState("00")
+  const [editEndTimeMinute, setEditEndTimeMinute] = useState("00")
 
   const filteredMarketMakers = marketMakers.filter(maker => {
     if (makerIdFilter && !maker.makerId.includes(makerIdFilter)) return false
     if (roleFilter !== "all" && maker.role !== roleFilter) return false
-    if (marketFilter !== "all" && maker.marketName !== marketFilter) return false
+    if (marketFilter && !maker.marketName.toLowerCase().includes(marketFilter.toLowerCase())) return false
     return true
   })
 
@@ -89,11 +109,11 @@ export default function SpotMarketMakerPage() {
     toast.success("查询完成")
   }
 
-  const handleReset = () => {
-    setMakerIdFilter("")
-    setRoleFilter("all")
-    setMarketFilter("all")
-    toast.success("筛选已重置")
+  const formatDateTime = (date: Date | null, hour: string, minute: string) => {
+    if (!date) return null
+    const result = new Date(date)
+    result.setHours(parseInt(hour), parseInt(minute), 0, 0)
+    return result
   }
 
   const handleAdd = () => {
@@ -107,9 +127,8 @@ export default function SpotMarketMakerPage() {
     }
 
     const newId = (parseInt(marketMakers[marketMakers.length - 1]?.id || "1999") + 1).toString()
-    const effectiveTime = newMaker.effectiveStartTime && newMaker.effectiveEndTime
-      ? `${newMaker.effectiveStartTime} - ${newMaker.effectiveEndTime}`
-      : ""
+    const startTime = formatDateTime(newMaker.effectiveStartTime, newMaker.startTimeHour, newMaker.startTimeMinute)
+    const endTime = formatDateTime(newMaker.effectiveEndTime, newMaker.endTimeHour, newMaker.endTimeMinute)
 
     setMarketMakers(prev => [...prev, {
       id: newId,
@@ -118,7 +137,8 @@ export default function SpotMarketMakerPage() {
       marketName: newMaker.marketName,
       makerFeeDiscount: newMaker.makerFeeDiscount,
       takerFeeDiscount: newMaker.takerFeeDiscount,
-      effectiveTime,
+      effectiveStartTime: startTime,
+      effectiveEndTime: endTime,
       enabled: newMaker.enabled,
     }])
 
@@ -128,8 +148,12 @@ export default function SpotMarketMakerPage() {
       marketName: "",
       makerFeeDiscount: 0,
       takerFeeDiscount: 0,
-      effectiveStartTime: "",
-      effectiveEndTime: "",
+      effectiveStartTime: null,
+      effectiveEndTime: null,
+      startTimeHour: "00",
+      startTimeMinute: "00",
+      endTimeHour: "00",
+      endTimeMinute: "00",
       enabled: true,
     })
     setShowAddDialog(false)
@@ -138,12 +162,27 @@ export default function SpotMarketMakerPage() {
 
   const handleEdit = (maker: MarketMaker) => {
     setEditingMaker(maker)
+    if (maker.effectiveStartTime) {
+      setEditStartTimeHour(maker.effectiveStartTime.getHours().toString().padStart(2, '0'))
+      setEditStartTimeMinute(maker.effectiveStartTime.getMinutes().toString().padStart(2, '0'))
+    }
+    if (maker.effectiveEndTime) {
+      setEditEndTimeHour(maker.effectiveEndTime.getHours().toString().padStart(2, '0'))
+      setEditEndTimeMinute(maker.effectiveEndTime.getMinutes().toString().padStart(2, '0'))
+    }
     setShowEditDialog(true)
   }
 
   const handleSaveEdit = () => {
     if (!editingMaker) return
-    setMarketMakers(prev => prev.map(m => m.id === editingMaker.id ? editingMaker : m))
+    const startTime = formatDateTime(editingMaker.effectiveStartTime, editStartTimeHour, editStartTimeMinute)
+    const endTime = formatDateTime(editingMaker.effectiveEndTime, editEndTimeHour, editEndTimeMinute)
+    
+    setMarketMakers(prev => prev.map(m => m.id === editingMaker.id ? {
+      ...editingMaker,
+      effectiveStartTime: startTime,
+      effectiveEndTime: endTime,
+    } : m))
     setShowEditDialog(false)
     setEditingMaker(null)
     toast.success("编辑成功")
@@ -152,6 +191,75 @@ export default function SpotMarketMakerPage() {
   const handleExport = () => {
     toast.success("导出成功", { description: "做市商数据已导出为CSV文件" })
   }
+
+  const formatDisplayTime = (date: Date | null) => {
+    if (!date) return "-"
+    return format(date, "yyyy-MM-dd HH:mm:ss", { locale: zhCN })
+  }
+
+  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
+  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'))
+
+  const DateTimePicker = ({ 
+    date, 
+    onDateChange, 
+    hour, 
+    onHourChange, 
+    minute, 
+    onMinuteChange,
+    label 
+  }: {
+    date: Date | null
+    onDateChange: (date: Date | undefined) => void
+    hour: string
+    onHourChange: (hour: string) => void
+    minute: string
+    onMinuteChange: (minute: string) => void
+    label: string
+  }) => (
+    <div className="space-y-2">
+      <Label className="text-sm">{label}</Label>
+      <div className="flex gap-2">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="flex-1 justify-start text-left font-normal">
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "yyyy-MM-dd", { locale: zhCN }) : "选择日期"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 z-[200]" align="start">
+            <Calendar
+              mode="single"
+              selected={date || undefined}
+              onSelect={onDateChange}
+              locale={zhCN}
+            />
+          </PopoverContent>
+        </Popover>
+        <Select value={hour} onValueChange={onHourChange}>
+          <SelectTrigger className="w-[70px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="max-h-[200px] z-[200]">
+            {hours.map(h => (
+              <SelectItem key={h} value={h}>{h}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <span className="flex items-center">:</span>
+        <Select value={minute} onValueChange={onMinuteChange}>
+          <SelectTrigger className="w-[70px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="max-h-[200px] z-[200]">
+            {minutes.map(m => (
+              <SelectItem key={m} value={m}>{m}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  )
 
   return (
     <div className="p-6 space-y-6">
@@ -179,52 +287,36 @@ export default function SpotMarketMakerPage() {
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">做市商ID</Label>
-            <Input 
-              placeholder="请输入做市商ID" 
-              value={makerIdFilter}
-              onChange={(e) => setMakerIdFilter(e.target.value)}
-              className="w-[180px]"
-            />
-          </div>
+          <Tabs value={roleFilter} onValueChange={setRoleFilter} className="w-auto flex-shrink-0">
+            <TabsList className="h-9">
+              <TabsTrigger value="all" className="text-sm px-4">全部</TabsTrigger>
+              <TabsTrigger value="内部" className="text-sm px-4">内部</TabsTrigger>
+              <TabsTrigger value="外部" className="text-sm px-4">外部</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
-          <div className="flex items-center gap-2">
-            <Label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">做市商角色</Label>
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="请选择" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">请选择</SelectItem>
-                {roleOptions.map(role => (
-                  <SelectItem key={role} value={role}>{role}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2 flex-1 min-w-[200px]">
-            <Label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">市场</Label>
-            <Select value={marketFilter} onValueChange={setMarketFilter}>
-              <SelectTrigger className="flex-1">
-                <SelectValue placeholder="请选择" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">请选择</SelectItem>
-                {marketOptions.map(market => (
-                  <SelectItem key={market} value={market}>{market}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white" onClick={handleSearch}>
-              查询
-            </Button>
-            <Button variant="outline" className="bg-yellow-500 hover:bg-yellow-600 text-white border-yellow-500" onClick={handleReset}>
-              重置
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="relative flex-1 max-w-[200px]">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="搜索做市商ID..." 
+                value={makerIdFilter}
+                onChange={(e) => setMakerIdFilter(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="搜索市场..." 
+                value={marketFilter}
+                onChange={(e) => setMarketFilter(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <Button variant="outline" className="h-9 flex-shrink-0" onClick={handleSearch}>
+              <Search className="w-4 h-4 mr-2" />
+              搜索
             </Button>
           </div>
         </div>
@@ -255,7 +347,9 @@ export default function SpotMarketMakerPage() {
                   <td className="px-4 py-4 text-sm text-gray-900 dark:text-white">{maker.marketName || "-"}</td>
                   <td className="px-4 py-4 text-sm text-gray-900 dark:text-white">{maker.makerFeeDiscount}</td>
                   <td className="px-4 py-4 text-sm text-gray-900 dark:text-white">{maker.takerFeeDiscount}</td>
-                  <td className="px-4 py-4 text-sm text-gray-900 dark:text-white whitespace-pre-line">{maker.effectiveTime}</td>
+                  <td className="px-4 py-4 text-sm text-gray-900 dark:text-white whitespace-pre-line">
+                    {formatDisplayTime(maker.effectiveStartTime)} - {formatDisplayTime(maker.effectiveEndTime)}
+                  </td>
                   <td className="px-4 py-4 text-sm">
                     <span className={`${maker.enabled ? "text-green-600" : "text-gray-500"}`}>
                       {maker.enabled ? "是" : "否"}
@@ -264,7 +358,7 @@ export default function SpotMarketMakerPage() {
                   <td className="px-4 py-4">
                     <Button 
                       size="sm" 
-                      className="bg-blue-500 hover:bg-blue-600 text-white"
+                      className="bg-custom-green hover:bg-custom-green-dark text-white"
                       onClick={() => handleEdit(maker)}
                     >
                       编辑
@@ -285,7 +379,7 @@ export default function SpotMarketMakerPage() {
       </div>
 
       <Sheet open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <SheetContent className="w-[500px] sm:max-w-[500px]">
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>添加做市商</SheetTitle>
           </SheetHeader>
@@ -314,16 +408,12 @@ export default function SpotMarketMakerPage() {
             </div>
             <div>
               <Label className="text-sm">市场</Label>
-              <Select value={newMaker.marketName} onValueChange={(v) => setNewMaker(prev => ({ ...prev, marketName: v }))}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="请选择" />
-                </SelectTrigger>
-                <SelectContent>
-                  {marketOptions.map(market => (
-                    <SelectItem key={market} value={market}>{market}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input 
+                placeholder="请输入市场名称"
+                value={newMaker.marketName}
+                onChange={(e) => setNewMaker(prev => ({ ...prev, marketName: e.target.value }))}
+                className="mt-1"
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -347,26 +437,24 @@ export default function SpotMarketMakerPage() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-sm">生效开始时间</Label>
-                <Input 
-                  type="datetime-local"
-                  value={newMaker.effectiveStartTime}
-                  onChange={(e) => setNewMaker(prev => ({ ...prev, effectiveStartTime: e.target.value }))}
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label className="text-sm">生效结束时间</Label>
-                <Input 
-                  type="datetime-local"
-                  value={newMaker.effectiveEndTime}
-                  onChange={(e) => setNewMaker(prev => ({ ...prev, effectiveEndTime: e.target.value }))}
-                  className="mt-1"
-                />
-              </div>
-            </div>
+            <DateTimePicker
+              date={newMaker.effectiveStartTime}
+              onDateChange={(d) => setNewMaker(prev => ({ ...prev, effectiveStartTime: d || null }))}
+              hour={newMaker.startTimeHour}
+              onHourChange={(h) => setNewMaker(prev => ({ ...prev, startTimeHour: h }))}
+              minute={newMaker.startTimeMinute}
+              onMinuteChange={(m) => setNewMaker(prev => ({ ...prev, startTimeMinute: m }))}
+              label="生效时间"
+            />
+            <DateTimePicker
+              date={newMaker.effectiveEndTime}
+              onDateChange={(d) => setNewMaker(prev => ({ ...prev, effectiveEndTime: d || null }))}
+              hour={newMaker.endTimeHour}
+              onHourChange={(h) => setNewMaker(prev => ({ ...prev, endTimeHour: h }))}
+              minute={newMaker.endTimeMinute}
+              onMinuteChange={(m) => setNewMaker(prev => ({ ...prev, endTimeMinute: m }))}
+              label="失效时间"
+            />
             <div className="flex items-center gap-2">
               <Label className="text-sm">是否启用</Label>
               <Switch 
@@ -390,7 +478,7 @@ export default function SpotMarketMakerPage() {
       </Sheet>
 
       <Sheet open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <SheetContent className="w-[500px] sm:max-w-[500px]">
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>编辑做市商</SheetTitle>
           </SheetHeader>
@@ -419,16 +507,12 @@ export default function SpotMarketMakerPage() {
               </div>
               <div>
                 <Label className="text-sm">市场</Label>
-                <Select value={editingMaker.marketName} onValueChange={(v) => setEditingMaker(prev => prev ? { ...prev, marketName: v } : null)}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="请选择" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {marketOptions.map(market => (
-                      <SelectItem key={market} value={market}>{market}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Input 
+                  placeholder="请输入市场名称"
+                  value={editingMaker.marketName}
+                  onChange={(e) => setEditingMaker(prev => prev ? { ...prev, marketName: e.target.value } : null)}
+                  className="mt-1"
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -450,6 +534,24 @@ export default function SpotMarketMakerPage() {
                   />
                 </div>
               </div>
+              <DateTimePicker
+                date={editingMaker.effectiveStartTime}
+                onDateChange={(d) => setEditingMaker(prev => prev ? { ...prev, effectiveStartTime: d || null } : null)}
+                hour={editStartTimeHour}
+                onHourChange={setEditStartTimeHour}
+                minute={editStartTimeMinute}
+                onMinuteChange={setEditStartTimeMinute}
+                label="生效时间"
+              />
+              <DateTimePicker
+                date={editingMaker.effectiveEndTime}
+                onDateChange={(d) => setEditingMaker(prev => prev ? { ...prev, effectiveEndTime: d || null } : null)}
+                hour={editEndTimeHour}
+                onHourChange={setEditEndTimeHour}
+                minute={editEndTimeMinute}
+                onMinuteChange={setEditEndTimeMinute}
+                label="失效时间"
+              />
               <div className="flex items-center gap-2">
                 <Label className="text-sm">是否启用</Label>
                 <Switch 
