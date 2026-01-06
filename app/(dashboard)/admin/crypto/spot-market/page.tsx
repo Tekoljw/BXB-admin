@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo, useEffect } from "react"
+import React, { useState, useMemo, useEffect, useRef } from "react"
 import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays } from "lucide-react"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
@@ -112,6 +112,7 @@ export default function SpotMarketManagementPage() {
   const [editingMarket, setEditingMarket] = useState<Partial<SpotMarket>>({})
   const [editTab, setEditTab] = useState("basic")
   const [googleCode, setGoogleCode] = useState("")
+  const scheduleSheetRef = useRef<HTMLDivElement>(null)
   const [newMarket, setNewMarket] = useState<Partial<SpotMarket>>({
     name: "",
     baseCurrency: "",
@@ -660,7 +661,7 @@ export default function SpotMarketManagementPage() {
       </Sheet>
 
       <Sheet open={showPlanDialog} onOpenChange={setShowPlanDialog}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+        <SheetContent ref={scheduleSheetRef} className="w-full sm:max-w-md overflow-y-auto">
           <SheetHeader>
             <SheetTitle>开盘计划</SheetTitle>
           </SheetHeader>
@@ -772,7 +773,7 @@ export default function SpotMarketManagementPage() {
                                   }
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0" align="start">
+                              <PopoverContent className="w-auto p-0" align="start" container={scheduleSheetRef.current}>
                                 <Calendar
                                   mode="single"
                                   selected={newScheduleDateTime ? new Date(newScheduleDateTime.split("T")[0]) : undefined}
