@@ -92,7 +92,7 @@ export default function SpotMarketManagementPage() {
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [selectedMarket, setSelectedMarket] = useState<SpotMarket | null>(null)
   const [editingMarket, setEditingMarket] = useState<Partial<SpotMarket>>({})
-  const [editTab, setEditTab] = useState("basic")
+  const [editTab, setEditTab] = useState("public")
   const [googleCode, setGoogleCode] = useState("")
   const [newMarket, setNewMarket] = useState<Partial<SpotMarket>>({
     name: "",
@@ -187,7 +187,7 @@ export default function SpotMarketManagementPage() {
   const handleEdit = (market: SpotMarket) => {
     setSelectedMarket(market)
     setEditingMarket({ ...market })
-    setEditTab("basic")
+    setEditTab("public")
     setGoogleCode("")
     setShowEditSheet(true)
   }
@@ -420,11 +420,48 @@ export default function SpotMarketManagementPage() {
           {selectedMarket && (
             <div className="mt-4">
               <Tabs value={editTab} onValueChange={setEditTab}>
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="public">公共</TabsTrigger>
                   <TabsTrigger value="basic">基本配置</TabsTrigger>
                   <TabsTrigger value="trading">交易配置</TabsTrigger>
                   <TabsTrigger value="limits">交易限制</TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="public" className="mt-4 space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>市场ID</Label></div>
+                      <Input value={editingMarket.id || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>市场名称</Label></div>
+                      <Input value={editingMarket.name || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>标的币种</Label></div>
+                      <Input value={editingMarket.baseCurrency || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>报价币种</Label></div>
+                      <Input value={editingMarket.quoteCurrency || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><Label>开盘状态</Label></div>
+                      <Input value={editingMarket.openStatus === "开盘" ? "开盘" : "停盘"} disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 mb-2"><Label>创建时间</Label></div>
+                      <Input value="2024-01-15 10:30:00" disabled className="bg-gray-50 dark:bg-gray-800" />
+                    </div>
+                  </div>
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
+                    <p className="text-sm text-amber-700 dark:text-amber-300">公共信息为系统自动生成，不可修改</p>
+                  </div>
+                </TabsContent>
 
                 <TabsContent value="basic" className="mt-4 space-y-4">
                   <div className="grid grid-cols-3 gap-4">
