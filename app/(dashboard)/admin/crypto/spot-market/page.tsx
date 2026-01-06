@@ -721,7 +721,7 @@ export default function SpotMarketManagementPage() {
                   ) : (
                     <div className="space-y-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <Calendar className="w-4 h-4 text-custom-green" />
+                        <CalendarIcon className="w-4 h-4 text-custom-green" />
                         <span className="font-medium">
                           创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
                         </span>
