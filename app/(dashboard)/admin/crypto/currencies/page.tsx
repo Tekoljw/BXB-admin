@@ -73,18 +73,18 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [showSectorManagementSheet, setShowSectorManagementSheet] = useState(false)
   
   const [sectors, setSectors] = useState([
-    { id: 'layer1', name: 'Layer1', description: '主链代币', enabled: true },
-    { id: 'layer2', name: 'Layer2', description: '二层网络代币', enabled: true },
-    { id: 'defi', name: 'DeFi', description: '去中心化金融', enabled: true },
-    { id: 'gamefi', name: 'GameFi', description: '游戏金融', enabled: true },
-    { id: 'nft', name: 'NFT', description: 'NFT相关代币', enabled: true },
-    { id: 'meme', name: 'Meme', description: 'Meme币', enabled: true },
-    { id: 'stablecoin', name: 'Stablecoin', description: '稳定币', enabled: true },
-    { id: 'ai', name: 'AI', description: 'AI概念币', enabled: true },
-    { id: 'rwa', name: 'RWA', description: '现实世界资产', enabled: false },
+    { id: 'layer1', name: 'Layer1', displayName: 'Layer1主链', description: '主链代币', weight: 100, enabled: true },
+    { id: 'layer2', name: 'Layer2', displayName: 'Layer2扩展', description: '二层网络代币', weight: 90, enabled: true },
+    { id: 'defi', name: 'DeFi', displayName: 'DeFi金融', description: '去中心化金融', weight: 80, enabled: true },
+    { id: 'gamefi', name: 'GameFi', displayName: 'GameFi游戏', description: '游戏金融', weight: 70, enabled: true },
+    { id: 'nft', name: 'NFT', displayName: 'NFT艺术', description: 'NFT相关代币', weight: 60, enabled: true },
+    { id: 'meme', name: 'Meme', displayName: 'Meme热门', description: 'Meme币', weight: 50, enabled: true },
+    { id: 'stablecoin', name: 'Stablecoin', displayName: '稳定币', description: '稳定币', weight: 40, enabled: true },
+    { id: 'ai', name: 'AI', displayName: 'AI智能', description: 'AI概念币', weight: 30, enabled: true },
+    { id: 'rwa', name: 'RWA', displayName: 'RWA资产', description: '现实世界资产', weight: 20, enabled: false },
   ])
-  const [editingSector, setEditingSector] = useState<{ id: string; name: string; description: string; enabled: boolean } | null>(null)
-  const [newSector, setNewSector] = useState({ name: '', description: '' })
+  const [editingSector, setEditingSector] = useState<{ id: string; name: string; displayName: string; description: string; weight: number; enabled: boolean } | null>(null)
+  const [newSector, setNewSector] = useState({ name: '', displayName: '', description: '', weight: 0 })
   
   const [globalNetworks, setGlobalNetworks] = useState([
     { id: 'trc20', name: 'TRC20', fullName: 'Tron Network', enabled: true },
@@ -1744,7 +1744,7 @@ export default function DepositWithdrawalCurrenciesPage() {
 
       {/* 板块管理 Sheet */}
       <Sheet open={showSectorManagementSheet} onOpenChange={setShowSectorManagementSheet}>
-        <SheetContent className="w-[500px] sm:w-[550px] overflow-y-auto">
+        <SheetContent className="w-[700px] sm:max-w-[700px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>板块管理</SheetTitle>
             <SheetDescription>
@@ -1753,18 +1753,27 @@ export default function DepositWithdrawalCurrenciesPage() {
           </SheetHeader>
           
           <div className="mt-6 space-y-4">
-            <div className="flex gap-2">
+            <div className="grid grid-cols-5 gap-2">
               <Input 
                 placeholder="板块名称"
                 value={newSector.name}
                 onChange={(e) => setNewSector(prev => ({ ...prev, name: e.target.value }))}
-                className="flex-1"
+              />
+              <Input 
+                placeholder="展示名称"
+                value={newSector.displayName}
+                onChange={(e) => setNewSector(prev => ({ ...prev, displayName: e.target.value }))}
               />
               <Input 
                 placeholder="板块描述"
                 value={newSector.description}
                 onChange={(e) => setNewSector(prev => ({ ...prev, description: e.target.value }))}
-                className="flex-1"
+              />
+              <Input 
+                type="number"
+                placeholder="展示权重"
+                value={newSector.weight || ''}
+                onChange={(e) => setNewSector(prev => ({ ...prev, weight: parseInt(e.target.value) || 0 }))}
               />
               <Button 
                 className="bg-custom-green hover:bg-custom-green-dark text-white"
@@ -1780,112 +1789,152 @@ export default function DepositWithdrawalCurrenciesPage() {
                   }
                   setSectors(prev => [...prev, { 
                     id, 
-                    name: newSector.name.trim(), 
+                    name: newSector.name.trim(),
+                    displayName: newSector.displayName.trim() || newSector.name.trim(),
                     description: newSector.description.trim(),
+                    weight: newSector.weight,
                     enabled: true 
                   }])
-                  setNewSector({ name: '', description: '' })
+                  setNewSector({ name: '', displayName: '', description: '', weight: 0 })
                   toast.success("板块添加成功")
                 }}
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4 mr-1" />
+                添加
               </Button>
             </div>
 
-            <div className="space-y-3">
-              {sectors.map((sector) => (
-                <div 
-                  key={sector.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
-                >
-                  {editingSector?.id === sector.id ? (
-                    <div className="flex items-center gap-2 flex-1 mr-4">
-                      <Input 
-                        value={editingSector.name}
-                        onChange={(e) => setEditingSector(prev => prev ? { ...prev, name: e.target.value } : null)}
-                        className="flex-1"
-                      />
-                      <Input 
-                        value={editingSector.description}
-                        onChange={(e) => setEditingSector(prev => prev ? { ...prev, description: e.target.value } : null)}
-                        className="flex-1"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-custom-green/10 flex items-center justify-center">
-                        <Layers className="w-5 h-5 text-custom-green" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-white">{sector.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{sector.description}</p>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2">
-                    {editingSector?.id === sector.id ? (
-                      <>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => {
-                            if (!editingSector.name.trim()) {
-                              toast.error("板块名称不能为空")
-                              return
-                            }
-                            setSectors(prev => prev.map(s => 
-                              s.id === sector.id 
-                                ? { ...s, name: editingSector.name, description: editingSector.description }
-                                : s
-                            ))
-                            setEditingSector(null)
-                            toast.success("板块已更新")
-                          }}
-                        >
-                          <Check className="w-4 h-4" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => setEditingSector(null)}
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => setEditingSector(sector)}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                          onClick={() => {
-                            setSectors(prev => prev.filter(s => s.id !== sector.id))
-                            toast.success("板块已删除")
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </>
-                    )}
-                    <Switch
-                      checked={sector.enabled}
-                      onCheckedChange={(checked) => {
-                        setSectors(prev => prev.map(s => 
-                          s.id === sector.id ? { ...s, enabled: checked } : s
-                        ))
-                        toast.success(checked ? "板块已启用" : "板块已禁用")
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
+            <div className="border rounded-lg overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">板块名称</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">展示名称</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">描述</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">展示权重</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">启用</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">操作</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {sectors.sort((a, b) => b.weight - a.weight).map((sector) => (
+                    <tr key={sector.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                      {editingSector?.id === sector.id ? (
+                        <>
+                          <td className="px-4 py-3">
+                            <Input 
+                              value={editingSector.name}
+                              onChange={(e) => setEditingSector(prev => prev ? { ...prev, name: e.target.value } : null)}
+                              className="h-8"
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <Input 
+                              value={editingSector.displayName}
+                              onChange={(e) => setEditingSector(prev => prev ? { ...prev, displayName: e.target.value } : null)}
+                              className="h-8"
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <Input 
+                              value={editingSector.description}
+                              onChange={(e) => setEditingSector(prev => prev ? { ...prev, description: e.target.value } : null)}
+                              className="h-8"
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <Input 
+                              type="number"
+                              value={editingSector.weight}
+                              onChange={(e) => setEditingSector(prev => prev ? { ...prev, weight: parseInt(e.target.value) || 0 } : null)}
+                              className="h-8 w-20"
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <Switch
+                              checked={editingSector.enabled}
+                              onCheckedChange={(checked) => setEditingSector(prev => prev ? { ...prev, enabled: checked } : null)}
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="h-7 w-7 p-0"
+                                onClick={() => {
+                                  if (!editingSector.name.trim()) {
+                                    toast.error("板块名称不能为空")
+                                    return
+                                  }
+                                  setSectors(prev => prev.map(s => 
+                                    s.id === sector.id 
+                                      ? { ...s, name: editingSector.name, displayName: editingSector.displayName, description: editingSector.description, weight: editingSector.weight, enabled: editingSector.enabled }
+                                      : s
+                                  ))
+                                  setEditingSector(null)
+                                  toast.success("板块已更新")
+                                }}
+                              >
+                                <Check className="w-3 h-3" />
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="h-7 w-7 p-0"
+                                onClick={() => setEditingSector(null)}
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{sector.name}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{sector.displayName}</td>
+                          <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{sector.description}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{sector.weight}</td>
+                          <td className="px-4 py-3">
+                            <Switch
+                              checked={sector.enabled}
+                              onCheckedChange={(checked) => {
+                                setSectors(prev => prev.map(s => 
+                                  s.id === sector.id ? { ...s, enabled: checked } : s
+                                ))
+                                toast.success(checked ? "板块已启用" : "板块已禁用")
+                              }}
+                            />
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="h-7 w-7 p-0"
+                                onClick={() => setEditingSector(sector)}
+                              >
+                                <Edit2 className="w-3 h-3" />
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="h-7 w-7 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                onClick={() => {
+                                  setSectors(prev => prev.filter(s => s.id !== sector.id))
+                                  toast.success("板块已删除")
+                                }}
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </SheetContent>
