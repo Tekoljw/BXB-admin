@@ -92,6 +92,7 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/crypto/business-report", icon: FileBarChart, label: "经营报表" },
     { path: "/admin/crypto/crypto-users", icon: Users, label: "Crypto用户管理" },
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
+    { path: "/admin/crypto/spot-market", icon: TrendingUp, label: "现货市场管理" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
     { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
