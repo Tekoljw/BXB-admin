@@ -129,6 +129,7 @@ export default function SpotMarketManagementPage() {
   const [showCountryRestrictionSheet, setShowCountryRestrictionSheet] = useState(false)
   const [showMarketSelectSheet, setShowMarketSelectSheet] = useState(false)
   const [showCountrySelectSheet, setShowCountrySelectSheet] = useState(false)
+  const [restrictionMarketType, setRestrictionMarketType] = useState<"spot" | "leverage">("spot")
   const [countryRestrictions, setCountryRestrictions] = useState<{ marketId: string; marketName: string; restrictedCountries: string[] }[]>([
     { marketId: "9425", marketName: "btc_usdt", restrictedCountries: ["+86", "+1"] },
     { marketId: "9424", marketName: "eth_usdt", restrictedCountries: ["+86"] },
@@ -972,6 +973,16 @@ export default function SpotMarketManagementPage() {
           </SheetHeader>
           
           <div className="mt-6 space-y-4">
+            <div>
+              <Label className="mb-2 block">市场类型</Label>
+              <Tabs value={restrictionMarketType} onValueChange={(v) => setRestrictionMarketType(v as "spot" | "leverage")} className="w-full">
+                <TabsList className="w-full">
+                  <TabsTrigger value="spot" className="flex-1">现货</TabsTrigger>
+                  <TabsTrigger value="leverage" className="flex-1">杠杆</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
             <div className="flex gap-4">
               <div className="flex-1">
                 <Label className="mb-2 block">选择市场</Label>
@@ -1141,9 +1152,18 @@ export default function SpotMarketManagementPage() {
       <Sheet open={showMarketSelectSheet} onOpenChange={setShowMarketSelectSheet}>
         <SheetContent className="w-[450px] sm:max-w-[450px] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>选择市场</SheetTitle>
+            <SheetTitle className="flex items-center gap-2">
+              选择市场
+              <span className={`text-xs px-2 py-0.5 rounded ${
+                restrictionMarketType === "spot" 
+                  ? "bg-custom-green/10 text-custom-green" 
+                  : "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400"
+              }`}>
+                {restrictionMarketType === "spot" ? "现货" : "杠杆"}
+              </span>
+            </SheetTitle>
             <SheetDescription>
-              选择要配置限制国家的市场
+              选择要配置限制国家的{restrictionMarketType === "spot" ? "现货" : "杠杆"}市场
             </SheetDescription>
           </SheetHeader>
           
