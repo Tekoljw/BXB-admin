@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
-import { Plus, RotateCcw, Download, TrendingUp, Info } from "lucide-react"
+import React, { useState, useMemo, useEffect } from "react"
+import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTotal } from "@/components/data-total"
@@ -68,6 +68,16 @@ interface SpotMarket {
   marketDeviation: string
 }
 
+interface MarketSchedule {
+  id: string
+  marketId: string
+  action: "open" | "close"
+  scheduledAt: Date
+  createdAt: Date
+  status: "pending" | "executed" | "cancelled"
+  executedAt?: Date
+}
+
 const mockMarkets: SpotMarket[] = [
   { id: "9432", name: "ubn_usdt", baseCurrency: "UBN", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 4, displayWeight: 100, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
   { id: "9431", name: "ubc_usdt", baseCurrency: "UBC", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 4, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
@@ -89,7 +99,12 @@ export default function SpotMarketManagementPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditSheet, setShowEditSheet] = useState(false)
-  const [showConfigSheet, setShowConfigSheet] = useState(false)
+  const [showPlanSheet, setShowPlanSheet] = useState(false)
+  const [showHistorySheet, setShowHistorySheet] = useState(false)
+  const [schedules, setSchedules] = useState<MarketSchedule[]>([])
+  const [newScheduleDate, setNewScheduleDate] = useState("")
+  const [newScheduleTime, setNewScheduleTime] = useState("")
+  const [countdown, setCountdown] = useState("")
   const [selectedMarket, setSelectedMarket] = useState<SpotMarket | null>(null)
   const [editingMarket, setEditingMarket] = useState<Partial<SpotMarket>>({})
   const [editTab, setEditTab] = useState("basic")
@@ -206,19 +221,82 @@ export default function SpotMarketManagementPage() {
     toast.success("市场已更新", { description: `${selectedMarket.name} 配置已保存` })
   }
 
-  const handleOpenConfig = (market: SpotMarket) => {
+  const handleOpenPlan = (market: SpotMarket) => {
     setSelectedMarket(market)
     setEditingMarket({ ...market })
-    setShowConfigSheet(true)
+    setNewScheduleDate("")
+    setNewScheduleTime("")
+    setShowPlanSheet(true)
   }
 
-  const handleSaveConfig = () => {
-    if (!selectedMarket) return
-    setMarkets(prev => prev.map(m => 
-      m.id === selectedMarket.id ? { ...m, ...editingMarket } as SpotMarket : m
+  const pendingSchedule = useMemo(() => {
+    if (!selectedMarket) return null
+    return schedules.find(s => s.marketId === selectedMarket.id && s.status === "pending")
+  }, [selectedMarket, schedules])
+
+  const marketHistory = useMemo(() => {
+    if (!selectedMarket) return []
+    return schedules.filter(s => s.marketId === selectedMarket.id && s.status !== "pending").sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  }, [selectedMarket, schedules])
+
+  useEffect(() => {
+    if (!pendingSchedule) {
+      setCountdown("")
+      return
+    }
+    const timer = setInterval(() => {
+      const now = new Date()
+      const diff = pendingSchedule.scheduledAt.getTime() - now.getTime()
+      if (diff <= 0) {
+        setSchedules(prev => prev.map(s => 
+          s.id === pendingSchedule.id ? { ...s, status: "executed" as const, executedAt: new Date() } : s
+        ))
+        setMarkets(prev => prev.map(m => 
+          m.id === pendingSchedule.marketId ? { ...m, tradingStatus: pendingSchedule.action === "open" ? "open" : "closed" } : m
+        ))
+        toast.success("计划已执行", { description: `${pendingSchedule.action === "open" ? "开盘" : "停盘"}计划已自动执行` })
+        setCountdown("")
+        return
+      }
+      const hours = Math.floor(diff / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+      setCountdown(`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`)
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [pendingSchedule])
+
+  const handleCreateSchedule = () => {
+    if (!selectedMarket || !newScheduleDate || !newScheduleTime) {
+      toast.error("请选择计划执行时间")
+      return
+    }
+    const scheduledAt = new Date(`${newScheduleDate}T${newScheduleTime}`)
+    if (scheduledAt <= new Date()) {
+      toast.error("计划时间必须晚于当前时间")
+      return
+    }
+    const action = selectedMarket.tradingStatus === "open" ? "close" : "open"
+    const newSchedule: MarketSchedule = {
+      id: `SCH${Date.now()}`,
+      marketId: selectedMarket.id,
+      action,
+      scheduledAt,
+      createdAt: new Date(),
+      status: "pending"
+    }
+    setSchedules(prev => [...prev, newSchedule])
+    setNewScheduleDate("")
+    setNewScheduleTime("")
+    toast.success("计划已创建", { description: `${action === "open" ? "开盘" : "停盘"}计划将于 ${scheduledAt.toLocaleString()} 执行` })
+  }
+
+  const handleCancelSchedule = () => {
+    if (!pendingSchedule) return
+    setSchedules(prev => prev.map(s => 
+      s.id === pendingSchedule.id ? { ...s, status: "cancelled" as const } : s
     ))
-    setShowConfigSheet(false)
-    toast.success("开盘配置已保存", { description: `${selectedMarket.name} 交易参数已更新` })
+    toast.success("计划已取消")
   }
 
   const handleInlineEdit = (id: string, field: keyof SpotMarket, value: number | string) => {
@@ -349,8 +427,8 @@ export default function SpotMarketManagementPage() {
                       <Button variant="outline" size="sm" onClick={() => handleEdit(market)} className="h-7 text-xs">
                         编辑
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleOpenConfig(market)} className="h-7 text-xs text-custom-green hover:text-custom-green-dark border-custom-green/30 hover:border-custom-green/50">
-                        开盘配置
+                      <Button variant="outline" size="sm" onClick={() => handleOpenPlan(market)} className="h-7 text-xs text-custom-green hover:text-custom-green-dark border-custom-green/30 hover:border-custom-green/50">
+                        开盘计划
                       </Button>
                     </div>
                   </td>
@@ -579,29 +657,166 @@ export default function SpotMarketManagementPage() {
         </SheetContent>
       </Sheet>
 
-      <Sheet open={showConfigSheet} onOpenChange={setShowConfigSheet}>
+      <Sheet open={showPlanSheet} onOpenChange={setShowPlanSheet}>
         <SheetContent className="w-full sm:max-w-md overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>开盘配置</SheetTitle>
+            <SheetTitle>
+              {selectedMarket?.tradingStatus === "open" ? "配置停盘计划" : "配置开盘计划"}
+            </SheetTitle>
           </SheetHeader>
           {selectedMarket && (
             <div className="mt-6 space-y-4">
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <p className="text-sm text-blue-700 dark:text-blue-300">市场：<span className="font-medium">{selectedMarket.name}</span></p>
-              </div>
-              <div className="flex items-center justify-between">
-                <Label>开盘状态</Label>
-                <div className="flex items-center gap-2">
-                  <span className={`text-sm ${editingMarket.tradingStatus === "open" ? "text-green-600" : "text-gray-500"}`}>
-                    {editingMarket.tradingStatus === "open" ? "开盘中" : "已停盘"}
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">市场</span>
+                  <span className="font-medium">{selectedMarket.name}</span>
+                </div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">当前状态</span>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                    selectedMarket.tradingStatus === "open" 
+                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                  }`}>
+                    {selectedMarket.tradingStatus === "open" ? "开盘中" : "已停盘"}
                   </span>
-                  <Switch checked={editingMarket.tradingStatus === "open"} onCheckedChange={(checked) => setEditingMarket({ ...editingMarket, tradingStatus: checked ? "open" : "closed" })} />
                 </div>
               </div>
-              <div className="pt-4 space-y-2">
-                <Button className="w-full bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleSaveConfig}>保存配置</Button>
-                <Button variant="outline" className="w-full" onClick={() => setShowConfigSheet(false)}>取消</Button>
+
+              {pendingSchedule ? (
+                <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Clock className="w-4 h-4 text-amber-600" />
+                    <span className="font-medium text-amber-800 dark:text-amber-300">等待执行的计划</span>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">计划类型</span>
+                      <span className={pendingSchedule.action === "open" ? "text-green-600" : "text-red-600"}>
+                        {pendingSchedule.action === "open" ? "开盘" : "停盘"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">执行时间</span>
+                      <span>{pendingSchedule.scheduledAt.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-400">倒计时</span>
+                      <span className="font-mono text-lg font-bold text-amber-600">{countdown}</span>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4 text-red-600 border-red-200 hover:bg-red-50" onClick={handleCancelSchedule}>
+                    <X className="w-4 h-4 mr-2" />
+                    取消计划
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Calendar className="w-4 h-4 text-custom-green" />
+                      <span className="font-medium">
+                        创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs text-gray-500">日期</Label>
+                        <Input type="date" value={newScheduleDate} onChange={(e) => setNewScheduleDate(e.target.value)} className="mt-1" />
+                      </div>
+                      <div>
+                        <Label className="text-xs text-gray-500">时间</Label>
+                        <Input type="time" value={newScheduleTime} onChange={(e) => setNewScheduleTime(e.target.value)} className="mt-1" />
+                      </div>
+                    </div>
+                    <Button className="w-full mt-4 bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleCreateSchedule}>
+                      创建计划
+                    </Button>
+                  </div>
+
+                  {marketHistory.length > 0 && (
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        最近计划已执行，可以创建新的计划
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <Button variant="outline" className="w-full" onClick={() => setShowHistorySheet(true)}>
+                <History className="w-4 h-4 mr-2" />
+                查看历史记录
+              </Button>
+
+              <Button variant="outline" className="w-full" onClick={() => setShowPlanSheet(false)}>
+                关闭
+              </Button>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={showHistorySheet} onOpenChange={setShowHistorySheet}>
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>计划历史记录</SheetTitle>
+          </SheetHeader>
+          {selectedMarket && (
+            <div className="mt-6 space-y-3">
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400">市场：<span className="font-medium text-gray-900 dark:text-white">{selectedMarket.name}</span></p>
               </div>
+              
+              {marketHistory.length === 0 ? (
+                <div className="text-center py-8">
+                  <History className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                  <p className="text-gray-500 dark:text-gray-400">暂无历史记录</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {marketHistory.map((schedule) => (
+                    <div key={schedule.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                          schedule.action === "open" 
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                            : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                        }`}>
+                          {schedule.action === "open" ? "开盘" : "停盘"}
+                        </span>
+                        <span className={`text-xs px-2 py-0.5 rounded ${
+                          schedule.status === "executed" 
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                            : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                        }`}>
+                          {schedule.status === "executed" ? "已执行" : "已取消"}
+                        </span>
+                      </div>
+                      <div className="text-xs text-gray-500 space-y-1">
+                        <div className="flex justify-between">
+                          <span>计划时间</span>
+                          <span>{schedule.scheduledAt.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>创建时间</span>
+                          <span>{schedule.createdAt.toLocaleString()}</span>
+                        </div>
+                        {schedule.executedAt && (
+                          <div className="flex justify-between">
+                            <span>执行时间</span>
+                            <span>{schedule.executedAt.toLocaleString()}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <Button variant="outline" className="w-full" onClick={() => setShowHistorySheet(false)}>
+                返回
+              </Button>
             </div>
           )}
         </SheetContent>
