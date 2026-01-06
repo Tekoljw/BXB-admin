@@ -92,7 +92,7 @@ export default function SpotMarketManagementPage() {
   const [showConfigSheet, setShowConfigSheet] = useState(false)
   const [selectedMarket, setSelectedMarket] = useState<SpotMarket | null>(null)
   const [editingMarket, setEditingMarket] = useState<Partial<SpotMarket>>({})
-  const [editTab, setEditTab] = useState("public")
+  const [editTab, setEditTab] = useState("basic")
   const [googleCode, setGoogleCode] = useState("")
   const [newMarket, setNewMarket] = useState<Partial<SpotMarket>>({
     name: "",
@@ -187,7 +187,7 @@ export default function SpotMarketManagementPage() {
   const handleEdit = (market: SpotMarket) => {
     setSelectedMarket(market)
     setEditingMarket({ ...market })
-    setEditTab("public")
+    setEditTab("basic")
     setGoogleCode("")
     setShowEditSheet(true)
   }
@@ -219,6 +219,12 @@ export default function SpotMarketManagementPage() {
     ))
     setShowConfigSheet(false)
     toast.success("开盘配置已保存", { description: `${selectedMarket.name} 交易参数已更新` })
+  }
+
+  const handleInlineEdit = (id: string, field: keyof SpotMarket, value: number | string) => {
+    setMarkets(prev => prev.map(m => 
+      m.id === id ? { ...m, [field]: value } as SpotMarket : m
+    ))
   }
 
   const handleExport = () => {
@@ -326,24 +332,24 @@ export default function SpotMarketManagementPage() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{market.name}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{market.baseCurrency.toLowerCase()}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{market.quoteCurrency.toLowerCase()}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">{market.pricePrecision}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">{market.quantityPrecision}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">{market.displayWeight}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                      market.tradingStatus === "open" 
-                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                        : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
-                    }`}>
-                      {market.tradingStatus === "open" ? "开盘" : "停盘"}
-                    </span>
+                    <Input type="number" className="w-16 h-7 text-sm text-center" value={market.pricePrecision} onChange={(e) => handleInlineEdit(market.id, 'pricePrecision', parseInt(e.target.value))} />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Input type="number" className="w-16 h-7 text-sm text-center" value={market.quantityPrecision} onChange={(e) => handleInlineEdit(market.id, 'quantityPrecision', parseInt(e.target.value))} />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Input type="number" className="w-16 h-7 text-sm text-center" value={market.displayWeight} onChange={(e) => handleInlineEdit(market.id, 'displayWeight', parseInt(e.target.value))} />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Switch checked={market.tradingStatus === "open"} onCheckedChange={(checked) => handleInlineEdit(market.id, 'tradingStatus', checked ? "open" : "closed")} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <Button variant="outline" size="sm" onClick={() => handleEdit(market)} className="h-7 text-xs">
                         编辑
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleOpenConfig(market)} className="h-7 text-xs text-blue-600 hover:text-blue-700 border-blue-200 hover:border-blue-300">
+                      <Button variant="outline" size="sm" onClick={() => handleOpenConfig(market)} className="h-7 text-xs text-custom-green hover:text-custom-green-dark border-custom-green/30 hover:border-custom-green/50">
                         开盘配置
                       </Button>
                     </div>
@@ -420,48 +426,11 @@ export default function SpotMarketManagementPage() {
           {selectedMarket && (
             <div className="mt-4">
               <Tabs value={editTab} onValueChange={setEditTab}>
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="public">公共</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="basic">基本配置</TabsTrigger>
                   <TabsTrigger value="trading">交易配置</TabsTrigger>
                   <TabsTrigger value="limits">交易限制</TabsTrigger>
                 </TabsList>
-
-                <TabsContent value="public" className="mt-4 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>市场ID</Label></div>
-                      <Input value={editingMarket.id || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>市场名称</Label></div>
-                      <Input value={editingMarket.name || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>标的币种</Label></div>
-                      <Input value={editingMarket.baseCurrency || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>报价币种</Label></div>
-                      <Input value={editingMarket.quoteCurrency || ""} disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><Label>开盘状态</Label></div>
-                      <Input value={editingMarket.openStatus === "开盘" ? "开盘" : "停盘"} disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1 mb-2"><Label>创建时间</Label></div>
-                      <Input value="2024-01-15 10:30:00" disabled className="bg-gray-50 dark:bg-gray-800" />
-                    </div>
-                  </div>
-                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
-                    <p className="text-sm text-amber-700 dark:text-amber-300">公共信息为系统自动生成，不可修改</p>
-                  </div>
-                </TabsContent>
 
                 <TabsContent value="basic" className="mt-4 space-y-4">
                   <div className="grid grid-cols-3 gap-4">
@@ -518,21 +487,21 @@ export default function SpotMarketManagementPage() {
                 <TabsContent value="trading" className="mt-4 space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <LabelWithInfo label="启用OPENAPI[false=否;true=是]" hasInfo />
+                      <LabelWithInfo label="启用OPENAPI" hasInfo />
                       <Select value={editingMarket.enableOpenAPI ? "是" : "否"} onValueChange={(v) => setEditingMarket({ ...editingMarket, enableOpenAPI: v === "是" })}>
                         <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                         <SelectContent><SelectItem value="是">是</SelectItem><SelectItem value="否">否</SelectItem></SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>允许撤单[false=否;true=是]</Label></div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>允许撤单</Label></div>
                       <Select value={editingMarket.allowCancel ? "是" : "否"} onValueChange={(v) => setEditingMarket({ ...editingMarket, allowCancel: v === "是" })}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent><SelectItem value="是">是</SelectItem><SelectItem value="否">否</SelectItem></SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>启用交易[false=否;true=是]</Label></div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>启用交易</Label></div>
                       <Select value={editingMarket.enableTrading ? "是" : "否"} onValueChange={(v) => setEditingMarket({ ...editingMarket, enableTrading: v === "是" })}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent><SelectItem value="是">是</SelectItem><SelectItem value="否">否</SelectItem></SelectContent>
@@ -541,7 +510,7 @@ export default function SpotMarketManagementPage() {
                   </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>启用返佣[false=否;true=是]</Label></div>
+                      <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>启用返佣</Label></div>
                       <Select value={editingMarket.enableRebate ? "是" : "否"} onValueChange={(v) => setEditingMarket({ ...editingMarket, enableRebate: v === "是" })}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent><SelectItem value="是">是</SelectItem><SelectItem value="否">否</SelectItem></SelectContent>
@@ -603,7 +572,7 @@ export default function SpotMarketManagementPage() {
 
               <div className="pt-6 flex gap-2">
                 <Button variant="outline" className="flex-1" onClick={() => setShowEditSheet(false)}>取消</Button>
-                <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveEdit}>提交</Button>
+                <Button className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleSaveEdit}>提交</Button>
               </div>
             </div>
           )}
