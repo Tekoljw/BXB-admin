@@ -655,13 +655,13 @@ export default function SpotMarketManagementPage() {
         </SheetContent>
       </Sheet>
 
-      <Dialog open={showPlanDialog} onOpenChange={setShowPlanDialog}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>开盘计划</DialogTitle>
-          </DialogHeader>
+      <Sheet open={showPlanDialog} onOpenChange={setShowPlanDialog}>
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>开盘计划</SheetTitle>
+          </SheetHeader>
           {selectedMarket && (
-            <div className="space-y-4">
+            <div className="mt-6 space-y-4">
               <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">市场</span>
@@ -715,27 +715,100 @@ export default function SpotMarketManagementPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-                        <div className="flex items-center gap-2 mb-4">
-                          <Calendar className="w-4 h-4 text-custom-green" />
-                          <span className="font-medium">
-                            创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
-                          </span>
-                        </div>
-                        <div>
-                          <Label className="text-sm text-gray-600 dark:text-gray-400">选择执行时间</Label>
-                          <Input 
-                            type="datetime-local" 
-                            value={newScheduleDateTime} 
-                            onChange={(e) => setNewScheduleDateTime(e.target.value)} 
-                            className="mt-2 w-full"
-                            min={new Date().toISOString().slice(0, 16)}
-                          />
-                        </div>
-                        <Button className="w-full mt-4 bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleCreateSchedule}>
-                          创建计划
-                        </Button>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Calendar className="w-4 h-4 text-custom-green" />
+                        <span className="font-medium">
+                          创建{selectedMarket.tradingStatus === "open" ? "停盘" : "开盘"}计划
+                        </span>
                       </div>
+
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">快捷选择</Label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {[
+                            { label: "30分钟后", minutes: 30 },
+                            { label: "1小时后", minutes: 60 },
+                            { label: "2小时后", minutes: 120 },
+                            { label: "6小时后", minutes: 360 },
+                            { label: "12小时后", minutes: 720 },
+                            { label: "24小时后", minutes: 1440 },
+                          ].map((preset) => {
+                            const presetTime = new Date(Date.now() + preset.minutes * 60 * 1000)
+                            const presetValue = presetTime.toISOString().slice(0, 16)
+                            return (
+                              <Button
+                                key={preset.label}
+                                variant="outline"
+                                size="sm"
+                                className={`text-xs ${newScheduleDateTime === presetValue ? "border-custom-green bg-custom-green/10 text-custom-green" : ""}`}
+                                onClick={() => setNewScheduleDateTime(presetValue)}
+                              >
+                                {preset.label}
+                              </Button>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">自定义时间</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-xs text-gray-500">日期</Label>
+                            <Input 
+                              type="date" 
+                              value={newScheduleDateTime ? newScheduleDateTime.split("T")[0] : ""} 
+                              onChange={(e) => {
+                                const time = newScheduleDateTime ? newScheduleDateTime.split("T")[1] || "09:00" : "09:00"
+                                setNewScheduleDateTime(`${e.target.value}T${time}`)
+                              }} 
+                              min={new Date().toISOString().slice(0, 10)}
+                              className="w-full"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs text-gray-500">时间</Label>
+                            <Select 
+                              value={newScheduleDateTime ? newScheduleDateTime.split("T")[1]?.slice(0, 5) || "" : ""}
+                              onValueChange={(time) => {
+                                const date = newScheduleDateTime ? newScheduleDateTime.split("T")[0] : new Date().toISOString().slice(0, 10)
+                                setNewScheduleDateTime(`${date}T${time}`)
+                              }}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="选择时间" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Array.from({ length: 24 }, (_, h) => 
+                                  ["00", "30"].map(m => {
+                                    const time = `${h.toString().padStart(2, "0")}:${m}`
+                                    return (
+                                      <SelectItem key={time} value={time}>
+                                        {time}
+                                      </SelectItem>
+                                    )
+                                  })
+                                ).flat()}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {newScheduleDateTime && (
+                        <div className="p-3 bg-custom-green/10 border border-custom-green/30 rounded-lg">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">计划执行时间</span>
+                            <span className="font-medium text-custom-green">
+                              {new Date(newScheduleDateTime).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      <Button className="w-full bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleCreateSchedule} disabled={!newScheduleDateTime}>
+                        创建计划
+                      </Button>
                     </div>
                   )}
                 </TabsContent>
@@ -747,7 +820,7 @@ export default function SpotMarketManagementPage() {
                       <p className="text-gray-500 dark:text-gray-400">暂无历史记录</p>
                     </div>
                   ) : (
-                    <div className="space-y-2 max-h-80 overflow-y-auto">
+                    <div className="space-y-2">
                       {marketHistory.map((schedule) => (
                         <div key={schedule.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
                           <div className="flex items-center justify-between mb-2">
@@ -790,8 +863,8 @@ export default function SpotMarketManagementPage() {
               </Tabs>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
