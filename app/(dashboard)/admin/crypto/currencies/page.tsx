@@ -33,6 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 
 type CurrencyCategory = "stablecoin" | "mainstream" | "meme" | "other"
+type CurrencySector = "defi" | "gamefi" | "nft" | "layer1" | "layer2" | "meme" | "stablecoin" | "other"
 
 interface CryptoCurrency {
   id: string
@@ -52,6 +53,10 @@ interface CryptoCurrency {
   precision: number
   sort: number
   logoUrl?: string
+  listingName: string
+  existsOnChain: boolean
+  sector: CurrencySector
+  transferEnabled: boolean
 }
 
 const ALL_NETWORKS = ['TRC20', 'ERC20', 'BSC', 'Polygon', 'Solana', 'Bitcoin', 'Ethereum', 'Arbitrum', 'Optimism', 'Dogecoin', 'Ripple']
@@ -86,6 +91,10 @@ export default function DepositWithdrawalCurrenciesPage() {
   const logoInputRef = useRef<HTMLInputElement>(null)
   const [editingMinWithdraw, setEditingMinWithdraw] = useState<string | null>(null)
   const [tempMinWithdraw, setTempMinWithdraw] = useState("")
+  const [editingPrecision, setEditingPrecision] = useState<string | null>(null)
+  const [tempPrecision, setTempPrecision] = useState("")
+  const [editingWeight, setEditingWeight] = useState<string | null>(null)
+  const [tempWeight, setTempWeight] = useState("")
   const [editingNetworks, setEditingNetworks] = useState<string[]>([])
   const [editingFee, setEditingFee] = useState({
     minFee: "",
@@ -108,7 +117,11 @@ export default function DepositWithdrawalCurrenciesPage() {
     withdrawEnabled: true,
     visible: true,
     precision: 6,
-    sort: 0
+    sort: 0,
+    listingName: "",
+    existsOnChain: true,
+    sector: "other",
+    transferEnabled: true
   })
 
   // 获取分类的中文显示名称
@@ -133,6 +146,36 @@ export default function DepositWithdrawalCurrenciesPage() {
     return colors[category]
   }
 
+  // 获取板块的中文显示名称
+  const getSectorLabel = (sector: CurrencySector): string => {
+    const labels: Record<CurrencySector, string> = {
+      defi: "DeFi",
+      gamefi: "GameFi",
+      nft: "NFT",
+      layer1: "Layer1",
+      layer2: "Layer2",
+      meme: "Meme",
+      stablecoin: "稳定币",
+      other: "其他"
+    }
+    return labels[sector]
+  }
+
+  // 获取板块标签的颜色
+  const getSectorColor = (sector: CurrencySector): string => {
+    const colors: Record<CurrencySector, string> = {
+      defi: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+      gamefi: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+      nft: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400",
+      layer1: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
+      layer2: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400",
+      meme: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+      stablecoin: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+      other: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+    }
+    return colors[sector]
+  }
+
   // 示例币种数据
   const [currencies, setCurrencies] = useState<CryptoCurrency[]>([
     {
@@ -151,7 +194,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 6,
-      sort: 1,
+      sort: 100,
+      listingName: 'Tether USD',
+      existsOnChain: true,
+      sector: 'stablecoin',
+      transferEnabled: true,
     },
     {
       id: '2',
@@ -169,7 +216,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 8,
-      sort: 2,
+      sort: 99,
+      listingName: 'Bitcoin Core',
+      existsOnChain: true,
+      sector: 'layer1',
+      transferEnabled: true,
     },
     {
       id: '3',
@@ -187,7 +238,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 8,
-      sort: 3,
+      sort: 98,
+      listingName: 'Ethereum Mainnet',
+      existsOnChain: true,
+      sector: 'layer1',
+      transferEnabled: true,
     },
     {
       id: '4',
@@ -205,7 +260,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: false,
       visible: true,
       precision: 8,
-      sort: 4,
+      sort: 95,
+      listingName: 'BNB Chain Token',
+      existsOnChain: true,
+      sector: 'layer1',
+      transferEnabled: true,
     },
     {
       id: '5',
@@ -223,7 +282,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 6,
-      sort: 5,
+      sort: 97,
+      listingName: 'USD Coin by Circle',
+      existsOnChain: true,
+      sector: 'stablecoin',
+      transferEnabled: true,
     },
     {
       id: '6',
@@ -241,7 +304,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: false,
       visible: false,
       precision: 8,
-      sort: 6,
+      sort: 90,
+      listingName: 'Solana Mainnet',
+      existsOnChain: true,
+      sector: 'layer1',
+      transferEnabled: false,
     },
     {
       id: '7',
@@ -259,7 +326,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 8,
-      sort: 7,
+      sort: 80,
+      listingName: 'Dogecoin Original',
+      existsOnChain: true,
+      sector: 'meme',
+      transferEnabled: true,
     },
     {
       id: '8',
@@ -277,7 +348,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 0,
-      sort: 8,
+      sort: 75,
+      listingName: 'Shiba Inu Token',
+      existsOnChain: true,
+      sector: 'meme',
+      transferEnabled: true,
     },
     {
       id: '9',
@@ -295,7 +370,77 @@ export default function DepositWithdrawalCurrenciesPage() {
       withdrawEnabled: true,
       visible: true,
       precision: 6,
-      sort: 9,
+      sort: 85,
+      listingName: 'XRP Ledger',
+      existsOnChain: true,
+      sector: 'layer1',
+      transferEnabled: true,
+    },
+    {
+      id: '10',
+      name: 'Uniswap',
+      symbol: 'UNI',
+      icon: 'U',
+      category: 'other',
+      networks: ['ERC20'],
+      minWithdraw: '1',
+      withdrawFee: '0.1',
+      maxWithdrawFee: '5',
+      feePercentage: '0.1',
+      gasEnabled: true,
+      depositEnabled: true,
+      withdrawEnabled: true,
+      visible: true,
+      precision: 8,
+      sort: 70,
+      listingName: 'Uniswap Protocol',
+      existsOnChain: true,
+      sector: 'defi',
+      transferEnabled: true,
+    },
+    {
+      id: '11',
+      name: 'Axie Infinity',
+      symbol: 'AXS',
+      icon: 'A',
+      category: 'other',
+      networks: ['ERC20'],
+      minWithdraw: '0.5',
+      withdrawFee: '0.05',
+      maxWithdrawFee: '2',
+      feePercentage: '0.1',
+      gasEnabled: true,
+      depositEnabled: true,
+      withdrawEnabled: true,
+      visible: true,
+      precision: 8,
+      sort: 65,
+      listingName: 'Axie Infinity Shards',
+      existsOnChain: true,
+      sector: 'gamefi',
+      transferEnabled: false,
+    },
+    {
+      id: '12',
+      name: 'Arbitrum',
+      symbol: 'ARB',
+      icon: 'A',
+      category: 'other',
+      networks: ['Arbitrum'],
+      minWithdraw: '5',
+      withdrawFee: '0.5',
+      maxWithdrawFee: '10',
+      feePercentage: '0.1',
+      gasEnabled: false,
+      depositEnabled: true,
+      withdrawEnabled: true,
+      visible: true,
+      precision: 8,
+      sort: 60,
+      listingName: 'Arbitrum One Token',
+      existsOnChain: true,
+      sector: 'layer2',
+      transferEnabled: true,
     },
   ])
 
@@ -554,6 +699,67 @@ export default function DepositWithdrawalCurrenciesPage() {
     setEditingMinWithdraw(null)
   }
 
+  const savePrecision = (id: string) => {
+    const precision = parseInt(tempPrecision)
+    if (isNaN(precision) || precision < 0) {
+      setEditingPrecision(null)
+      return
+    }
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("精度已更新", {
+          description: `${currency.symbol} 精度已更新为 ${precision}`,
+        })
+        return { ...currency, precision }
+      }
+      return currency
+    }))
+    setEditingPrecision(null)
+  }
+
+  const saveWeight = (id: string) => {
+    const weight = parseInt(tempWeight)
+    if (isNaN(weight) || weight < 0) {
+      setEditingWeight(null)
+      return
+    }
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("展示权重已更新", {
+          description: `${currency.symbol} 展示权重已更新为 ${weight}`,
+        })
+        return { ...currency, sort: weight }
+      }
+      return currency
+    }))
+    setEditingWeight(null)
+  }
+
+  const toggleTransfer = (id: string) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        const newStatus = !currency.transferEnabled
+        toast.success(newStatus ? "划转已开启" : "划转已关闭", {
+          description: `${currency.symbol} 划转功能已${newStatus ? '开启' : '关闭'}`,
+        })
+        return { ...currency, transferEnabled: newStatus }
+      }
+      return currency
+    }))
+  }
+
+  const handleSectorChange = (id: string, sector: CurrencySector) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        toast.success("所属板块已更新", {
+          description: `${currency.symbol} 板块已更新为 ${getSectorLabel(sector)}`,
+        })
+        return { ...currency, sector }
+      }
+      return currency
+    }))
+  }
+
   const handleAddCurrency = () => {
     if (!newCurrency.name || !newCurrency.symbol) {
       toast.error("请填写完整信息", { description: "币种名称和代码为必填项" })
@@ -577,7 +783,11 @@ export default function DepositWithdrawalCurrenciesPage() {
       visible: newCurrency.visible ?? true,
       precision: newCurrency.precision || 6,
       sort: newCurrency.sort || currencies.length + 1,
-      logoUrl: newCurrency.logoUrl
+      logoUrl: newCurrency.logoUrl,
+      listingName: newCurrency.listingName || newCurrency.name!,
+      existsOnChain: newCurrency.existsOnChain ?? true,
+      sector: newCurrency.sector || "other",
+      transferEnabled: newCurrency.transferEnabled ?? true
     }
 
     setCurrencies([...currencies, currency])
@@ -626,19 +836,16 @@ export default function DepositWithdrawalCurrenciesPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <span className="text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-3 py-1.5 rounded-lg flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            币种列表从供应商接口配置读取
+          </span>
           <Button 
             variant="outline"
             onClick={() => setShowNetworkManagementSheet(true)}
           >
             <Network className="w-4 h-4 mr-2" />
             网络管理
-          </Button>
-          <Button 
-            className="bg-custom-green hover:bg-custom-green-dark text-white"
-            onClick={() => setShowAddDialog(true)}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            添加币种
           </Button>
         </div>
       </div>
@@ -693,32 +900,44 @@ export default function DepositWithdrawalCurrenciesPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  币种ID
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   币种
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  收录名称
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   分类
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  精度
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  展示权重
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  链上存在
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  所属板块
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   支持网络
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  最小提现
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  提现手续费
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   充值
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   提现
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  显示
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  划转
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  排序
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  显示
                 </th>
               </tr>
             </thead>
@@ -728,10 +947,15 @@ export default function DepositWithdrawalCurrenciesPage() {
                   key={currency.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-900/30 transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                      {currency.id}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
                       <div 
-                        className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold cursor-pointer hover:opacity-80 transition-opacity relative group"
+                        className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:opacity-80 transition-opacity relative group"
                         onClick={() => {
                           const input = document.getElementById(`logo-input-${currency.id}`) as HTMLInputElement
                           input?.click()
@@ -743,7 +967,7 @@ export default function DepositWithdrawalCurrenciesPage() {
                           currency.icon
                         )}
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-full flex items-center justify-center transition-all">
-                          <Upload className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <Upload className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
                       <input
@@ -754,44 +978,42 @@ export default function DepositWithdrawalCurrenciesPage() {
                         className="hidden"
                       />
                       <div>
-                        <div className="font-semibold text-gray-900 dark:text-white">
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm">
                           {currency.symbol}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
                           {currency.name}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      {currency.listingName}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <button
                       onClick={() => handleEditCategory(currency)}
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity group ${getCategoryColor(currency.category)}`}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity group ${getCategoryColor(currency.category)}`}
                     >
                       {getCategoryLabel(currency.category)}
                       <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleViewNetworks(currency)}
-                      className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      <Network className="w-4 h-4" />
-                      {currency.networks.length} 个网络
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {editingMinWithdraw === currency.id ? (
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {editingPrecision === currency.id ? (
                       <div className="flex items-center gap-1">
                         <Input
-                          type="text"
-                          value={tempMinWithdraw}
-                          onChange={(e) => setTempMinWithdraw(e.target.value)}
-                          className="w-24 h-7 text-sm"
+                          type="number"
+                          value={tempPrecision}
+                          onChange={(e) => setTempPrecision(e.target.value)}
+                          className="w-16 h-7 text-sm text-center"
+                          min="0"
+                          max="18"
                           onKeyDown={(e) => {
-                            if (e.key === 'Enter') saveMinWithdraw(currency.id)
-                            if (e.key === 'Escape') setEditingMinWithdraw(null)
+                            if (e.key === 'Enter') savePrecision(currency.id)
+                            if (e.key === 'Escape') setEditingPrecision(null)
                           }}
                           autoFocus
                         />
@@ -799,7 +1021,7 @@ export default function DepositWithdrawalCurrenciesPage() {
                           size="sm"
                           variant="ghost"
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
-                          onClick={() => saveMinWithdraw(currency.id)}
+                          onClick={() => savePrecision(currency.id)}
                         >
                           <Check className="h-4 w-4" />
                         </Button>
@@ -807,7 +1029,7 @@ export default function DepositWithdrawalCurrenciesPage() {
                           size="sm"
                           variant="ghost"
                           className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
-                          onClick={() => setEditingMinWithdraw(null)}
+                          onClick={() => setEditingPrecision(null)}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -816,58 +1038,126 @@ export default function DepositWithdrawalCurrenciesPage() {
                       <div
                         className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
                         onClick={() => {
-                          setEditingMinWithdraw(currency.id)
-                          setTempMinWithdraw(currency.minWithdraw)
+                          setEditingPrecision(currency.id)
+                          setTempPrecision(String(currency.precision))
                         }}
                       >
-                        <span className="text-gray-900 dark:text-white font-medium">
-                          {currency.minWithdraw}
+                        <span className="text-gray-900 dark:text-white font-medium text-sm">
+                          {currency.precision}
                         </span>
                         <Edit2 className="h-3 w-3 text-gray-400" />
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleEditFee(currency)}
-                      className="flex flex-col items-start text-left cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 group"
-                    >
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {editingWeight === currency.id ? (
                       <div className="flex items-center gap-1">
-                        <span className="text-gray-900 dark:text-white font-medium">
-                          {currency.withdrawFee} - {currency.maxWithdrawFee}
+                        <Input
+                          type="number"
+                          value={tempWeight}
+                          onChange={(e) => setTempWeight(e.target.value)}
+                          className="w-16 h-7 text-sm text-center"
+                          min="0"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveWeight(currency.id)
+                            if (e.key === 'Escape') setEditingWeight(null)
+                          }}
+                          autoFocus
+                        />
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          onClick={() => saveWeight(currency.id)}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+                          onClick={() => setEditingWeight(null)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div
+                        className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded px-2 py-1 inline-flex items-center gap-1"
+                        onClick={() => {
+                          setEditingWeight(currency.id)
+                          setTempWeight(String(currency.sort))
+                        }}
+                      >
+                        <span className="text-gray-900 dark:text-white font-medium text-sm">
+                          {currency.sort}
                         </span>
-                        <Edit2 className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Edit2 className="h-3 w-3 text-gray-400" />
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {currency.feePercentage}% {currency.gasEnabled && <span className="text-green-600 dark:text-green-400">· Gas开</span>}
-                      </div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {currency.existsOnChain ? (
+                      <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 text-xs">
+                        <Check className="h-3 w-3" /> 是
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-gray-400 text-xs">
+                        <X className="h-3 w-3" /> 否
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Select
+                      value={currency.sector}
+                      onValueChange={(value) => handleSectorChange(currency.id, value as CurrencySector)}
+                    >
+                      <SelectTrigger className="w-24 h-7 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="defi">DeFi</SelectItem>
+                        <SelectItem value="gamefi">GameFi</SelectItem>
+                        <SelectItem value="nft">NFT</SelectItem>
+                        <SelectItem value="layer1">Layer1</SelectItem>
+                        <SelectItem value="layer2">Layer2</SelectItem>
+                        <SelectItem value="meme">Meme</SelectItem>
+                        <SelectItem value="stablecoin">稳定币</SelectItem>
+                        <SelectItem value="other">其他</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <button
+                      onClick={() => handleViewNetworks(currency)}
+                      className="flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                    >
+                      <Network className="w-3 h-3" />
+                      {currency.networks.length}个
                     </button>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <Switch
                       checked={currency.depositEnabled}
                       onCheckedChange={() => toggleDeposit(currency.id)}
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <Switch
                       checked={currency.withdrawEnabled}
                       onCheckedChange={() => toggleWithdraw(currency.id)}
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Switch
+                      checked={currency.transferEnabled}
+                      onCheckedChange={() => toggleTransfer(currency.id)}
+                    />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <Switch
                       checked={currency.visible}
                       onCheckedChange={() => toggleVisible(currency.id)}
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Input
-                      type="number"
-                      value={currency.sort}
-                      onChange={(e) => updateSort(currency.id, parseInt(e.target.value) || 0)}
-                      className="w-20 text-center"
-                      min="0"
                     />
                   </td>
                 </tr>
@@ -938,6 +1228,15 @@ export default function DepositWithdrawalCurrenciesPage() {
               </div>
 
               <div>
+                <Label>收录名称</Label>
+                <Input 
+                  value={editingConfig.listingName || ''} 
+                  onChange={(e) => setEditingConfig({ ...editingConfig, listingName: e.target.value })}
+                  className="mt-2" 
+                />
+              </div>
+
+              <div>
                 <Label>精度</Label>
                 <Input 
                   type="number" 
@@ -948,40 +1247,35 @@ export default function DepositWithdrawalCurrenciesPage() {
               </div>
 
               <div>
-                <Label>最小提现金额</Label>
-                <Input 
-                  value={editingConfig.minWithdraw || ''} 
-                  onChange={(e) => setEditingConfig({ ...editingConfig, minWithdraw: e.target.value })}
-                  className="mt-2" 
-                />
-              </div>
-
-              <div>
-                <Label>提现手续费</Label>
-                <Input 
-                  value={editingConfig.withdrawFee || ''} 
-                  onChange={(e) => setEditingConfig({ ...editingConfig, withdrawFee: e.target.value })}
-                  className="mt-2" 
-                />
-              </div>
-
-              <div>
-                <Label>封顶提现手续费</Label>
-                <Input 
-                  value={editingConfig.maxWithdrawFee || ''} 
-                  onChange={(e) => setEditingConfig({ ...editingConfig, maxWithdrawFee: e.target.value })}
-                  className="mt-2" 
-                />
-              </div>
-
-              <div>
-                <Label>排序</Label>
+                <Label>展示权重</Label>
                 <Input 
                   type="number" 
                   value={editingConfig.sort || 0} 
                   onChange={(e) => setEditingConfig({ ...editingConfig, sort: parseInt(e.target.value) })}
                   className="mt-2" 
                 />
+              </div>
+
+              <div>
+                <Label>所属板块</Label>
+                <Select 
+                  value={editingConfig.sector || 'other'} 
+                  onValueChange={(value) => setEditingConfig({ ...editingConfig, sector: value as CurrencySector })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="defi">DeFi</SelectItem>
+                    <SelectItem value="gamefi">GameFi</SelectItem>
+                    <SelectItem value="nft">NFT</SelectItem>
+                    <SelectItem value="layer1">Layer1</SelectItem>
+                    <SelectItem value="layer2">Layer2</SelectItem>
+                    <SelectItem value="meme">Meme</SelectItem>
+                    <SelectItem value="stablecoin">稳定币</SelectItem>
+                    <SelectItem value="other">其他</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
@@ -1040,6 +1334,14 @@ export default function DepositWithdrawalCurrenciesPage() {
                 <Switch
                   checked={editingConfig.withdrawEnabled || false}
                   onCheckedChange={(checked) => setEditingConfig({ ...editingConfig, withdrawEnabled: checked })}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label>划转开关</Label>
+                <Switch
+                  checked={editingConfig.transferEnabled || false}
+                  onCheckedChange={(checked) => setEditingConfig({ ...editingConfig, transferEnabled: checked })}
                 />
               </div>
 
