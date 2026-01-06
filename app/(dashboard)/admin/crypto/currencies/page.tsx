@@ -1030,19 +1030,19 @@ export default function DepositWithdrawalCurrenciesPage() {
         </SheetContent>
       </Sheet>
 
-      {/* 网络列表对话框 */}
-      <Dialog open={showNetworksDialog} onOpenChange={setShowNetworksDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{selectedCurrency?.symbol} 支持的网络</DialogTitle>
-            <DialogDescription>
+      {/* 网络列表右侧滑出面板 */}
+      <Sheet open={showNetworksDialog} onOpenChange={setShowNetworksDialog}>
+        <SheetContent className="w-full sm:max-w-[400px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>{selectedCurrency?.symbol} 支持的网络</SheetTitle>
+            <SheetDescription>
               选择 {selectedCurrency?.name} 支持的区块链网络
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
 
           {selectedCurrency && (
-            <div className="space-y-4">
-              <div className="space-y-2 max-h-80 overflow-y-auto">
+            <div className="space-y-4 py-6">
+              <div className="space-y-2">
                 {ALL_NETWORKS.map((network) => (
                   <div
                     key={network}
@@ -1059,7 +1059,7 @@ export default function DepositWithdrawalCurrenciesPage() {
                   </div>
                 ))}
               </div>
-              <div className="flex gap-2 pt-2">
+              <div className="flex gap-2 pt-4 border-t">
                 <Button 
                   className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
                   onClick={handleSaveNetworks}
@@ -1076,8 +1076,8 @@ export default function DepositWithdrawalCurrenciesPage() {
               </div>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
 
       {/* 提现手续费编辑对话框 */}
       <Dialog open={showFeeDialog} onOpenChange={setShowFeeDialog}>
