@@ -773,7 +773,7 @@ export default function SpotMarketManagementPage() {
                                   }
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0" align="start" container={scheduleSheetRef.current}>
+                              <PopoverContent className="w-auto p-0" align="start">
                                 <Calendar
                                   mode="single"
                                   selected={newScheduleDateTime ? new Date(newScheduleDateTime.split("T")[0]) : undefined}
