@@ -63,6 +63,8 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [showNetworksDialog, setShowNetworksDialog] = useState(false)
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showFeeDialog, setShowFeeDialog] = useState(false)
+  const [showCategoryDialog, setShowCategoryDialog] = useState(false)
+  const [editingCategory, setEditingCategory] = useState<CurrencyCategory>('stablecoin')
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
   const [categoryTab, setCategoryTab] = useState("all")
   const [networkTab, setNetworkTab] = useState("all")
@@ -455,6 +457,28 @@ export default function DepositWithdrawalCurrenciesPage() {
     })
   }
 
+  const handleEditCategory = (currency: CryptoCurrency) => {
+    setSelectedCurrency(currency)
+    setEditingCategory(currency.category)
+    setShowCategoryDialog(true)
+  }
+
+  const handleSaveCategory = () => {
+    if (!selectedCurrency) return
+    
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === selectedCurrency.id) {
+        return { ...currency, category: editingCategory }
+      }
+      return currency
+    }))
+    
+    toast.success("分类已更新", {
+      description: `${selectedCurrency.symbol} 的分类已更新为${getCategoryLabel(editingCategory)}`,
+    })
+    setShowCategoryDialog(false)
+  }
+
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -703,9 +727,13 @@ export default function DepositWithdrawalCurrenciesPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(currency.category)}`}>
+                    <button
+                      onClick={() => handleEditCategory(currency)}
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity group ${getCategoryColor(currency.category)}`}
+                    >
                       {getCategoryLabel(currency.category)}
-                    </span>
+                      <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
@@ -1121,6 +1149,60 @@ export default function DepositWithdrawalCurrenciesPage() {
                   variant="outline" 
                   className="flex-1"
                   onClick={() => setShowFeeDialog(false)}
+                >
+                  取消
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 分类编辑对话框 */}
+      <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>修改 {selectedCurrency?.symbol} 分类</DialogTitle>
+            <DialogDescription>
+              选择 {selectedCurrency?.name} 的币种分类
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedCurrency && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                {(['stablecoin', 'mainstream', 'meme', 'other'] as CurrencyCategory[]).map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setEditingCategory(category)}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
+                      editingCategory === category
+                        ? 'border-custom-green bg-custom-green/5'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(category)}`}>
+                        {getCategoryLabel(category)}
+                      </span>
+                    </div>
+                    {editingCategory === category && (
+                      <Check className="h-5 w-5 text-custom-green" />
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Button 
+                  className="flex-1 bg-custom-green hover:bg-custom-green-dark text-white"
+                  onClick={handleSaveCategory}
+                >
+                  保存
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowCategoryDialog(false)}
                 >
                   取消
                 </Button>
