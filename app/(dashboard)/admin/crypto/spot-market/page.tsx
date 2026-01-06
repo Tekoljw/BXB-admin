@@ -344,16 +344,6 @@ export default function SpotMarketManagementPage() {
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex flex-wrap items-center gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input 
-              placeholder="搜索市场名称、币种..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 w-[240px]"
-            />
-          </div>
-
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-auto">
             <TabsList className="h-9">
               <TabsTrigger value="all" className="text-sm px-4">全部</TabsTrigger>
@@ -362,11 +352,23 @@ export default function SpotMarketManagementPage() {
             </TabsList>
           </Tabs>
 
-          <div className="flex items-center gap-2 ml-auto">
-            <Button variant="outline" onClick={handleReset}>
-              <RotateCcw className="w-4 h-4 mr-2" />
-              重置
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder="搜索市场名称、币种..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 w-[240px]"
+              />
+            </div>
+            <Button variant="outline" className="h-9">
+              <Search className="w-4 h-4 mr-2" />
+              搜索
             </Button>
+          </div>
+
+          <div className="flex items-center gap-2 ml-auto">
             <Button 
               className="bg-custom-green hover:bg-custom-green-dark text-white"
               onClick={() => setShowAddDialog(true)}
