@@ -748,6 +748,19 @@ export default function DepositWithdrawalCurrenciesPage() {
     }))
   }
 
+  const toggleExistsOnChain = (id: string) => {
+    setCurrencies(prev => prev.map(currency => {
+      if (currency.id === id) {
+        const newStatus = !currency.existsOnChain
+        toast.success(newStatus ? "已设为链上存在" : "已设为非链上存在", {
+          description: `${currency.symbol} 链上存在状态已${newStatus ? '开启' : '关闭'}`,
+        })
+        return { ...currency, existsOnChain: newStatus }
+      }
+      return currency
+    }))
+  }
+
   const handleSectorChange = (id: string, sector: CurrencySector) => {
     setCurrencies(prev => prev.map(currency => {
       if (currency.id === id) {
@@ -846,6 +859,13 @@ export default function DepositWithdrawalCurrenciesPage() {
           >
             <Network className="w-4 h-4 mr-2" />
             网络管理
+          </Button>
+          <Button 
+            className="bg-custom-green hover:bg-custom-green-dark text-white"
+            onClick={() => setShowAddDialog(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            添加币种
           </Button>
         </div>
       </div>
@@ -1097,15 +1117,10 @@ export default function DepositWithdrawalCurrenciesPage() {
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    {currency.existsOnChain ? (
-                      <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 text-xs">
-                        <Check className="h-3 w-3" /> 是
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-gray-400 text-xs">
-                        <X className="h-3 w-3" /> 否
-                      </span>
-                    )}
+                    <Switch
+                      checked={currency.existsOnChain}
+                      onCheckedChange={() => toggleExistsOnChain(currency.id)}
+                    />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <Select
