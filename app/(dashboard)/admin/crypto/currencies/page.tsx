@@ -64,6 +64,21 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showFeeDialog, setShowFeeDialog] = useState(false)
   const [showCategoryDialog, setShowCategoryDialog] = useState(false)
+  const [showNetworkManagementSheet, setShowNetworkManagementSheet] = useState(false)
+  
+  const [globalNetworks, setGlobalNetworks] = useState([
+    { id: 'trc20', name: 'TRC20', fullName: 'Tron Network', enabled: true },
+    { id: 'erc20', name: 'ERC20', fullName: 'Ethereum Network', enabled: true },
+    { id: 'bsc', name: 'BSC', fullName: 'BNB Smart Chain', enabled: true },
+    { id: 'polygon', name: 'Polygon', fullName: 'Polygon Network', enabled: true },
+    { id: 'solana', name: 'Solana', fullName: 'Solana Network', enabled: true },
+    { id: 'bitcoin', name: 'Bitcoin', fullName: 'Bitcoin Network', enabled: true },
+    { id: 'ethereum', name: 'Ethereum', fullName: 'Ethereum Mainnet', enabled: true },
+    { id: 'arbitrum', name: 'Arbitrum', fullName: 'Arbitrum One', enabled: false },
+    { id: 'optimism', name: 'Optimism', fullName: 'Optimism Network', enabled: false },
+    { id: 'dogecoin', name: 'Dogecoin', fullName: 'Dogecoin Network', enabled: true },
+    { id: 'ripple', name: 'Ripple', fullName: 'XRP Ledger', enabled: true },
+  ])
   const [editingCategory, setEditingCategory] = useState<CurrencyCategory>('stablecoin')
   const [editingConfig, setEditingConfig] = useState<Partial<CryptoCurrency>>({})
   const [categoryTab, setCategoryTab] = useState("all")
@@ -587,6 +602,19 @@ export default function DepositWithdrawalCurrenciesPage() {
     toast.success("币种已添加", { description: `${currency.symbol} 已成功添加` })
   }
 
+  const toggleGlobalNetwork = (networkId: string) => {
+    setGlobalNetworks(prev => prev.map(network => {
+      if (network.id === networkId) {
+        const newStatus = !network.enabled
+        toast.success(newStatus ? "网络已启用" : "网络已禁用", {
+          description: `${network.name} 已${newStatus ? '启用' : '禁用'}`,
+        })
+        return { ...network, enabled: newStatus }
+      }
+      return network
+    }))
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* 页面标题 */}
@@ -597,13 +625,22 @@ export default function DepositWithdrawalCurrenciesPage() {
             管理支持的加密货币币种、网络和配置参数
           </p>
         </div>
-        <Button 
-          className="bg-custom-green hover:bg-custom-green-dark text-white"
-          onClick={() => setShowAddDialog(true)}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          添加币种
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline"
+            onClick={() => setShowNetworkManagementSheet(true)}
+          >
+            <Network className="w-4 h-4 mr-2" />
+            网络管理
+          </Button>
+          <Button 
+            className="bg-custom-green hover:bg-custom-green-dark text-white"
+            onClick={() => setShowAddDialog(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            添加币种
+          </Button>
+        </div>
       </div>
 
       {/* 两级页签过滤 */}
@@ -1361,6 +1398,49 @@ export default function DepositWithdrawalCurrenciesPage() {
               >
                 取消
               </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* 网络管理 Sheet */}
+      <Sheet open={showNetworkManagementSheet} onOpenChange={setShowNetworkManagementSheet}>
+        <SheetContent className="w-[400px] sm:w-[450px]">
+          <SheetHeader>
+            <SheetTitle>网络管理</SheetTitle>
+            <SheetDescription>
+              管理支持的区块链网络
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+              <p className="text-sm text-amber-700 dark:text-amber-400">
+                仅读取供应商支持的网络
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {globalNetworks.map((network) => (
+                <div 
+                  key={network.id}
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-custom-green/10 flex items-center justify-center">
+                      <Network className="w-5 h-5 text-custom-green" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-white">{network.name}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{network.fullName}</p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={network.enabled}
+                    onCheckedChange={() => toggleGlobalNetwork(network.id)}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </SheetContent>
