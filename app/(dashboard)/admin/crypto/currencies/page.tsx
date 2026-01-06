@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useRef } from "react"
-import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check, Search } from "lucide-react"
+import { Plus, Settings, Activity, TrendingUp, Network, Upload, X, Edit2, Check, Search, Layers, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTotal } from "@/components/data-total"
@@ -70,6 +70,21 @@ export default function DepositWithdrawalCurrenciesPage() {
   const [showFeeDialog, setShowFeeDialog] = useState(false)
   const [showCategoryDialog, setShowCategoryDialog] = useState(false)
   const [showNetworkManagementSheet, setShowNetworkManagementSheet] = useState(false)
+  const [showSectorManagementSheet, setShowSectorManagementSheet] = useState(false)
+  
+  const [sectors, setSectors] = useState([
+    { id: 'layer1', name: 'Layer1', description: '主链代币', enabled: true },
+    { id: 'layer2', name: 'Layer2', description: '二层网络代币', enabled: true },
+    { id: 'defi', name: 'DeFi', description: '去中心化金融', enabled: true },
+    { id: 'gamefi', name: 'GameFi', description: '游戏金融', enabled: true },
+    { id: 'nft', name: 'NFT', description: 'NFT相关代币', enabled: true },
+    { id: 'meme', name: 'Meme', description: 'Meme币', enabled: true },
+    { id: 'stablecoin', name: 'Stablecoin', description: '稳定币', enabled: true },
+    { id: 'ai', name: 'AI', description: 'AI概念币', enabled: true },
+    { id: 'rwa', name: 'RWA', description: '现实世界资产', enabled: false },
+  ])
+  const [editingSector, setEditingSector] = useState<{ id: string; name: string; description: string; enabled: boolean } | null>(null)
+  const [newSector, setNewSector] = useState({ name: '', description: '' })
   
   const [globalNetworks, setGlobalNetworks] = useState([
     { id: 'trc20', name: 'TRC20', fullName: 'Tron Network', enabled: true },
@@ -853,6 +868,13 @@ export default function DepositWithdrawalCurrenciesPage() {
             <Activity className="w-4 h-4" />
             币种列表从供应商接口配置读取
           </span>
+          <Button 
+            variant="outline"
+            onClick={() => setShowSectorManagementSheet(true)}
+          >
+            <Layers className="w-4 h-4 mr-2" />
+            板块管理
+          </Button>
           <Button 
             variant="outline"
             onClick={() => setShowNetworkManagementSheet(true)}
@@ -1715,6 +1737,155 @@ export default function DepositWithdrawalCurrenciesPage() {
               >
                 取消
               </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* 板块管理 Sheet */}
+      <Sheet open={showSectorManagementSheet} onOpenChange={setShowSectorManagementSheet}>
+        <SheetContent className="w-[500px] sm:w-[550px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>板块管理</SheetTitle>
+            <SheetDescription>
+              管理币种板块分类（如Layer1、Meme等）
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="flex gap-2">
+              <Input 
+                placeholder="板块名称"
+                value={newSector.name}
+                onChange={(e) => setNewSector(prev => ({ ...prev, name: e.target.value }))}
+                className="flex-1"
+              />
+              <Input 
+                placeholder="板块描述"
+                value={newSector.description}
+                onChange={(e) => setNewSector(prev => ({ ...prev, description: e.target.value }))}
+                className="flex-1"
+              />
+              <Button 
+                className="bg-custom-green hover:bg-custom-green-dark text-white"
+                onClick={() => {
+                  if (!newSector.name.trim()) {
+                    toast.error("请输入板块名称")
+                    return
+                  }
+                  const id = newSector.name.toLowerCase().replace(/\s+/g, '-')
+                  if (sectors.some(s => s.id === id)) {
+                    toast.error("板块已存在")
+                    return
+                  }
+                  setSectors(prev => [...prev, { 
+                    id, 
+                    name: newSector.name.trim(), 
+                    description: newSector.description.trim(),
+                    enabled: true 
+                  }])
+                  setNewSector({ name: '', description: '' })
+                  toast.success("板块添加成功")
+                }}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="space-y-3">
+              {sectors.map((sector) => (
+                <div 
+                  key={sector.id}
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                >
+                  {editingSector?.id === sector.id ? (
+                    <div className="flex items-center gap-2 flex-1 mr-4">
+                      <Input 
+                        value={editingSector.name}
+                        onChange={(e) => setEditingSector(prev => prev ? { ...prev, name: e.target.value } : null)}
+                        className="flex-1"
+                      />
+                      <Input 
+                        value={editingSector.description}
+                        onChange={(e) => setEditingSector(prev => prev ? { ...prev, description: e.target.value } : null)}
+                        className="flex-1"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-custom-green/10 flex items-center justify-center">
+                        <Layers className="w-5 h-5 text-custom-green" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{sector.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{sector.description}</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    {editingSector?.id === sector.id ? (
+                      <>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => {
+                            if (!editingSector.name.trim()) {
+                              toast.error("板块名称不能为空")
+                              return
+                            }
+                            setSectors(prev => prev.map(s => 
+                              s.id === sector.id 
+                                ? { ...s, name: editingSector.name, description: editingSector.description }
+                                : s
+                            ))
+                            setEditingSector(null)
+                            toast.success("板块已更新")
+                          }}
+                        >
+                          <Check className="w-4 h-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setEditingSector(null)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setEditingSector(sector)}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                          onClick={() => {
+                            setSectors(prev => prev.filter(s => s.id !== sector.id))
+                            toast.success("板块已删除")
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </>
+                    )}
+                    <Switch
+                      checked={sector.enabled}
+                      onCheckedChange={(checked) => {
+                        setSectors(prev => prev.map(s => 
+                          s.id === sector.id ? { ...s, enabled: checked } : s
+                        ))
+                        toast.success(checked ? "板块已启用" : "板块已禁用")
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </SheetContent>
