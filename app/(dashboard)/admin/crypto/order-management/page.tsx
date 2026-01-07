@@ -13,14 +13,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -497,130 +489,175 @@ export default function OrderManagementPage() {
         </SheetContent>
       </Sheet>
 
-      <Dialog open={showPresetDialog} onOpenChange={setShowPresetDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>添加筛选组合</DialogTitle>
-            <DialogDescription>
-              配置筛选条件并保存为常用组合，方便快速筛选
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4">
+      <Sheet open={showPresetDialog} onOpenChange={setShowPresetDialog}>
+        <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>筛选组合管理</SheetTitle>
+            <SheetDescription>管理已有组合或添加新的筛选组合</SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-6">
+            <div>
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">已有组合</h3>
               <div className="space-y-2">
-                <Label>组合名称 *</Label>
-                <Input
-                  placeholder="输入筛选组合名称"
-                  value={newPresetName}
-                  onChange={(e) => setNewPresetName(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>用户ID</Label>
-                <Input
-                  placeholder="输入用户ID"
-                  value={newPresetUserId}
-                  onChange={(e) => setNewPresetUserId(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>交易对</Label>
-                <Input
-                  placeholder="如 BTC/USDT"
-                  value={newPresetMarket}
-                  onChange={(e) => setNewPresetMarket(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>时间范围</Label>
-                <Select value={newPresetTimeRange} onValueChange={setNewPresetTimeRange}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">全部时间</SelectItem>
-                    <SelectItem value="today">今天</SelectItem>
-                    <SelectItem value="yesterday">昨天</SelectItem>
-                    <SelectItem value="7days">最近7天</SelectItem>
-                    <SelectItem value="30days">最近30天</SelectItem>
-                    <SelectItem value="thisMonth">本月</SelectItem>
-                    <SelectItem value="lastMonth">上月</SelectItem>
-                  </SelectContent>
-                </Select>
+                {filterPresets.map((preset) => (
+                  <div 
+                    key={preset.id} 
+                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Switch
+                        checked={preset.enabled}
+                        onCheckedChange={(checked) => handleTogglePreset(preset.id, checked)}
+                        disabled={preset.isDefault}
+                      />
+                      <div>
+                        <div className="font-medium text-sm text-gray-900 dark:text-white">
+                          {preset.name}
+                          {preset.isDefault && (
+                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">(默认)</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {preset.status !== "all" && `状态: ${preset.status} `}
+                          {preset.side !== "all" && `方向: ${preset.side === "buy" ? "买入" : "卖出"} `}
+                          {preset.type !== "all" && `类型: ${preset.type}`}
+                          {preset.userId && ` 用户: ${preset.userId}`}
+                          {preset.market && ` 交易对: ${preset.market}`}
+                        </div>
+                      </div>
+                    </div>
+                    {!preset.isDefault && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        onClick={() => handleDeletePreset(preset.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>状态筛选</Label>
-                <Select value={newPresetStatus} onValueChange={setNewPresetStatus}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">全部状态</SelectItem>
-                    <SelectItem value="pending">待成交</SelectItem>
-                    <SelectItem value="partial">部分成交</SelectItem>
-                    <SelectItem value="pending,partial">待处理（待成交+部分成交）</SelectItem>
-                    <SelectItem value="filled">已成交</SelectItem>
-                    <SelectItem value="cancelled">已取消</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>方向筛选</Label>
-                <Select value={newPresetSide} onValueChange={setNewPresetSide}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">全部方向</SelectItem>
-                    <SelectItem value="buy">买入</SelectItem>
-                    <SelectItem value="sell">卖出</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>类型筛选</Label>
-                <Select value={newPresetType} onValueChange={setNewPresetType}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">全部类型</SelectItem>
-                    <SelectItem value="limit">限价单</SelectItem>
-                    <SelectItem value="market">市价单</SelectItem>
-                    <SelectItem value="stop_limit">止损限价</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>启用状态</Label>
-                <div className="flex items-center gap-2 h-10">
-                  <Switch
-                    checked={newPresetEnabled}
-                    onCheckedChange={setNewPresetEnabled}
-                  />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {newPresetEnabled ? "启用" : "禁用"}
-                  </span>
+
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">添加新组合</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>组合名称 *</Label>
+                    <Input
+                      placeholder="输入筛选组合名称"
+                      value={newPresetName}
+                      onChange={(e) => setNewPresetName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>用户ID</Label>
+                    <Input
+                      placeholder="输入用户ID"
+                      value={newPresetUserId}
+                      onChange={(e) => setNewPresetUserId(e.target.value)}
+                    />
+                  </div>
                 </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>交易对</Label>
+                    <Input
+                      placeholder="如 BTC/USDT"
+                      value={newPresetMarket}
+                      onChange={(e) => setNewPresetMarket(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>时间范围</Label>
+                    <Select value={newPresetTimeRange} onValueChange={setNewPresetTimeRange}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">全部时间</SelectItem>
+                        <SelectItem value="today">今天</SelectItem>
+                        <SelectItem value="yesterday">昨天</SelectItem>
+                        <SelectItem value="7days">最近7天</SelectItem>
+                        <SelectItem value="30days">最近30天</SelectItem>
+                        <SelectItem value="thisMonth">本月</SelectItem>
+                        <SelectItem value="lastMonth">上月</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>状态筛选</Label>
+                    <Select value={newPresetStatus} onValueChange={setNewPresetStatus}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">全部状态</SelectItem>
+                        <SelectItem value="pending">待成交</SelectItem>
+                        <SelectItem value="partial">部分成交</SelectItem>
+                        <SelectItem value="pending,partial">待处理（待成交+部分成交）</SelectItem>
+                        <SelectItem value="filled">已成交</SelectItem>
+                        <SelectItem value="cancelled">已取消</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>方向筛选</Label>
+                    <Select value={newPresetSide} onValueChange={setNewPresetSide}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">全部方向</SelectItem>
+                        <SelectItem value="buy">买入</SelectItem>
+                        <SelectItem value="sell">卖出</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>类型筛选</Label>
+                    <Select value={newPresetType} onValueChange={setNewPresetType}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">全部类型</SelectItem>
+                        <SelectItem value="limit">限价单</SelectItem>
+                        <SelectItem value="market">市价单</SelectItem>
+                        <SelectItem value="stop_limit">止损限价</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>启用状态</Label>
+                    <div className="flex items-center gap-2 h-10">
+                      <Switch
+                        checked={newPresetEnabled}
+                        onCheckedChange={setNewPresetEnabled}
+                      />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {newPresetEnabled ? "启用" : "禁用"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <Button className="w-full" onClick={handleAddPreset}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  添加组合
+                </Button>
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
-              取消
-            </Button>
-            <Button onClick={handleAddPreset}>
-              保存组合
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
