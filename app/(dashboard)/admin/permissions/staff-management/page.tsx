@@ -31,8 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Search, Trash2, Edit, Loader2, RotateCcw, Settings, X } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { Plus, Search, Trash2, Edit, Loader2, RotateCcw, Settings } from "lucide-react"
 
 interface Staff {
   id: string
@@ -87,7 +86,6 @@ const departments = ["全部", "技术部", "财务部", "风控部", "客服部
 const statuses = ["全部", "启用", "禁用"]
 
 export default function StaffManagementPage() {
-  const { toast } = useToast()
   const [staffList, setStaffList] = useState<Staff[]>(mockStaffData)
   const [roles, setRoles] = useState<Role[]>(initialRoles)
   const [searchKeyword, setSearchKeyword] = useState("")
@@ -149,10 +147,7 @@ export default function StaffManagementPage() {
   }
 
   const handleResetGoogleAuth = (staff: Staff) => {
-    toast({
-      title: "重置成功",
-      description: `已重置 ${staff.name} 的谷歌验证码`,
-    })
+    console.log(`已重置 ${staff.name} 的谷歌验证码`)
   }
 
   const handleOpenAdd = () => {
@@ -184,7 +179,6 @@ export default function StaffManagementPage() {
     }
     setStaffList(prev => [newStaff, ...prev])
     setAddSheetOpen(false)
-    toast({ title: "添加成功", description: `已添加人员 ${formData.name}` })
   }
 
   const handleEdit = () => {
@@ -195,7 +189,6 @@ export default function StaffManagementPage() {
         : staff
     ))
     setEditSheetOpen(false)
-    toast({ title: "保存成功", description: `已更新人员 ${formData.name}` })
   }
 
   const handleDelete = (id: string) => {
@@ -210,7 +203,6 @@ export default function StaffManagementPage() {
     }
     setRoles(prev => [...prev, newRole])
     setRoleFormData({ name: "", description: "" })
-    toast({ title: "添加成功", description: `已添加角色 ${roleFormData.name}` })
   }
 
   const handleEditRole = (role: Role) => {
@@ -225,7 +217,6 @@ export default function StaffManagementPage() {
     ))
     setEditingRole(null)
     setRoleFormData({ name: "", description: "" })
-    toast({ title: "保存成功", description: `已更新角色 ${roleFormData.name}` })
   }
 
   const handleDeleteRole = (id: string) => {
