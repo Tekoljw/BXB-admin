@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect, useRef } from "react"
-import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays, Search, Edit2, Globe, Check, Trash2, Users } from "lucide-react"
+import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays, Search, Edit2, Globe, Check, Trash2, Users, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
 import { Button } from "@/components/ui/button"
@@ -155,6 +155,16 @@ export default function SpotMarketManagementPage() {
   const [selectedRestrictionMarket, setSelectedRestrictionMarket] = useState<string>("")
   const [marketSearchQuery, setMarketSearchQuery] = useState("")
   const [countrySearchQuery, setCountrySearchQuery] = useState("")
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(10)
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 10)
+      setIsLoadingMore(false)
+    }, 800)
+  }
   const allCountries = [
     { code: "+86", name: "中国", flag: "🇨🇳" },
     { code: "+1", name: "美国", flag: "🇺🇸" },
@@ -499,7 +509,7 @@ export default function SpotMarketManagementPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredMarkets.map((market) => (
+              {filteredMarkets.slice(0, displayCount).map((market) => (
                 <tr key={market.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/50">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">{market.id}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{market.name}</td>
@@ -552,6 +562,26 @@ export default function SpotMarketManagementPage() {
 
         {filteredMarkets.length > 0 && <DataTotal total={filteredMarkets.length} />}
       </div>
+
+      {filteredMarkets.length > displayCount && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="min-w-[140px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              `加载更多 (${filteredMarkets.length - displayCount})`
+            )}
+          </Button>
+        </div>
+      )}
 
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="sm:max-w-md">
