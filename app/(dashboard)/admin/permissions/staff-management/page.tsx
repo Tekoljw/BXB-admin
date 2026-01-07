@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
   TableBody,
@@ -30,7 +31,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Search, Trash2, Edit, Loader2 } from "lucide-react"
+import { Plus, Search, Trash2, Edit, Loader2, RotateCcw } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface Staff {
   id: string
@@ -65,6 +67,7 @@ const departments = ["全部", "技术部", "财务部", "风控部", "客服部
 const statuses = ["全部", "启用", "禁用"]
 
 export default function StaffManagementPage() {
+  const { toast } = useToast()
   const [staffList, setStaffList] = useState<Staff[]>(mockStaffData)
   const [searchKeyword, setSearchKeyword] = useState("")
   const [filterRole, setFilterRole] = useState("全部")
@@ -118,6 +121,13 @@ export default function StaffManagementPage() {
     ))
   }
 
+  const handleResetGoogleAuth = (staff: Staff) => {
+    toast({
+      title: "重置成功",
+      description: `已重置 ${staff.name} 的谷歌验证码`,
+    })
+  }
+
   const handleOpenAdd = () => {
     setFormData({ account: "", name: "", role: "", department: "", phone: "", email: "" })
     setAddDialogOpen(true)
@@ -167,58 +177,55 @@ export default function StaffManagementPage() {
     <PermissionsLayout>
       <div className="p-6 space-y-4">
         <Card>
-          <CardContent className="p-4">
-            <div className="flex flex-wrap items-end gap-4">
-              <div className="flex-1 min-w-[200px]">
-                <Label className="text-xs text-muted-foreground mb-1 block">搜索</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="账号/姓名/邮箱"
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-              </div>
-              <div className="w-[150px]">
-                <Label className="text-xs text-muted-foreground mb-1 block">角色</Label>
-                <Select value={filterRole} onValueChange={setFilterRole}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.map(role => (
-                      <SelectItem key={role} value={role}>{role}</SelectItem>
+          <CardContent className="p-4 space-y-4">
+            <div className="flex flex-wrap gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">角色</Label>
+                <Tabs value={filterRole} onValueChange={setFilterRole}>
+                  <TabsList className="h-8">
+                    {roles.slice(0, 6).map(role => (
+                      <TabsTrigger key={role} value={role} className="text-xs px-3 h-7">
+                        {role}
+                      </TabsTrigger>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </TabsList>
+                </Tabs>
               </div>
-              <div className="w-[150px]">
-                <Label className="text-xs text-muted-foreground mb-1 block">部门</Label>
-                <Select value={filterDepartment} onValueChange={setFilterDepartment}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departments.map(dept => (
-                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">部门</Label>
+                <Tabs value={filterDepartment} onValueChange={setFilterDepartment}>
+                  <TabsList className="h-8">
+                    {departments.slice(0, 6).map(dept => (
+                      <TabsTrigger key={dept} value={dept} className="text-xs px-3 h-7">
+                        {dept}
+                      </TabsTrigger>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </TabsList>
+                </Tabs>
               </div>
-              <div className="w-[120px]">
-                <Label className="text-xs text-muted-foreground mb-1 block">状态</Label>
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">状态</Label>
+                <Tabs value={filterStatus} onValueChange={setFilterStatus}>
+                  <TabsList className="h-8">
                     {statuses.map(status => (
-                      <SelectItem key={status} value={status}>{status}</SelectItem>
+                      <TabsTrigger key={status} value={status} className="text-xs px-3 h-7">
+                        {status}
+                      </TabsTrigger>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex-1 max-w-md relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="搜索账号/姓名/邮箱"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  className="pl-9"
+                />
               </div>
               <Button onClick={handleOpenAdd}>
                 <Plus className="w-4 h-4 mr-1" />
@@ -238,7 +245,6 @@ export default function StaffManagementPage() {
                   <TableHead>角色</TableHead>
                   <TableHead>部门</TableHead>
                   <TableHead>手机号</TableHead>
-                  <TableHead>邮箱</TableHead>
                   <TableHead className="text-center">状态</TableHead>
                   <TableHead>最后登录</TableHead>
                   <TableHead className="text-center">操作</TableHead>
@@ -247,7 +253,7 @@ export default function StaffManagementPage() {
               <TableBody>
                 {displayedStaff.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
                       暂无数据
                     </TableCell>
                   </TableRow>
@@ -261,7 +267,6 @@ export default function StaffManagementPage() {
                       </TableCell>
                       <TableCell>{staff.department}</TableCell>
                       <TableCell>{staff.phone}</TableCell>
-                      <TableCell className="text-muted-foreground">{staff.email}</TableCell>
                       <TableCell className="text-center">
                         <Switch
                           checked={staff.status === "active"}
@@ -274,6 +279,15 @@ export default function StaffManagementPage() {
                           <Button
                             variant="ghost"
                             size="sm"
+                            title="重置谷歌验证码"
+                            onClick={() => handleResetGoogleAuth(staff)}
+                          >
+                            <RotateCcw className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            title="编辑"
                             onClick={() => handleOpenEdit(staff)}
                           >
                             <Edit className="w-4 h-4" />
@@ -282,6 +296,7 @@ export default function StaffManagementPage() {
                             variant="ghost"
                             size="sm"
                             className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            title="删除"
                             onClick={() => handleDelete(staff.id)}
                           >
                             <Trash2 className="w-4 h-4" />
