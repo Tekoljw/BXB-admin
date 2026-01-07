@@ -1,16 +1,10 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Filter, Eye, X as XIcon, TrendingUp, TrendingDown } from "lucide-react"
+import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Sheet,
   SheetContent,
@@ -56,6 +50,7 @@ export default function OrderManagementPage() {
   const [marketType, setMarketType] = useState<"spot" | "leverage">("spot")
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([])
 
   const filteredOrders = useMemo(() => {
     return mockOrders.filter(order => {
@@ -70,6 +65,35 @@ export default function OrderManagementPage() {
       return matchesSearch && matchesStatus && matchesSide && matchesType
     })
   }, [searchQuery, statusFilter, sideFilter, typeFilter])
+
+  const cancellableOrders = useMemo(() => {
+    return filteredOrders.filter(o => o.status === "pending" || o.status === "partial")
+  }, [filteredOrders])
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedOrders(cancellableOrders.map(o => o.id))
+    } else {
+      setSelectedOrders([])
+    }
+  }
+
+  const handleSelectOrder = (orderId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedOrders(prev => [...prev, orderId])
+    } else {
+      setSelectedOrders(prev => prev.filter(id => id !== orderId))
+    }
+  }
+
+  const handleBatchCancel = () => {
+    if (selectedOrders.length === 0) {
+      toast.error("请先选择要撤销的订单")
+      return
+    }
+    toast.success(`已批量撤销 ${selectedOrders.length} 个订单`)
+    setSelectedOrders([])
+  }
 
   const handleViewDetail = (order: Order) => {
     setSelectedOrder(order)
@@ -110,6 +134,12 @@ export default function OrderManagementPage() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">管理和查看所有交易委托订单</p>
         </div>
         <div className="flex gap-2">
+          {selectedOrders.length > 0 && (
+            <Button variant="destructive" size="sm" onClick={handleBatchCancel}>
+              <Trash2 className="w-4 h-4 mr-2" />
+              批量撤单 ({selectedOrders.length})
+            </Button>
+          )}
           <Button variant="outline" size="sm">
             <Download className="w-4 h-4 mr-2" />
             导出
@@ -147,8 +177,43 @@ export default function OrderManagementPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">状态:</span>
+            <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-fit">
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+                <TabsTrigger value="pending" className="text-xs px-3 h-7">待成交</TabsTrigger>
+                <TabsTrigger value="partial" className="text-xs px-3 h-7">部分成交</TabsTrigger>
+                <TabsTrigger value="filled" className="text-xs px-3 h-7">已成交</TabsTrigger>
+                <TabsTrigger value="cancelled" className="text-xs px-3 h-7">已取消</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">方向:</span>
+            <Tabs value={sideFilter} onValueChange={setSideFilter} className="w-fit">
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+                <TabsTrigger value="buy" className="text-xs px-3 h-7">买入</TabsTrigger>
+                <TabsTrigger value="sell" className="text-xs px-3 h-7">卖出</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">类型:</span>
+            <Tabs value={typeFilter} onValueChange={setTypeFilter} className="w-fit">
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+                <TabsTrigger value="limit" className="text-xs px-3 h-7">限价单</TabsTrigger>
+                <TabsTrigger value="market" className="text-xs px-3 h-7">市价单</TabsTrigger>
+                <TabsTrigger value="stop_limit" className="text-xs px-3 h-7">止损限价</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+        <div className="relative max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder="搜索订单ID/用户ID/用户名/交易对..."
@@ -157,45 +222,18 @@ export default function OrderManagementPage() {
             className="pl-9"
           />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="状态" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部状态</SelectItem>
-            <SelectItem value="pending">待成交</SelectItem>
-            <SelectItem value="partial">部分成交</SelectItem>
-            <SelectItem value="filled">已成交</SelectItem>
-            <SelectItem value="cancelled">已取消</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={sideFilter} onValueChange={setSideFilter}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="方向" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部方向</SelectItem>
-            <SelectItem value="buy">买入</SelectItem>
-            <SelectItem value="sell">卖出</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-[130px]">
-            <SelectValue placeholder="类型" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部类型</SelectItem>
-            <SelectItem value="limit">限价单</SelectItem>
-            <SelectItem value="market">市价单</SelectItem>
-            <SelectItem value="stop_limit">止损限价</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 dark:bg-gray-900/50">
             <tr>
+              <th className="px-4 py-3 text-center">
+                <Checkbox 
+                  checked={cancellableOrders.length > 0 && selectedOrders.length === cancellableOrders.length}
+                  onCheckedChange={handleSelectAll}
+                />
+              </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">订单ID</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">用户</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">交易对</th>
@@ -212,6 +250,16 @@ export default function OrderManagementPage() {
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredOrders.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <td className="px-4 py-3 text-center">
+                  {(order.status === "pending" || order.status === "partial") ? (
+                    <Checkbox 
+                      checked={selectedOrders.includes(order.id)}
+                      onCheckedChange={(checked) => handleSelectOrder(order.id, checked as boolean)}
+                    />
+                  ) : (
+                    <div className="w-4 h-4" />
+                  )}
+                </td>
                 <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{order.id}</td>
                 <td className="px-4 py-3">
                   <div className="text-sm text-gray-900 dark:text-white">{order.username}</div>
