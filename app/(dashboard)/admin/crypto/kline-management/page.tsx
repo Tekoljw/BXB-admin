@@ -209,43 +209,53 @@ export default function KlineManagementPage() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="搜索交易对..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">类型:</span>
+            <Tabs value={typeFilter} onValueChange={setTypeFilter}>
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="h-7 px-3 text-xs">全部</TabsTrigger>
+                {klineTypes.map(t => (
+                  <TabsTrigger key={t.value} value={t.value} className="h-7 px-3 text-xs">{t.label}</TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">周期:</span>
+            <Tabs value={intervalFilter} onValueChange={setIntervalFilter}>
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="h-7 px-2 text-xs">全部</TabsTrigger>
+                {intervals.map(i => (
+                  <TabsTrigger key={i} value={i} className="h-7 px-2 text-xs">{i}</TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
         </div>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="类型" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部类型</SelectItem>
-            {klineTypes.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={intervalFilter} onValueChange={setIntervalFilter}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="周期" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部周期</SelectItem>
-            {intervals.map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={sourceFilter} onValueChange={setSourceFilter}>
-          <SelectTrigger className="w-[130px]">
-            <SelectValue placeholder="数据源" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">全部数据源</SelectItem>
-            {dataSources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">数据源:</span>
+            <Tabs value={sourceFilter} onValueChange={setSourceFilter}>
+              <TabsList className="h-8">
+                <TabsTrigger value="all" className="h-7 px-3 text-xs">全部</TabsTrigger>
+                {dataSources.map(s => (
+                  <TabsTrigger key={s} value={s} className="h-7 px-3 text-xs">{s}</TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="搜索交易对..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-8"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto">
