@@ -214,14 +214,20 @@ export default function OrderManagementPage() {
             </TabsList>
           </Tabs>
         </div>
-        <div className="relative flex-1 min-w-[200px] max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="搜索订单ID/用户ID/用户名/交易对..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
+        <div className="flex-1" />
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="搜索订单ID/用户ID/用户名/交易对..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 w-[280px]"
+            />
+          </div>
+          <Button size="sm" onClick={() => toast.success("搜索完成")}>
+            搜索
+          </Button>
         </div>
       </div>
 
