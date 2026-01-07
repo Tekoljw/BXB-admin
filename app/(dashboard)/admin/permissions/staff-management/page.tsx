@@ -231,8 +231,49 @@ export default function StaffManagementPage() {
     <PermissionsLayout>
       <div className="p-6 space-y-4">
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center flex-wrap gap-4">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center gap-4">
+              <Tabs value={filterRole} onValueChange={setFilterRole}>
+                <TabsList className="h-9">
+                  {roleNames.map(role => (
+                    <TabsTrigger key={role} value={role} className="text-sm px-4 h-8">
+                      {role}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+              <div className="ml-auto flex items-center gap-2">
+                <Button variant="outline" size="sm" onClick={() => setRoleSheetOpen(true)}>
+                  <Settings className="w-4 h-4 mr-1" />
+                  角色管理
+                </Button>
+                <Button size="sm" onClick={handleOpenAdd}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  添加人员
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <Tabs value={filterDepartment} onValueChange={setFilterDepartment}>
+                <TabsList className="h-8">
+                  {departments.map(dept => (
+                    <TabsTrigger key={dept} value={dept} className="text-xs px-3 h-7">
+                      {dept}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+            <div className="flex items-center gap-4">
+              <Tabs value={filterStatus} onValueChange={setFilterStatus}>
+                <TabsList className="h-8">
+                  {statuses.map(status => (
+                    <TabsTrigger key={status} value={status} className="text-xs px-3 h-7">
+                      {status}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
               <div className="relative w-48">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -241,50 +282,6 @@ export default function StaffManagementPage() {
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   className="pl-9 h-8"
                 />
-              </div>
-              <Button variant="outline" size="sm" onClick={() => setRoleSheetOpen(true)}>
-                <Settings className="w-4 h-4 mr-1" />
-                角色管理
-              </Button>
-              <Button size="sm" onClick={handleOpenAdd}>
-                <Plus className="w-4 h-4 mr-1" />
-                添加人员
-              </Button>
-              <div className="flex items-center gap-1">
-                <Label className="text-xs text-muted-foreground mr-1">角色</Label>
-                <Tabs value={filterRole} onValueChange={setFilterRole}>
-                  <TabsList className="h-8">
-                    {roleNames.slice(0, 6).map(role => (
-                      <TabsTrigger key={role} value={role} className="text-xs px-3 h-7">
-                        {role}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-              </div>
-              <div className="flex items-center gap-1">
-                <Label className="text-xs text-muted-foreground mr-1">部门</Label>
-                <Tabs value={filterDepartment} onValueChange={setFilterDepartment}>
-                  <TabsList className="h-8">
-                    {departments.slice(0, 6).map(dept => (
-                      <TabsTrigger key={dept} value={dept} className="text-xs px-3 h-7">
-                        {dept}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
-              </div>
-              <div className="flex items-center gap-1">
-                <Label className="text-xs text-muted-foreground mr-1">状态</Label>
-                <Tabs value={filterStatus} onValueChange={setFilterStatus}>
-                  <TabsList className="h-8">
-                    {statuses.map(status => (
-                      <TabsTrigger key={status} value={status} className="text-xs px-3 h-7">
-                        {status}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                </Tabs>
               </div>
             </div>
           </CardContent>
