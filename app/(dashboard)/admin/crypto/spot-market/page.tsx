@@ -41,6 +41,7 @@ interface SpotMarket {
   name: string
   baseCurrency: string
   quoteCurrency: string
+  marketType: "spot" | "leverage"
   pricePrecision: number
   quantityPrecision: number
   displayWeight: number
@@ -74,6 +75,11 @@ interface SpotMarket {
   marketDeviation: string
 }
 
+const marketTypes = [
+  { value: "spot", label: "现货" },
+  { value: "leverage", label: "杠杆" },
+]
+
 interface MarketSchedule {
   id: string
   marketId: string
@@ -85,18 +91,18 @@ interface MarketSchedule {
 }
 
 const mockMarkets: SpotMarket[] = [
-  { id: "9432", name: "ubn_usdt", baseCurrency: "UBN", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 4, displayWeight: 100, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9431", name: "ubc_usdt", baseCurrency: "UBC", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 4, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9430", name: "ubx_usdt", baseCurrency: "UBX", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 4, displayWeight: 1, tradingStatus: "closed", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: false, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9429", name: "ab_usdt", baseCurrency: "AB", quoteCurrency: "USDT", pricePrecision: 4, quantityPrecision: 2, displayWeight: 3, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9428", name: "gcgl_usdt", baseCurrency: "GCGL", quoteCurrency: "USDT", pricePrecision: 3, quantityPrecision: 3, displayWeight: 0, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9427", name: "busd_btc", baseCurrency: "BUSD", quoteCurrency: "BTC", pricePrecision: 2, quantityPrecision: 2, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9426", name: "sand_eth", baseCurrency: "SAND", quoteCurrency: "ETH", pricePrecision: 2, quantityPrecision: 2, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9425", name: "btc_usdt", baseCurrency: "BTC", quoteCurrency: "USDT", pricePrecision: 2, quantityPrecision: 6, displayWeight: 99, tradingStatus: "open", shardGroup: 1, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 10, priceEnabled: true, priceMax: "100000", priceMin: "10000", priceStep: "0.01", quantityEnabled: true, quantityMax: "100", quantityMin: "0.0001", quantityStep: "0.0001", amountEnabled: true, amountMin: "10", openProtection: true, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: true, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: true, marketDeviation: "0.1" },
-  { id: "9424", name: "eth_usdt", baseCurrency: "ETH", quoteCurrency: "USDT", pricePrecision: 2, quantityPrecision: 5, displayWeight: 98, tradingStatus: "open", shardGroup: 1, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 10, priceEnabled: true, priceMax: "10000", priceMin: "1000", priceStep: "0.01", quantityEnabled: true, quantityMax: "1000", quantityMin: "0.001", quantityStep: "0.001", amountEnabled: true, amountMin: "10", openProtection: true, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: true, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: true, marketDeviation: "0.1" },
-  { id: "9423", name: "bnb_usdt", baseCurrency: "BNB", quoteCurrency: "USDT", pricePrecision: 2, quantityPrecision: 4, displayWeight: 95, tradingStatus: "open", shardGroup: 2, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 8, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9422", name: "sol_usdt", baseCurrency: "SOL", quoteCurrency: "USDT", pricePrecision: 2, quantityPrecision: 3, displayWeight: 90, tradingStatus: "open", shardGroup: 2, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 8, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
-  { id: "9421", name: "doge_usdt", baseCurrency: "DOGE", quoteCurrency: "USDT", pricePrecision: 6, quantityPrecision: 0, displayWeight: 80, tradingStatus: "open", shardGroup: 3, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9432", name: "ubn_usdt", baseCurrency: "UBN", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 4, quantityPrecision: 4, displayWeight: 100, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9431", name: "ubc_usdt", baseCurrency: "UBC", quoteCurrency: "USDT", marketType: "leverage", pricePrecision: 4, quantityPrecision: 4, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9430", name: "ubx_usdt", baseCurrency: "UBX", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 4, quantityPrecision: 4, displayWeight: 1, tradingStatus: "closed", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: false, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9429", name: "ab_usdt", baseCurrency: "AB", quoteCurrency: "USDT", marketType: "leverage", pricePrecision: 4, quantityPrecision: 2, displayWeight: 3, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9428", name: "gcgl_usdt", baseCurrency: "GCGL", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 3, quantityPrecision: 3, displayWeight: 0, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9427", name: "busd_btc", baseCurrency: "BUSD", quoteCurrency: "BTC", marketType: "spot", pricePrecision: 2, quantityPrecision: 2, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9426", name: "sand_eth", baseCurrency: "SAND", quoteCurrency: "ETH", marketType: "leverage", pricePrecision: 2, quantityPrecision: 2, displayWeight: 1, tradingStatus: "open", shardGroup: 87, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9425", name: "btc_usdt", baseCurrency: "BTC", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 2, quantityPrecision: 6, displayWeight: 99, tradingStatus: "open", shardGroup: 1, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 10, priceEnabled: true, priceMax: "100000", priceMin: "10000", priceStep: "0.01", quantityEnabled: true, quantityMax: "100", quantityMin: "0.0001", quantityStep: "0.0001", amountEnabled: true, amountMin: "10", openProtection: true, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: true, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: true, marketDeviation: "0.1" },
+  { id: "9424", name: "eth_usdt", baseCurrency: "ETH", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 2, quantityPrecision: 5, displayWeight: 98, tradingStatus: "open", shardGroup: 1, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 10, priceEnabled: true, priceMax: "10000", priceMin: "1000", priceStep: "0.01", quantityEnabled: true, quantityMax: "1000", quantityMin: "0.001", quantityStep: "0.001", amountEnabled: true, amountMin: "10", openProtection: true, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: true, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: true, marketDeviation: "0.1" },
+  { id: "9423", name: "bnb_usdt", baseCurrency: "BNB", quoteCurrency: "USDT", marketType: "leverage", pricePrecision: 2, quantityPrecision: 4, displayWeight: 95, tradingStatus: "open", shardGroup: 2, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 8, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9422", name: "sol_usdt", baseCurrency: "SOL", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 2, quantityPrecision: 3, displayWeight: 90, tradingStatus: "open", shardGroup: 2, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.001", makerFeeRate: "0.001", orderBookDepth: 8, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
+  { id: "9421", name: "doge_usdt", baseCurrency: "DOGE", quoteCurrency: "USDT", marketType: "spot", pricePrecision: 6, quantityPrecision: 0, displayWeight: 80, tradingStatus: "open", shardGroup: 3, displayLevel: "full", enableOpenAPI: true, allowCancel: true, enableTrading: true, enableRebate: true, takerFeeRate: "0.002", makerFeeRate: "0.002", orderBookDepth: 5, priceEnabled: false, priceMax: "", priceMin: "", priceStep: "", quantityEnabled: false, quantityMax: "", quantityMin: "", quantityStep: "", amountEnabled: false, amountMin: "", openProtection: false, openProtectionSeconds: 300, openProtectionMultiplier: 5, limitProtection: false, limitBuyDeviation: "0.8", limitSellDeviation: "0.8", marketProtection: false, marketDeviation: "0.1" },
 ]
 
 export default function SpotMarketManagementPage() {
@@ -119,6 +125,7 @@ export default function SpotMarketManagementPage() {
     name: "",
     baseCurrency: "",
     quoteCurrency: "USDT",
+    marketType: "spot",
     pricePrecision: 4,
     quantityPrecision: 4,
     displayWeight: 0,
@@ -242,6 +249,7 @@ export default function SpotMarketManagementPage() {
       name: `${newMarket.baseCurrency?.toLowerCase()}_${newMarket.quoteCurrency?.toLowerCase()}`,
       baseCurrency: newMarket.baseCurrency!.toUpperCase(),
       quoteCurrency: newMarket.quoteCurrency!.toUpperCase(),
+      marketType: newMarket.marketType || "spot",
       pricePrecision: newMarket.pricePrecision || 4,
       quantityPrecision: newMarket.quantityPrecision || 4,
       displayWeight: newMarket.displayWeight || 0,
@@ -280,6 +288,7 @@ export default function SpotMarketManagementPage() {
       name: "",
       baseCurrency: "",
       quoteCurrency: "USDT",
+      marketType: "spot",
       pricePrecision: 4,
       quantityPrecision: 4,
       displayWeight: 0,
@@ -479,6 +488,7 @@ export default function SpotMarketManagementPage() {
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">市场ID</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">市场名称</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">市场类型</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">标的币种</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">报价币种</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">交易价格精度</th>
@@ -493,6 +503,15 @@ export default function SpotMarketManagementPage() {
                 <tr key={market.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/50">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white">{market.id}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{market.name}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      market.marketType === "spot" 
+                        ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400" 
+                        : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                    }`}>
+                      {market.marketType === "spot" ? "现货" : "杠杆"}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{market.baseCurrency.toLowerCase()}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{market.quoteCurrency.toLowerCase()}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
@@ -541,6 +560,15 @@ export default function SpotMarketManagementPage() {
             <DialogDescription>创建新的现货交易市场</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
+            <div>
+              <Label>市场类型</Label>
+              <Tabs value={newMarket.marketType || "spot"} onValueChange={(v) => setNewMarket({ ...newMarket, marketType: v as "spot" | "leverage" })} className="mt-2">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="spot">现货</TabsTrigger>
+                  <TabsTrigger value="leverage">杠杆</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>标的币种</Label>
@@ -596,6 +624,15 @@ export default function SpotMarketManagementPage() {
                 </TabsList>
 
                 <TabsContent value="basic" className="mt-4 space-y-4">
+                  <div>
+                    <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>市场类型</Label></div>
+                    <Tabs value={editingMarket.marketType || "spot"} onValueChange={(v) => setEditingMarket({ ...editingMarket, marketType: v as "spot" | "leverage" })}>
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="spot">现货</TabsTrigger>
+                        <TabsTrigger value="leverage">杠杆</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <div className="flex items-center gap-1 mb-2"><span className="text-red-500">*</span><Label>标的币种</Label></div>
