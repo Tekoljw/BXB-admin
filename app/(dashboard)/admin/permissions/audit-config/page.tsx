@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Plus, Trash2 } from "lucide-react"
@@ -30,16 +31,48 @@ interface Auditor {
   role: string
 }
 
-const mockLevel1Auditors: Auditor[] = [
-  { id: "1", account: "admin001", name: "张三", role: "财务审核员" },
-  { id: "2", account: "admin002", name: "李四", role: "风控审核员" },
-]
+type AuditPermissionType = "add_funds" | "deduct_funds" | "transfer_funds"
 
-const mockLevel2Auditors: Auditor[] = [
-  { id: "1", account: "manager001", name: "王五", role: "财务主管" },
-  { id: "2", account: "manager002", name: "赵六", role: "风控主管" },
-  { id: "3", account: "manager003", name: "钱七", role: "运营主管" },
-]
+interface PermissionAuditors {
+  level1: Auditor[]
+  level2: Auditor[]
+}
+
+const permissionLabels: Record<AuditPermissionType, string> = {
+  add_funds: "添加资金",
+  deduct_funds: "扣减资金",
+  transfer_funds: "资金互转",
+}
+
+const initialData: Record<AuditPermissionType, PermissionAuditors> = {
+  add_funds: {
+    level1: [
+      { id: "1", account: "admin001", name: "张三", role: "财务审核员" },
+      { id: "2", account: "admin002", name: "李四", role: "风控审核员" },
+    ],
+    level2: [
+      { id: "1", account: "manager001", name: "王五", role: "财务主管" },
+    ],
+  },
+  deduct_funds: {
+    level1: [
+      { id: "1", account: "admin003", name: "孙八", role: "财务审核员" },
+    ],
+    level2: [
+      { id: "1", account: "manager002", name: "周九", role: "风控主管" },
+      { id: "2", account: "manager003", name: "吴十", role: "运营主管" },
+    ],
+  },
+  transfer_funds: {
+    level1: [
+      { id: "1", account: "admin004", name: "郑十一", role: "财务审核员" },
+      { id: "2", account: "admin005", name: "冯十二", role: "风控审核员" },
+    ],
+    level2: [
+      { id: "1", account: "manager004", name: "陈十三", role: "财务主管" },
+    ],
+  },
+}
 
 interface AuditLevelSectionProps {
   title: string
@@ -102,8 +135,8 @@ function AuditLevelSection({ title, auditors, onAdd, onRemove }: AuditLevelSecti
 }
 
 export default function AuditConfigPage() {
-  const [level1Auditors, setLevel1Auditors] = useState<Auditor[]>(mockLevel1Auditors)
-  const [level2Auditors, setLevel2Auditors] = useState<Auditor[]>(mockLevel2Auditors)
+  const [activeTab, setActiveTab] = useState<AuditPermissionType>("add_funds")
+  const [auditorsData, setAuditorsData] = useState<Record<AuditPermissionType, PermissionAuditors>>(initialData)
   
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const [addingLevel, setAddingLevel] = useState<1 | 2>(1)
@@ -123,45 +156,71 @@ export default function AuditConfigPage() {
       ...newAuditor
     }
     
-    if (addingLevel === 1) {
-      setLevel1Auditors([...level1Auditors, auditor])
-    } else {
-      setLevel2Auditors([...level2Auditors, auditor])
-    }
+    setAuditorsData(prev => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        [addingLevel === 1 ? "level1" : "level2"]: [
+          ...prev[activeTab][addingLevel === 1 ? "level1" : "level2"],
+          auditor
+        ]
+      }
+    }))
     
     setAddDialogOpen(false)
   }
 
-  const handleRemoveLevel1 = (id: string) => {
-    setLevel1Auditors(level1Auditors.filter(a => a.id !== id))
+  const handleRemoveAuditor = (level: 1 | 2, id: string) => {
+    const levelKey = level === 1 ? "level1" : "level2"
+    setAuditorsData(prev => ({
+      ...prev,
+      [activeTab]: {
+        ...prev[activeTab],
+        [levelKey]: prev[activeTab][levelKey].filter(a => a.id !== id)
+      }
+    }))
   }
 
-  const handleRemoveLevel2 = (id: string) => {
-    setLevel2Auditors(level2Auditors.filter(a => a.id !== id))
-  }
+  const currentAuditors = auditorsData[activeTab]
 
   return (
     <PermissionsLayout>
-      <div className="p-6 space-y-6">
-        <AuditLevelSection
-          title="一级审核"
-          auditors={level1Auditors}
-          onAdd={() => handleOpenAddDialog(1)}
-          onRemove={handleRemoveLevel1}
-        />
-        
-        <AuditLevelSection
-          title="二级审核"
-          auditors={level2Auditors}
-          onAdd={() => handleOpenAddDialog(2)}
-          onRemove={handleRemoveLevel2}
-        />
+      <div className="p-6">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as AuditPermissionType)}>
+          <TabsList className="mb-6">
+            {(Object.keys(permissionLabels) as AuditPermissionType[]).map((key) => (
+              <TabsTrigger key={key} value={key} className="px-6">
+                {permissionLabels[key]}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          
+          {(Object.keys(permissionLabels) as AuditPermissionType[]).map((key) => (
+            <TabsContent key={key} value={key} className="space-y-6">
+              <AuditLevelSection
+                title="一级审核"
+                auditors={auditorsData[key].level1}
+                onAdd={() => handleOpenAddDialog(1)}
+                onRemove={(id) => handleRemoveAuditor(1, id)}
+              />
+              
+              <AuditLevelSection
+                title="二级审核"
+                auditors={auditorsData[key].level2}
+                onAdd={() => handleOpenAddDialog(2)}
+                onRemove={(id) => handleRemoveAuditor(2, id)}
+              />
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
 
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>添加{addingLevel === 1 ? "一级" : "二级"}审核人员</DialogTitle>
+            <DialogTitle>
+              添加{addingLevel === 1 ? "一级" : "二级"}审核人员 - {permissionLabels[activeTab]}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
