@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect, useRef } from "react"
-import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays, Search, Edit2, Globe, Check, Trash2 } from "lucide-react"
+import { Plus, RotateCcw, Download, TrendingUp, Info, Clock, History, Calendar as CalendarIcon, X, CalendarDays, Search, Edit2, Globe, Check, Trash2, Users } from "lucide-react"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
 import { Button } from "@/components/ui/button"
@@ -129,12 +129,22 @@ export default function SpotMarketManagementPage() {
   const [showCountryRestrictionSheet, setShowCountryRestrictionSheet] = useState(false)
   const [showMarketSelectSheet, setShowMarketSelectSheet] = useState(false)
   const [showCountrySelectSheet, setShowCountrySelectSheet] = useState(false)
+  const [showWhitelistUserSheet, setShowWhitelistUserSheet] = useState(false)
   const [restrictionMarketType, setRestrictionMarketType] = useState<"spot" | "leverage">("spot")
-  const [countryRestrictions, setCountryRestrictions] = useState<{ marketId: string; marketName: string; restrictedCountries: string[] }[]>([
-    { marketId: "9425", marketName: "btc_usdt", restrictedCountries: ["+86", "+1"] },
-    { marketId: "9424", marketName: "eth_usdt", restrictedCountries: ["+86"] },
-    { marketId: "9423", marketName: "bnb_usdt", restrictedCountries: [] },
+  const [restrictionMode, setRestrictionMode] = useState<"blacklist" | "whitelist">("blacklist")
+  const [countryRestrictions, setCountryRestrictions] = useState<{ marketId: string; marketName: string; restrictedCountries: string[]; mode: "blacklist" | "whitelist" }[]>([
+    { marketId: "9425", marketName: "btc_usdt", restrictedCountries: ["+86", "+1"], mode: "blacklist" },
+    { marketId: "9424", marketName: "eth_usdt", restrictedCountries: ["+86"], mode: "blacklist" },
+    { marketId: "9423", marketName: "bnb_usdt", restrictedCountries: [], mode: "blacklist" },
   ])
+  const [whitelistUsers, setWhitelistUsers] = useState<{ marketId: string; users: { uid: string; email: string; name: string }[] }[]>([
+    { marketId: "9425", users: [
+      { uid: "100001", email: "vip1@example.com", name: "VIP用户1" },
+      { uid: "100002", email: "vip2@example.com", name: "VIP用户2" },
+    ]},
+  ])
+  const [newWhitelistUser, setNewWhitelistUser] = useState({ uid: "", email: "", name: "" })
+  const [whitelistUserSearch, setWhitelistUserSearch] = useState("")
   const [selectedRestrictionMarket, setSelectedRestrictionMarket] = useState<string>("")
   const [marketSearchQuery, setMarketSearchQuery] = useState("")
   const [countrySearchQuery, setCountrySearchQuery] = useState("")
@@ -973,14 +983,25 @@ export default function SpotMarketManagementPage() {
           </SheetHeader>
           
           <div className="mt-6 space-y-4">
-            <div>
-              <Label className="mb-2 block">市场类型</Label>
-              <Tabs value={restrictionMarketType} onValueChange={(v) => setRestrictionMarketType(v as "spot" | "leverage")} className="w-full">
-                <TabsList className="w-full">
-                  <TabsTrigger value="spot" className="flex-1">现货</TabsTrigger>
-                  <TabsTrigger value="leverage" className="flex-1">杠杆</TabsTrigger>
-                </TabsList>
-              </Tabs>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Label className="mb-2 block">市场类型</Label>
+                <Tabs value={restrictionMarketType} onValueChange={(v) => setRestrictionMarketType(v as "spot" | "leverage")} className="w-full">
+                  <TabsList className="w-full">
+                    <TabsTrigger value="spot" className="flex-1">现货</TabsTrigger>
+                    <TabsTrigger value="leverage" className="flex-1">杠杆</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+              <div className="flex-1">
+                <Label className="mb-2 block">限制模式</Label>
+                <Tabs value={restrictionMode} onValueChange={(v) => setRestrictionMode(v as "blacklist" | "whitelist")} className="w-full">
+                  <TabsList className="w-full">
+                    <TabsTrigger value="blacklist" className="flex-1">黑名单</TabsTrigger>
+                    <TabsTrigger value="whitelist" className="flex-1">白名单</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
             </div>
 
             <div className="flex gap-4">
@@ -998,7 +1019,7 @@ export default function SpotMarketManagementPage() {
                 </Button>
               </div>
               <div className="flex-1">
-                <Label className="mb-2 block">添加限制国家</Label>
+                <Label className="mb-2 block">{restrictionMode === "blacklist" ? "添加黑名单国家" : "添加白名单国家"}</Label>
                 <Button 
                   variant="outline" 
                   className="w-full justify-between"
@@ -1017,12 +1038,38 @@ export default function SpotMarketManagementPage() {
               </div>
             </div>
 
+            {selectedRestrictionMarket && (
+              <div>
+                <Label className="mb-2 block">白名单用户</Label>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-between"
+                  onClick={() => setShowWhitelistUserSheet(true)}
+                >
+                  <span className="flex items-center gap-2">
+                    配置白名单用户
+                    <span className="text-xs px-1.5 py-0.5 bg-custom-green/10 text-custom-green rounded">
+                      {whitelistUsers.find(w => w.marketId === selectedRestrictionMarket)?.users.length || 0} 人
+                    </span>
+                  </span>
+                  <Users className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            )}
+
             {selectedRestrictionMarket ? (
               <div className="space-y-4">
                 <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium text-gray-900 dark:text-white">
-                      {markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase()} - 已限制国家
+                    <h4 className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                      {markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase()}
+                      <span className={`text-xs px-2 py-0.5 rounded ${
+                        restrictionMode === "blacklist" 
+                          ? "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400" 
+                          : "bg-custom-green/10 text-custom-green"
+                      }`}>
+                        {restrictionMode === "blacklist" ? "黑名单模式" : "白名单模式"}
+                      </span>
                     </h4>
                     <span className="text-sm text-gray-500">
                       共 {countryRestrictions.find(r => r.marketId === selectedRestrictionMarket)?.restrictedCountries.length || 0} 个
@@ -1303,6 +1350,149 @@ export default function SpotMarketManagementPage() {
             >
               完成选择
             </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* 白名单用户 Sheet */}
+      <Sheet open={showWhitelistUserSheet} onOpenChange={setShowWhitelistUserSheet}>
+        <SheetContent className="w-[550px] sm:max-w-[550px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              白名单用户配置
+              <span className={`text-xs px-2 py-0.5 rounded ${
+                restrictionMarketType === "spot" 
+                  ? "bg-custom-green/10 text-custom-green" 
+                  : "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400"
+              }`}>
+                {restrictionMarketType === "spot" ? "现货" : "杠杆"}
+              </span>
+            </SheetTitle>
+            <SheetDescription>
+              {selectedRestrictionMarket && `${markets.find(m => m.id === selectedRestrictionMarket)?.name.toUpperCase()} - `}
+              白名单用户不受国家限制，可正常交易
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 space-y-3">
+              <Label className="text-sm font-medium">添加白名单用户</Label>
+              <div className="grid grid-cols-3 gap-2">
+                <Input 
+                  placeholder="用户UID" 
+                  value={newWhitelistUser.uid}
+                  onChange={(e) => setNewWhitelistUser(prev => ({ ...prev, uid: e.target.value }))}
+                />
+                <Input 
+                  placeholder="用户邮箱" 
+                  value={newWhitelistUser.email}
+                  onChange={(e) => setNewWhitelistUser(prev => ({ ...prev, email: e.target.value }))}
+                />
+                <Input 
+                  placeholder="用户名称" 
+                  value={newWhitelistUser.name}
+                  onChange={(e) => setNewWhitelistUser(prev => ({ ...prev, name: e.target.value }))}
+                />
+              </div>
+              <Button 
+                className="w-full bg-custom-green hover:bg-custom-green-dark text-white"
+                onClick={() => {
+                  if (!newWhitelistUser.uid || !newWhitelistUser.email) {
+                    toast.error("请填写用户UID和邮箱")
+                    return
+                  }
+                  setWhitelistUsers(prev => {
+                    const existing = prev.find(w => w.marketId === selectedRestrictionMarket)
+                    if (existing) {
+                      if (existing.users.some(u => u.uid === newWhitelistUser.uid)) {
+                        toast.error("该用户已在白名单中")
+                        return prev
+                      }
+                      return prev.map(w => {
+                        if (w.marketId === selectedRestrictionMarket) {
+                          return { ...w, users: [...w.users, { ...newWhitelistUser }] }
+                        }
+                        return w
+                      })
+                    }
+                    return [...prev, { marketId: selectedRestrictionMarket, users: [{ ...newWhitelistUser }] }]
+                  })
+                  setNewWhitelistUser({ uid: "", email: "", name: "" })
+                  toast.success("已添加白名单用户")
+                }}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                添加用户
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-medium">当前白名单用户</Label>
+                <span className="text-sm text-gray-500">
+                  共 {whitelistUsers.find(w => w.marketId === selectedRestrictionMarket)?.users.length || 0} 人
+                </span>
+              </div>
+              
+              <div className="relative mb-2">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input 
+                  placeholder="搜索用户UID/邮箱/名称..." 
+                  value={whitelistUserSearch}
+                  onChange={(e) => setWhitelistUserSearch(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+
+              <div className="space-y-2 max-h-[350px] overflow-y-auto">
+                {(whitelistUsers.find(w => w.marketId === selectedRestrictionMarket)?.users || [])
+                  .filter(u => 
+                    !whitelistUserSearch ||
+                    u.uid.includes(whitelistUserSearch) ||
+                    u.email.includes(whitelistUserSearch) ||
+                    u.name.includes(whitelistUserSearch)
+                  )
+                  .map(user => (
+                    <div 
+                      key={user.uid}
+                      className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-custom-green/10 flex items-center justify-center">
+                          <Users className="w-5 h-5 text-custom-green" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">{user.name || "未命名用户"}</p>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <span>UID: {user.uid}</span>
+                            <span>|</span>
+                            <span>{user.email}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        onClick={() => {
+                          setWhitelistUsers(prev => prev.map(w => {
+                            if (w.marketId === selectedRestrictionMarket) {
+                              return { ...w, users: w.users.filter(u => u.uid !== user.uid) }
+                            }
+                            return w
+                          }))
+                          toast.success(`已移除用户 ${user.name || user.uid}`)
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                {(whitelistUsers.find(w => w.marketId === selectedRestrictionMarket)?.users.length || 0) === 0 && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">暂无白名单用户</p>
+                )}
+              </div>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
