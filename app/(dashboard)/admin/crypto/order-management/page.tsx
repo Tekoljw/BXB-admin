@@ -4,7 +4,6 @@ import React, { useState, useMemo } from "react"
 import { Search, Download, RotateCcw, Filter, Eye, X as XIcon, TrendingUp, TrendingDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTotal } from "@/components/data-total"
 import {
   Select,
   SelectContent,
@@ -129,12 +128,24 @@ export default function OrderManagementPage() {
         </TabsList>
       </Tabs>
 
-      <DataTotal items={[
-        { label: "总委托", value: filteredOrders.length.toString() },
-        { label: "待成交", value: filteredOrders.filter(o => o.status === "pending").length.toString() },
-        { label: "部分成交", value: filteredOrders.filter(o => o.status === "partial").length.toString() },
-        { label: "已成交", value: filteredOrders.filter(o => o.status === "filled").length.toString() },
-      ]} />
+      <div className="grid grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">总委托</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{filteredOrders.length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">待成交</div>
+          <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{filteredOrders.filter(o => o.status === "pending").length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">部分成交</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{filteredOrders.filter(o => o.status === "partial").length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">已成交</div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{filteredOrders.filter(o => o.status === "filled").length}</div>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-4">
         <div className="relative flex-1 min-w-[200px]">

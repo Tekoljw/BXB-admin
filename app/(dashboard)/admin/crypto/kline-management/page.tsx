@@ -4,7 +4,6 @@ import React, { useState, useMemo } from "react"
 import { Search, Download, RotateCcw, Edit2, TrendingUp, BarChart3, Settings, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTotal } from "@/components/data-total"
 import { Switch } from "@/components/ui/switch"
 import {
   Select,
@@ -123,12 +122,24 @@ export default function KlineManagementPage() {
         </div>
       </div>
 
-      <DataTotal items={[
-        { label: "总配置", value: configs.length.toString() },
-        { label: "同步中", value: configs.filter(c => c.syncStatus).length.toString() },
-        { label: "数据源", value: [...new Set(configs.map(c => c.dataSource))].length.toString() },
-        { label: "交易对", value: [...new Set(configs.map(c => c.market))].length.toString() },
-      ]} />
+      <div className="grid grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">总配置</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{configs.length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">同步中</div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{configs.filter(c => c.syncStatus).length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">数据源</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{[...new Set(configs.map(c => c.dataSource))].length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">交易对</div>
+          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{[...new Set(configs.map(c => c.market))].length}</div>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-4">
         <div className="relative flex-1 min-w-[200px]">

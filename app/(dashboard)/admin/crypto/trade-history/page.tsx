@@ -4,7 +4,6 @@ import React, { useState, useMemo } from "react"
 import { Search, Download, RotateCcw, Eye, TrendingUp, TrendingDown, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTotal } from "@/components/data-total"
 import {
   Select,
   SelectContent,
@@ -125,12 +124,24 @@ export default function TradeHistoryPage() {
         </TabsList>
       </Tabs>
 
-      <DataTotal items={[
-        { label: "成交笔数", value: filteredTrades.length.toString() },
-        { label: "成交金额", value: `$${totalVolume.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-        { label: "手续费收入", value: `$${totalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-        { label: "Maker占比", value: `${((filteredTrades.filter(t => t.role === "maker").length / filteredTrades.length) * 100).toFixed(1)}%` },
-      ]} />
+      <div className="grid grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">成交笔数</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{filteredTrades.length}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">成交金额</div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-400">${totalVolume.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">手续费收入</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">${totalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div className="text-sm text-gray-500 dark:text-gray-400">Maker占比</div>
+          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{filteredTrades.length > 0 ? ((filteredTrades.filter(t => t.role === "maker").length / filteredTrades.length) * 100).toFixed(1) : 0}%</div>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-4">
         <div className="relative flex-1 min-w-[200px]">
