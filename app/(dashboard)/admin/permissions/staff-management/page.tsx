@@ -232,27 +232,15 @@ export default function StaffManagementPage() {
       <div className="p-6 space-y-4">
         <Card>
           <CardContent className="p-4 space-y-3">
-            <div className="flex items-center gap-4">
-              <Tabs value={filterRole} onValueChange={setFilterRole}>
-                <TabsList className="h-9">
-                  {roleNames.map(role => (
-                    <TabsTrigger key={role} value={role} className="text-sm px-4 h-8">
-                      {role}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-              <div className="ml-auto flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setRoleSheetOpen(true)}>
-                  <Settings className="w-4 h-4 mr-1" />
-                  角色管理
-                </Button>
-                <Button size="sm" onClick={handleOpenAdd}>
-                  <Plus className="w-4 h-4 mr-1" />
-                  添加人员
-                </Button>
-              </div>
-            </div>
+            <Tabs value={filterRole} onValueChange={setFilterRole}>
+              <TabsList className="h-9">
+                {roleNames.map(role => (
+                  <TabsTrigger key={role} value={role} className="text-sm px-4 h-8">
+                    {role}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
             <div className="flex items-center gap-4">
               <Tabs value={filterDepartment} onValueChange={setFilterDepartment}>
                 <TabsList className="h-8">
@@ -274,7 +262,7 @@ export default function StaffManagementPage() {
                   ))}
                 </TabsList>
               </Tabs>
-              <div className="relative w-48">
+              <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="搜索账号/姓名/邮箱"
@@ -283,6 +271,14 @@ export default function StaffManagementPage() {
                   className="pl-9 h-8"
                 />
               </div>
+              <Button variant="outline" size="sm" onClick={() => setRoleSheetOpen(true)}>
+                <Settings className="w-4 h-4 mr-1" />
+                角色管理
+              </Button>
+              <Button size="sm" onClick={handleOpenAdd}>
+                <Plus className="w-4 h-4 mr-1" />
+                添加人员
+              </Button>
             </div>
           </CardContent>
         </Card>
