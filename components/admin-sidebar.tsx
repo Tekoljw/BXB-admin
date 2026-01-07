@@ -113,9 +113,6 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/permissions/user-permissions", icon: Key, label: "用户权限" },
     { path: "/admin/permissions/system-management", icon: Settings, label: "系统管理" },
     { path: "/admin/permissions/system-logs", icon: FileText, label: "系统日志" },
-    { path: "/admin/permissions/manual-credit", icon: DollarSign, label: "手动开分" },
-    { path: "/admin/permissions/manual-transfer", icon: ArrowLeftRight, label: "手动转账" },
-    { path: "/admin/permissions/large-withdrawal-audit", icon: ShieldCheck, label: "大额提币审核" },
   ],
   marketing: [
     {
@@ -299,6 +296,9 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/orders/crypto-assets", icon: BarChart3, label: "Crypto资产管理" },
     { path: "/admin/orders/fiat-assets", icon: BarChart3, label: "法币资产管理" },
     { path: "/admin/orders/ucard-assets", icon: CreditCard, label: "U卡资产管理" },
+    { path: "/admin/orders/manual-credit", icon: DollarSign, label: "手动开分" },
+    { path: "/admin/orders/manual-transfer", icon: ArrowLeftRight, label: "手动转账" },
+    { path: "/admin/orders/large-withdrawal-audit", icon: ShieldCheck, label: "大额提币审核" },
   ],
   system: [
     {
