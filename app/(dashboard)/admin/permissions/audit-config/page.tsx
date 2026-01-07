@@ -49,10 +49,10 @@ export default function AuditConfigPage() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="bg-blue-50 dark:bg-blue-900/20">
-                  <th className="px-6 py-4 text-center text-sm font-medium text-blue-600 dark:text-blue-400">类型</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-blue-600 dark:text-blue-400">sh.lineOfBusiness</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-blue-600 dark:text-blue-400">操作</th>
+                <tr className="bg-gray-100 dark:bg-gray-700">
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">类型</th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">sh.lineOfBusiness</th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -61,13 +61,13 @@ export default function AuditConfigPage() {
                     key={item.id} 
                     className={index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700/30"}
                   >
-                    <td className="px-6 py-4 text-center text-sm text-blue-600 dark:text-blue-400">{item.type}</td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">{item.type}</td>
                     <td className="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">{item.lineOfBusiness}</td>
                     <td className="px-6 py-4 text-center">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-blue-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                        className="text-custom-green hover:text-custom-green/80 hover:bg-green-50 dark:hover:bg-green-900/20"
                         onClick={() => handleEdit(item)}
                       >
                         编辑
