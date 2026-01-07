@@ -101,6 +101,9 @@ import OnchainDepositOrdersPage from "@/app/(dashboard)/admin/crypto/onchain-dep
 import CryptoFreezeRecordsPage from "@/app/(dashboard)/admin/crypto/freeze-records/page"
 import CryptoSpotMarketPage from "@/app/(dashboard)/admin/crypto/spot-market/page"
 import CryptoSpotMarketMakerPage from "@/app/(dashboard)/admin/crypto/spot-market-maker/page"
+import CryptoOrderManagementPage from "@/app/(dashboard)/admin/crypto/order-management/page"
+import CryptoKlineManagementPage from "@/app/(dashboard)/admin/crypto/kline-management/page"
+import CryptoTradeHistoryPage from "@/app/(dashboard)/admin/crypto/trade-history/page"
 import FiatAssetStatisticsPage from "@/app/(dashboard)/admin/orders/fiat-assets/page"
 import FiatUsersPage from "@/app/(dashboard)/admin/fiat/users/page"
 import FiatManagementPage from "@/app/(dashboard)/admin/fiat/page"
@@ -389,6 +392,9 @@ export default function InstantNavigation() {
     if (currentPage === "/admin/crypto/freeze-records") return <CryptoFreezeRecordsPage />
     if (currentPage === "/admin/crypto/spot-market") return <CryptoSpotMarketPage />
     if (currentPage === "/admin/crypto/spot-market-maker") return <CryptoSpotMarketMakerPage />
+    if (currentPage === "/admin/crypto/order-management") return <CryptoOrderManagementPage />
+    if (currentPage === "/admin/crypto/kline-management") return <CryptoKlineManagementPage />
+    if (currentPage === "/admin/crypto/trade-history") return <CryptoTradeHistoryPage />
     if (currentPage === "/admin/orders/fiat-assets") return <FiatAssetStatisticsPage />
     if (currentPage === "/admin/fiat/users") return <FiatUsersPage />
     if (currentPage.startsWith("/admin/fiat")) return <FiatManagementPage />
