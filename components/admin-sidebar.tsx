@@ -73,6 +73,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Truck,
+  ClipboardList,
+  History,
 } from "lucide-react"
 
 interface AdminSidebarV2Props {
@@ -94,6 +96,9 @@ const moduleMenus: Record<string, MenuConfig> = {
     { path: "/admin/crypto/currencies", icon: DollarSign, label: "币种管理" },
     { path: "/admin/crypto/spot-market", icon: TrendingUp, label: "现货市场管理" },
     { path: "/admin/crypto/spot-market-maker", icon: Activity, label: "现货做市商" },
+    { path: "/admin/crypto/order-management", icon: ClipboardList, label: "委托管理" },
+    { path: "/admin/crypto/kline-management", icon: BarChart3, label: "K线管理" },
+    { path: "/admin/crypto/trade-history", icon: History, label: "成交记录" },
     { path: "/admin/crypto/addresses", icon: Network, label: "地址管理" },
     { path: "/admin/crypto/custodial-wallets", icon: Wallet, label: "供应商接口" },
     { path: "/admin/crypto/onchain-deposit-orders", icon: ArrowLeftRight, label: "Crypto出入金订单" },
