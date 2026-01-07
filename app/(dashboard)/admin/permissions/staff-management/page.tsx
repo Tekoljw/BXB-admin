@@ -444,11 +444,11 @@ export default function StaffManagementPage() {
               />
             </div>
           </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setAddSheetOpen(false)}>
+          <SheetFooter className="flex justify-center gap-4 pt-4">
+            <Button variant="outline" className="flex-1" onClick={() => setAddSheetOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleAdd} disabled={!formData.account || !formData.name}>
+            <Button className="flex-1" onClick={handleAdd} disabled={!formData.account || !formData.name}>
               确定
             </Button>
           </SheetFooter>
@@ -520,11 +520,11 @@ export default function StaffManagementPage() {
               />
             </div>
           </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setEditSheetOpen(false)}>
+          <SheetFooter className="flex justify-center gap-4 pt-4">
+            <Button variant="outline" className="flex-1" onClick={() => setEditSheetOpen(false)}>
               取消
             </Button>
-            <Button onClick={handleEdit} disabled={!formData.account || !formData.name}>
+            <Button className="flex-1" onClick={handleEdit} disabled={!formData.account || !formData.name}>
               保存
             </Button>
           </SheetFooter>
@@ -536,8 +536,8 @@ export default function StaffManagementPage() {
           <SheetHeader>
             <SheetTitle>角色管理</SheetTitle>
           </SheetHeader>
-          <div className="py-6 space-y-4">
-            <div className="flex items-center gap-2">
+          <div className="py-4">
+            <div className="flex items-center gap-2 mb-4">
               <Input
                 placeholder={editingRole ? "编辑角色名称" : "输入角色名称"}
                 value={roleFormData.name}
@@ -560,34 +560,31 @@ export default function StaffManagementPage() {
                 </Button>
               )}
             </div>
-            
-            <div className="space-y-2 max-h-[400px] overflow-y-auto">
-              {roles.map((role) => (
-                <div
-                  key={role.id}
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50"
-                >
-                  <div className="font-medium">{role.name}</div>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEditRole(role)}
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                      onClick={() => handleDeleteRole(role.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
+            {roles.map((role) => (
+              <div
+                key={role.id}
+                className="flex items-center justify-between py-2 border-b last:border-b-0"
+              >
+                <span>{role.name}</span>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditRole(role)}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    onClick={() => handleDeleteRole(role.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </SheetContent>
       </Sheet>
