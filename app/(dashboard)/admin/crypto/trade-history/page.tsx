@@ -29,6 +29,11 @@ interface FilterPreset {
   side: string
   role: string
   market?: string
+  tradeId?: string
+  accountId?: string
+  orderId?: string
+  counterpartyAccountId?: string
+  counterpartyOrderId?: string
   enabled: boolean
   isDefault?: boolean
 }
@@ -89,6 +94,11 @@ export default function TradeHistoryPage() {
   const [newPresetSide, setNewPresetSide] = useState("all")
   const [newPresetRole, setNewPresetRole] = useState("all")
   const [newPresetMarket, setNewPresetMarket] = useState("")
+  const [newPresetTradeId, setNewPresetTradeId] = useState("")
+  const [newPresetAccountId, setNewPresetAccountId] = useState("")
+  const [newPresetOrderId, setNewPresetOrderId] = useState("")
+  const [newPresetCounterpartyAccountId, setNewPresetCounterpartyAccountId] = useState("")
+  const [newPresetCounterpartyOrderId, setNewPresetCounterpartyOrderId] = useState("")
   const [newPresetEnabled, setNewPresetEnabled] = useState(true)
 
   const handleLoadMore = () => {
@@ -119,6 +129,11 @@ export default function TradeHistoryPage() {
       side: newPresetSide,
       role: newPresetRole,
       market: newPresetMarket || undefined,
+      tradeId: newPresetTradeId || undefined,
+      accountId: newPresetAccountId || undefined,
+      orderId: newPresetOrderId || undefined,
+      counterpartyAccountId: newPresetCounterpartyAccountId || undefined,
+      counterpartyOrderId: newPresetCounterpartyOrderId || undefined,
       enabled: newPresetEnabled,
       isDefault: false,
     }
@@ -127,6 +142,11 @@ export default function TradeHistoryPage() {
     setNewPresetSide("all")
     setNewPresetRole("all")
     setNewPresetMarket("")
+    setNewPresetTradeId("")
+    setNewPresetAccountId("")
+    setNewPresetOrderId("")
+    setNewPresetCounterpartyAccountId("")
+    setNewPresetCounterpartyOrderId("")
     setNewPresetEnabled(true)
     toast.success("筛选组合已添加")
   }
@@ -436,10 +456,21 @@ export default function TradeHistoryPage() {
                             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">(默认)</span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          {preset.side !== "all" && `方向: ${preset.side === "buy" ? "买入" : "卖出"} `}
-                          {preset.role !== "all" && `角色: ${preset.role === "maker" ? "Maker" : "Taker"}`}
-                          {preset.market && ` 市场: ${preset.market}`}
+                        <div className="text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
+                          <div>
+                            {preset.side !== "all" && `方向: ${preset.side === "buy" ? "买入" : "卖出"} `}
+                            {preset.role !== "all" && `角色: ${preset.role === "maker" ? "Maker" : "Taker"} `}
+                            {preset.market && `市场: ${preset.market}`}
+                          </div>
+                          {(preset.tradeId || preset.accountId || preset.orderId || preset.counterpartyAccountId || preset.counterpartyOrderId) && (
+                            <div>
+                              {preset.tradeId && `成交ID: ${preset.tradeId} `}
+                              {preset.accountId && `账户ID: ${preset.accountId} `}
+                              {preset.orderId && `委托ID: ${preset.orderId} `}
+                              {preset.counterpartyAccountId && `对手账户: ${preset.counterpartyAccountId} `}
+                              {preset.counterpartyOrderId && `对手委托: ${preset.counterpartyOrderId}`}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -505,7 +536,57 @@ export default function TradeHistoryPage() {
                     className="mt-1"
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 block">ID筛选条件</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs text-gray-500">成交ID</Label>
+                      <Input
+                        placeholder="T001"
+                        value={newPresetTradeId}
+                        onChange={(e) => setNewPresetTradeId(e.target.value)}
+                        className="mt-1 h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">账户ID</Label>
+                      <Input
+                        placeholder="ACC100001"
+                        value={newPresetAccountId}
+                        onChange={(e) => setNewPresetAccountId(e.target.value)}
+                        className="mt-1 h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">委托ID</Label>
+                      <Input
+                        placeholder="ORD001"
+                        value={newPresetOrderId}
+                        onChange={(e) => setNewPresetOrderId(e.target.value)}
+                        className="mt-1 h-8 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">交易对手账户ID</Label>
+                      <Input
+                        placeholder="ACC200001"
+                        value={newPresetCounterpartyAccountId}
+                        onChange={(e) => setNewPresetCounterpartyAccountId(e.target.value)}
+                        className="mt-1 h-8 text-sm"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Label className="text-xs text-gray-500">交易对手委托ID</Label>
+                      <Input
+                        placeholder="ORD101"
+                        value={newPresetCounterpartyOrderId}
+                        onChange={(e) => setNewPresetCounterpartyOrderId(e.target.value)}
+                        className="mt-1 h-8 text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-2">
                   <Switch 
                     checked={newPresetEnabled}
                     onCheckedChange={setNewPresetEnabled}
