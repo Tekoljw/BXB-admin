@@ -177,43 +177,41 @@ export default function OrderManagementPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400">状态:</span>
-            <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-fit">
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
-                <TabsTrigger value="pending" className="text-xs px-3 h-7">待成交</TabsTrigger>
-                <TabsTrigger value="partial" className="text-xs px-3 h-7">部分成交</TabsTrigger>
-                <TabsTrigger value="filled" className="text-xs px-3 h-7">已成交</TabsTrigger>
-                <TabsTrigger value="cancelled" className="text-xs px-3 h-7">已取消</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400">方向:</span>
-            <Tabs value={sideFilter} onValueChange={setSideFilter} className="w-fit">
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
-                <TabsTrigger value="buy" className="text-xs px-3 h-7">买入</TabsTrigger>
-                <TabsTrigger value="sell" className="text-xs px-3 h-7">卖出</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400">类型:</span>
-            <Tabs value={typeFilter} onValueChange={setTypeFilter} className="w-fit">
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
-                <TabsTrigger value="limit" className="text-xs px-3 h-7">限价单</TabsTrigger>
-                <TabsTrigger value="market" className="text-xs px-3 h-7">市价单</TabsTrigger>
-                <TabsTrigger value="stop_limit" className="text-xs px-3 h-7">止损限价</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400">状态:</span>
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-fit">
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+              <TabsTrigger value="pending" className="text-xs px-3 h-7">待成交</TabsTrigger>
+              <TabsTrigger value="partial" className="text-xs px-3 h-7">部分成交</TabsTrigger>
+              <TabsTrigger value="filled" className="text-xs px-3 h-7">已成交</TabsTrigger>
+              <TabsTrigger value="cancelled" className="text-xs px-3 h-7">已取消</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
-        <div className="relative max-w-md">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400">方向:</span>
+          <Tabs value={sideFilter} onValueChange={setSideFilter} className="w-fit">
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+              <TabsTrigger value="buy" className="text-xs px-3 h-7">买入</TabsTrigger>
+              <TabsTrigger value="sell" className="text-xs px-3 h-7">卖出</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400">类型:</span>
+          <Tabs value={typeFilter} onValueChange={setTypeFilter} className="w-fit">
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="text-xs px-3 h-7">全部</TabsTrigger>
+              <TabsTrigger value="limit" className="text-xs px-3 h-7">限价单</TabsTrigger>
+              <TabsTrigger value="market" className="text-xs px-3 h-7">市价单</TabsTrigger>
+              <TabsTrigger value="stop_limit" className="text-xs px-3 h-7">止损限价</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder="搜索订单ID/用户ID/用户名/交易对..."
