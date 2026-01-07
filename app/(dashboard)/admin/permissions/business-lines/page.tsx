@@ -351,7 +351,7 @@ export default function BusinessManagementPage() {
                       </button>
                       <button 
                         onClick={() => openPageSheet(item)}
-                        className="flex-1 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium flex items-center justify-center gap-1"
+                        className="flex-1 px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium flex items-center justify-center gap-1"
                       >
                         <Layout className="w-4 h-4" />
                         配置页面
@@ -487,17 +487,17 @@ export default function BusinessManagementPage() {
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
               {selectedPageItem && React.createElement(selectedPageItem.icon, {
-                className: "w-5 h-5 text-blue-500"
+                className: "w-5 h-5 text-custom-green"
               })}
               {selectedPageItem?.label} - 页面配置
             </SheetTitle>
           </SheetHeader>
           <div className="py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              管理该业务线下的二级页面，可将页面移至其他业务线
+              管理该业务线下的二级页面，选择其他业务线可移动页面
             </p>
-            <div className="space-y-2">
-              {selectedPageItem && getBusinessLinePages(selectedPageItem.id).map((page) => (
+            <div className="space-y-2 max-h-[500px] overflow-y-auto">
+              {selectedPageItem && subPages.filter(p => p.businessLineId === selectedPageItem.id).map((page) => (
                 <div
                   key={page.id}
                   className="flex items-center justify-between py-3 px-3 border rounded-lg hover:bg-muted/50"
@@ -505,10 +505,16 @@ export default function BusinessManagementPage() {
                   <span className="font-medium">{page.name}</span>
                   <Select
                     value={page.businessLineId}
-                    onValueChange={(value) => movePageToBusinessLine(page.id, value)}
+                    onValueChange={(value) => {
+                      if (value !== page.businessLineId) {
+                        movePageToBusinessLine(page.id, value)
+                      }
+                    }}
                   >
-                    <SelectTrigger className="w-32 h-8">
-                      <SelectValue />
+                    <SelectTrigger className="w-36 h-8">
+                      <SelectValue>
+                        {menuItems.find(m => m.id === page.businessLineId)?.label}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {menuItems.map(item => (
@@ -518,11 +524,14 @@ export default function BusinessManagementPage() {
                   </Select>
                 </div>
               ))}
-              {selectedPageItem && getBusinessLinePages(selectedPageItem.id).length === 0 && (
+              {selectedPageItem && subPages.filter(p => p.businessLineId === selectedPageItem.id).length === 0 && (
                 <div className="text-center text-muted-foreground py-8">
                   暂无页面
                 </div>
               )}
+            </div>
+            <div className="mt-4 p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground">
+              提示：选择其他业务线后，页面将被移动，当前列表会自动更新
             </div>
           </div>
         </SheetContent>
