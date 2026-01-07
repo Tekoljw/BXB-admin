@@ -231,10 +231,27 @@ export default function StaffManagementPage() {
     <PermissionsLayout>
       <div className="p-6 space-y-4">
         <Card>
-          <CardContent className="p-4 space-y-4">
-            <div className="flex flex-wrap gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground mb-2 block">角色</Label>
+          <CardContent className="p-4">
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="relative w-48">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="搜索账号/姓名/邮箱"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  className="pl-9 h-8"
+                />
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setRoleSheetOpen(true)}>
+                <Settings className="w-4 h-4 mr-1" />
+                角色管理
+              </Button>
+              <Button size="sm" onClick={handleOpenAdd}>
+                <Plus className="w-4 h-4 mr-1" />
+                添加人员
+              </Button>
+              <div className="flex items-center gap-1">
+                <Label className="text-xs text-muted-foreground mr-1">角色</Label>
                 <Tabs value={filterRole} onValueChange={setFilterRole}>
                   <TabsList className="h-8">
                     {roleNames.slice(0, 6).map(role => (
@@ -245,8 +262,8 @@ export default function StaffManagementPage() {
                   </TabsList>
                 </Tabs>
               </div>
-              <div>
-                <Label className="text-xs text-muted-foreground mb-2 block">部门</Label>
+              <div className="flex items-center gap-1">
+                <Label className="text-xs text-muted-foreground mr-1">部门</Label>
                 <Tabs value={filterDepartment} onValueChange={setFilterDepartment}>
                   <TabsList className="h-8">
                     {departments.slice(0, 6).map(dept => (
@@ -257,8 +274,8 @@ export default function StaffManagementPage() {
                   </TabsList>
                 </Tabs>
               </div>
-              <div>
-                <Label className="text-xs text-muted-foreground mb-2 block">状态</Label>
+              <div className="flex items-center gap-1">
+                <Label className="text-xs text-muted-foreground mr-1">状态</Label>
                 <Tabs value={filterStatus} onValueChange={setFilterStatus}>
                   <TabsList className="h-8">
                     {statuses.map(status => (
@@ -269,26 +286,6 @@ export default function StaffManagementPage() {
                   </TabsList>
                 </Tabs>
               </div>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="flex-1 max-w-md relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="搜索账号/姓名/邮箱"
-                  value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
-              <Button variant="outline" onClick={() => setRoleSheetOpen(true)}>
-                <Settings className="w-4 h-4 mr-1" />
-                角色管理
-              </Button>
-              <Button onClick={handleOpenAdd}>
-                <Plus className="w-4 h-4 mr-1" />
-                添加人员
-              </Button>
             </div>
           </CardContent>
         </Card>
@@ -547,32 +544,28 @@ export default function StaffManagementPage() {
             <SheetTitle>角色管理</SheetTitle>
           </SheetHeader>
           <div className="py-6 space-y-4">
-            <div className="p-4 border rounded-lg space-y-3">
-              <Label className="font-medium">{editingRole ? "编辑角色" : "添加角色"}</Label>
-              <div className="space-y-2">
-                <Input
-                  placeholder="角色名称"
-                  value={roleFormData.name}
-                  onChange={(e) => setRoleFormData({ ...roleFormData, name: e.target.value })}
-                />
-              </div>
-              <div className="flex gap-2">
-                {editingRole ? (
-                  <>
-                    <Button size="sm" onClick={handleSaveRole} disabled={!roleFormData.name}>
-                      保存
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={handleCancelEditRole}>
-                      取消
-                    </Button>
-                  </>
-                ) : (
-                  <Button size="sm" onClick={handleAddRole} disabled={!roleFormData.name}>
-                    <Plus className="w-4 h-4 mr-1" />
-                    添加
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder={editingRole ? "编辑角色名称" : "输入角色名称"}
+                value={roleFormData.name}
+                onChange={(e) => setRoleFormData({ ...roleFormData, name: e.target.value })}
+                className="flex-1"
+              />
+              {editingRole ? (
+                <>
+                  <Button size="sm" onClick={handleSaveRole} disabled={!roleFormData.name}>
+                    保存
                   </Button>
-                )}
-              </div>
+                  <Button size="sm" variant="outline" onClick={handleCancelEditRole}>
+                    取消
+                  </Button>
+                </>
+              ) : (
+                <Button size="sm" onClick={handleAddRole} disabled={!roleFormData.name}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  添加
+                </Button>
+              )}
             </div>
             
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
