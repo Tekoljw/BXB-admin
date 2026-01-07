@@ -23,8 +23,23 @@ import {
   UserCheck,
   Construction,
   PlayCircle,
-  X
+  X,
+  Layout
 } from "lucide-react"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 
 interface MenuItem {
   id: string
@@ -34,10 +49,67 @@ interface MenuItem {
   roles: string[]
 }
 
+interface SubPage {
+  id: string
+  name: string
+  businessLineId: string
+}
+
+const initialSubPages: SubPage[] = [
+  { id: "p1", name: "审核配置", businessLineId: "permissions" },
+  { id: "p2", name: "人员管理", businessLineId: "permissions" },
+  { id: "p3", name: "用户权限", businessLineId: "permissions" },
+  { id: "p4", name: "系统管理", businessLineId: "permissions" },
+  { id: "p5", name: "系统日志", businessLineId: "permissions" },
+  { id: "p6", name: "手动开分", businessLineId: "permissions" },
+  { id: "p7", name: "手动转账", businessLineId: "permissions" },
+  { id: "p8", name: "大额提币审核", businessLineId: "permissions" },
+  { id: "p9", name: "经营报表", businessLineId: "operations" },
+  { id: "p10", name: "数据分析", businessLineId: "operations" },
+  { id: "p11", name: "用户列表", businessLineId: "users" },
+  { id: "p12", name: "用户审核", businessLineId: "users" },
+  { id: "p13", name: "KYC管理", businessLineId: "users" },
+  { id: "p14", name: "消息管理", businessLineId: "im" },
+  { id: "p15", name: "聊天记录", businessLineId: "im" },
+  { id: "p16", name: "动态管理", businessLineId: "social" },
+  { id: "p17", name: "评论管理", businessLineId: "social" },
+  { id: "p18", name: "C2C管理", businessLineId: "c2c" },
+  { id: "p19", name: "C2C订单", businessLineId: "c2c" },
+  { id: "p20", name: "OTC配置", businessLineId: "c2c" },
+  { id: "p21", name: "OTC订单", businessLineId: "c2c" },
+  { id: "p22", name: "担保订单", businessLineId: "escrow" },
+  { id: "p23", name: "担保配置", businessLineId: "escrow" },
+  { id: "p24", name: "U卡用户", businessLineId: "ucard" },
+  { id: "p25", name: "U卡供应商", businessLineId: "ucard" },
+  { id: "p26", name: "基础配置", businessLineId: "ucard" },
+  { id: "p27", name: "号段管理", businessLineId: "ucard" },
+  { id: "p28", name: "开卡记录", businessLineId: "ucard" },
+  { id: "p29", name: "现货交易", businessLineId: "spot" },
+  { id: "p30", name: "币种管理", businessLineId: "spot" },
+  { id: "p31", name: "合约交易", businessLineId: "futures" },
+  { id: "p32", name: "持仓管理", businessLineId: "futures" },
+  { id: "p33", name: "跟单配置", businessLineId: "copytrade" },
+  { id: "p34", name: "跟单订单", businessLineId: "copytrade" },
+  { id: "p35", name: "理财产品", businessLineId: "finance" },
+  { id: "p36", name: "理财订单", businessLineId: "finance" },
+  { id: "p37", name: "支付佣金", businessLineId: "commission" },
+  { id: "p38", name: "U卡佣金", businessLineId: "commission" },
+  { id: "p39", name: "法币用户", businessLineId: "fiat" },
+  { id: "p40", name: "代收订单", businessLineId: "fiat" },
+  { id: "p41", name: "代付订单", businessLineId: "fiat" },
+  { id: "p42", name: "财务报表", businessLineId: "orders" },
+  { id: "p43", name: "资产管理", businessLineId: "orders" },
+  { id: "p44", name: "系统配置", businessLineId: "system" },
+  { id: "p45", name: "参数设置", businessLineId: "system" },
+]
+
 export default function BusinessManagementPage() {
   const { isModuleUnderMaintenance, setModuleMaintenance } = useMaintenance()
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
   const [showRoleModal, setShowRoleModal] = useState(false)
+  const [subPages, setSubPages] = useState<SubPage[]>(initialSubPages)
+  const [pageSheetOpen, setPageSheetOpen] = useState(false)
+  const [selectedPageItem, setSelectedPageItem] = useState<MenuItem | null>(null)
   
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     { id: "permissions", label: "权限管理", icon: Shield, visible: true, roles: ["超级管理员", "系统管理员"] },
@@ -130,6 +202,21 @@ export default function BusinessManagementPage() {
   const closeRoleModal = () => {
     setShowRoleModal(false)
     setSelectedItem(null)
+  }
+
+  const openPageSheet = (item: MenuItem) => {
+    setSelectedPageItem(item)
+    setPageSheetOpen(true)
+  }
+
+  const movePageToBusinessLine = (pageId: string, newBusinessLineId: string) => {
+    setSubPages(prev => prev.map(page =>
+      page.id === pageId ? { ...page, businessLineId: newBusinessLineId } : page
+    ))
+  }
+
+  const getBusinessLinePages = (businessLineId: string) => {
+    return subPages.filter(page => page.businessLineId === businessLineId)
   }
 
   const maintenanceCount = menuItems.filter(item => isModuleUnderMaintenance(item.id)).length
@@ -247,19 +334,29 @@ export default function BusinessManagementPage() {
 
                   {/* 卡片内容 */}
                   <div className="p-4 space-y-3">
-                    {/* 角色权限信息 */}
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      已分配角色: <span className="font-medium text-gray-900 dark:text-white">{item.roles.length}</span> 个
+                    {/* 信息统计 */}
+                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                      <span>角色: <span className="font-medium text-gray-900 dark:text-white">{item.roles.length}</span></span>
+                      <span>页面: <span className="font-medium text-gray-900 dark:text-white">{getBusinessLinePages(item.id).length}</span></span>
                     </div>
 
                     {/* 操作按钮 */}
-                    <button 
-                      onClick={() => openRoleModal(item)}
-                      className="w-full px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
-                    >
-                      <UserCheck className="w-4 h-4" />
-                      配置权限
-                    </button>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => openRoleModal(item)}
+                        className="flex-1 px-3 py-2 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors text-sm font-medium flex items-center justify-center gap-1"
+                      >
+                        <UserCheck className="w-4 h-4" />
+                        配置权限
+                      </button>
+                      <button 
+                        onClick={() => openPageSheet(item)}
+                        className="flex-1 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium flex items-center justify-center gap-1"
+                      >
+                        <Layout className="w-4 h-4" />
+                        配置页面
+                      </button>
+                    </div>
                   </div>
                 </div>
               )
@@ -383,6 +480,53 @@ export default function BusinessManagementPage() {
           </div>
         </>
       )}
+
+      {/* 页面配置弹窗 */}
+      <Sheet open={pageSheetOpen} onOpenChange={setPageSheetOpen}>
+        <SheetContent className="w-[450px] sm:w-[500px]">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              {selectedPageItem && React.createElement(selectedPageItem.icon, {
+                className: "w-5 h-5 text-blue-500"
+              })}
+              {selectedPageItem?.label} - 页面配置
+            </SheetTitle>
+          </SheetHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              管理该业务线下的二级页面，可将页面移至其他业务线
+            </p>
+            <div className="space-y-2">
+              {selectedPageItem && getBusinessLinePages(selectedPageItem.id).map((page) => (
+                <div
+                  key={page.id}
+                  className="flex items-center justify-between py-3 px-3 border rounded-lg hover:bg-muted/50"
+                >
+                  <span className="font-medium">{page.name}</span>
+                  <Select
+                    value={page.businessLineId}
+                    onValueChange={(value) => movePageToBusinessLine(page.id, value)}
+                  >
+                    <SelectTrigger className="w-32 h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {menuItems.map(item => (
+                        <SelectItem key={item.id} value={item.id}>{item.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ))}
+              {selectedPageItem && getBusinessLinePages(selectedPageItem.id).length === 0 && (
+                <div className="text-center text-muted-foreground py-8">
+                  暂无页面
+                </div>
+              )}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </PermissionsLayout>
   )
 }
