@@ -3,6 +3,15 @@
 import React, { useState } from "react"
 import PermissionsLayout from "@/components/permissions-layout"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import {
   Dialog,
   DialogContent,
@@ -44,41 +53,37 @@ export default function AuditConfigPage() {
 
   return (
     <PermissionsLayout>
-      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-100 dark:bg-gray-700">
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">类型</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">sh.lineOfBusiness</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 dark:text-gray-300">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr 
-                    key={item.id} 
-                    className={index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700/30"}
-                  >
-                    <td className="px-6 py-4 text-center text-sm text-gray-900 dark:text-gray-100">{item.type}</td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">{item.lineOfBusiness}</td>
-                    <td className="px-6 py-4 text-center">
+      <div className="p-6">
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-center">类型</TableHead>
+                  <TableHead className="text-center">sh.lineOfBusiness</TableHead>
+                  <TableHead className="text-center">操作</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="text-center">{item.type}</TableCell>
+                    <TableCell className="text-center">{item.lineOfBusiness}</TableCell>
+                    <TableCell className="text-center">
                       <Button
-                        variant="ghost"
+                        variant="link"
                         size="sm"
-                        className="text-custom-green hover:text-custom-green/80 hover:bg-green-50 dark:hover:bg-green-900/20"
                         onClick={() => handleEdit(item)}
                       >
                         编辑
                       </Button>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
