@@ -18,12 +18,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+} from "@/components/ui/sheet"
 import {
   Select,
   SelectContent,
@@ -31,7 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Plus, Search, Trash2, Edit, Loader2, RotateCcw } from "lucide-react"
+import { Plus, Search, Trash2, Edit, Loader2, RotateCcw, Settings, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface Staff {
@@ -45,6 +45,12 @@ interface Staff {
   status: "active" | "inactive"
   createdAt: string
   lastLogin: string
+}
+
+interface Role {
+  id: string
+  name: string
+  description: string
 }
 
 const mockStaffData: Staff[] = [
@@ -62,13 +68,28 @@ const mockStaffData: Staff[] = [
   { id: "12", account: "admin012", name: "褚十四", role: "市场专员", department: "市场部", phone: "138****2222", email: "chu14@example.com", status: "active", createdAt: "2024-12-01", lastLogin: "2025-01-06 15:10" },
 ]
 
-const roles = ["全部", "超级管理员", "财务审核员", "风控专员", "客服主管", "运营专员", "技术支持", "财务主管", "合规专员", "产品经理", "数据分析师", "安全专员", "市场专员"]
+const initialRoles: Role[] = [
+  { id: "1", name: "超级管理员", description: "拥有所有权限" },
+  { id: "2", name: "财务审核员", description: "财务审核相关权限" },
+  { id: "3", name: "风控专员", description: "风控管理权限" },
+  { id: "4", name: "客服主管", description: "客服管理权限" },
+  { id: "5", name: "运营专员", description: "运营相关权限" },
+  { id: "6", name: "技术支持", description: "技术支持权限" },
+  { id: "7", name: "财务主管", description: "财务管理权限" },
+  { id: "8", name: "合规专员", description: "合规审核权限" },
+  { id: "9", name: "产品经理", description: "产品管理权限" },
+  { id: "10", name: "数据分析师", description: "数据查看权限" },
+  { id: "11", name: "安全专员", description: "安全管理权限" },
+  { id: "12", name: "市场专员", description: "市场运营权限" },
+]
+
 const departments = ["全部", "技术部", "财务部", "风控部", "客服部", "运营部", "合规部", "产品部", "数据部", "安全部", "市场部"]
 const statuses = ["全部", "启用", "禁用"]
 
 export default function StaffManagementPage() {
   const { toast } = useToast()
   const [staffList, setStaffList] = useState<Staff[]>(mockStaffData)
+  const [roles, setRoles] = useState<Role[]>(initialRoles)
   const [searchKeyword, setSearchKeyword] = useState("")
   const [filterRole, setFilterRole] = useState("全部")
   const [filterDepartment, setFilterDepartment] = useState("全部")
@@ -77,8 +98,9 @@ export default function StaffManagementPage() {
   const [displayCount, setDisplayCount] = useState(10)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   
-  const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [addSheetOpen, setAddSheetOpen] = useState(false)
+  const [editSheetOpen, setEditSheetOpen] = useState(false)
+  const [roleSheetOpen, setRoleSheetOpen] = useState(false)
   const [editingStaff, setEditingStaff] = useState<Staff | null>(null)
   const [formData, setFormData] = useState({
     account: "",
@@ -88,6 +110,11 @@ export default function StaffManagementPage() {
     phone: "",
     email: "",
   })
+  
+  const [editingRole, setEditingRole] = useState<Role | null>(null)
+  const [roleFormData, setRoleFormData] = useState({ name: "", description: "" })
+
+  const roleNames = ["全部", ...roles.map(r => r.name)]
 
   const filteredStaff = staffList.filter(staff => {
     const matchKeyword = !searchKeyword || 
@@ -130,7 +157,7 @@ export default function StaffManagementPage() {
 
   const handleOpenAdd = () => {
     setFormData({ account: "", name: "", role: "", department: "", phone: "", email: "" })
-    setAddDialogOpen(true)
+    setAddSheetOpen(true)
   }
 
   const handleOpenEdit = (staff: Staff) => {
@@ -143,7 +170,7 @@ export default function StaffManagementPage() {
       phone: staff.phone,
       email: staff.email,
     })
-    setEditDialogOpen(true)
+    setEditSheetOpen(true)
   }
 
   const handleAdd = () => {
@@ -156,7 +183,8 @@ export default function StaffManagementPage() {
       lastLogin: "-",
     }
     setStaffList(prev => [newStaff, ...prev])
-    setAddDialogOpen(false)
+    setAddSheetOpen(false)
+    toast({ title: "添加成功", description: `已添加人员 ${formData.name}` })
   }
 
   const handleEdit = () => {
@@ -166,11 +194,47 @@ export default function StaffManagementPage() {
         ? { ...staff, ...formData }
         : staff
     ))
-    setEditDialogOpen(false)
+    setEditSheetOpen(false)
+    toast({ title: "保存成功", description: `已更新人员 ${formData.name}` })
   }
 
   const handleDelete = (id: string) => {
     setStaffList(prev => prev.filter(staff => staff.id !== id))
+  }
+
+  const handleAddRole = () => {
+    if (!roleFormData.name) return
+    const newRole: Role = {
+      id: Date.now().toString(),
+      ...roleFormData
+    }
+    setRoles(prev => [...prev, newRole])
+    setRoleFormData({ name: "", description: "" })
+    toast({ title: "添加成功", description: `已添加角色 ${roleFormData.name}` })
+  }
+
+  const handleEditRole = (role: Role) => {
+    setEditingRole(role)
+    setRoleFormData({ name: role.name, description: role.description })
+  }
+
+  const handleSaveRole = () => {
+    if (!editingRole || !roleFormData.name) return
+    setRoles(prev => prev.map(r =>
+      r.id === editingRole.id ? { ...r, ...roleFormData } : r
+    ))
+    setEditingRole(null)
+    setRoleFormData({ name: "", description: "" })
+    toast({ title: "保存成功", description: `已更新角色 ${roleFormData.name}` })
+  }
+
+  const handleDeleteRole = (id: string) => {
+    setRoles(prev => prev.filter(r => r.id !== id))
+  }
+
+  const handleCancelEditRole = () => {
+    setEditingRole(null)
+    setRoleFormData({ name: "", description: "" })
   }
 
   return (
@@ -183,7 +247,7 @@ export default function StaffManagementPage() {
                 <Label className="text-xs text-muted-foreground mb-2 block">角色</Label>
                 <Tabs value={filterRole} onValueChange={setFilterRole}>
                   <TabsList className="h-8">
-                    {roles.slice(0, 6).map(role => (
+                    {roleNames.slice(0, 6).map(role => (
                       <TabsTrigger key={role} value={role} className="text-xs px-3 h-7">
                         {role}
                       </TabsTrigger>
@@ -227,6 +291,10 @@ export default function StaffManagementPage() {
                   className="pl-9"
                 />
               </div>
+              <Button variant="outline" onClick={() => setRoleSheetOpen(true)}>
+                <Settings className="w-4 h-4 mr-1" />
+                角色管理
+              </Button>
               <Button onClick={handleOpenAdd}>
                 <Plus className="w-4 h-4 mr-1" />
                 添加人员
@@ -331,169 +399,234 @@ export default function StaffManagementPage() {
         </Card>
       </div>
 
-      <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>添加人员</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>账号 *</Label>
-                <Input
-                  placeholder="请输入账号"
-                  value={formData.account}
-                  onChange={(e) => setFormData({ ...formData, account: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>姓名 *</Label>
-                <Input
-                  placeholder="请输入姓名"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
-              </div>
+      <Sheet open={addSheetOpen} onOpenChange={setAddSheetOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>添加人员</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-4 py-6">
+            <div className="space-y-2">
+              <Label>账号 *</Label>
+              <Input
+                placeholder="请输入账号"
+                value={formData.account}
+                onChange={(e) => setFormData({ ...formData, account: e.target.value })}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>角色</Label>
-                <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择角色" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.filter(r => r !== "全部").map(role => (
-                      <SelectItem key={role} value={role}>{role}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>部门</Label>
-                <Select value={formData.department} onValueChange={(v) => setFormData({ ...formData, department: v })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择部门" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departments.filter(d => d !== "全部").map(dept => (
-                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label>姓名 *</Label>
+              <Input
+                placeholder="请输入姓名"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>手机号</Label>
-                <Input
-                  placeholder="请输入手机号"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>邮箱</Label>
-                <Input
-                  placeholder="请输入邮箱"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>角色</Label>
+              <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择角色" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map(role => (
+                    <SelectItem key={role.id} value={role.name}>{role.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>部门</Label>
+              <Select value={formData.department} onValueChange={(v) => setFormData({ ...formData, department: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择部门" />
+                </SelectTrigger>
+                <SelectContent>
+                  {departments.filter(d => d !== "全部").map(dept => (
+                    <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>手机号</Label>
+              <Input
+                placeholder="请输入手机号"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>邮箱</Label>
+              <Input
+                placeholder="请输入邮箱"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setAddSheetOpen(false)}>
               取消
             </Button>
             <Button onClick={handleAdd} disabled={!formData.account || !formData.name}>
               确定
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>编辑人员</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>账号 *</Label>
-                <Input
-                  placeholder="请输入账号"
-                  value={formData.account}
-                  onChange={(e) => setFormData({ ...formData, account: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>姓名 *</Label>
-                <Input
-                  placeholder="请输入姓名"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
-              </div>
+      <Sheet open={editSheetOpen} onOpenChange={setEditSheetOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>编辑人员</SheetTitle>
+          </SheetHeader>
+          <div className="space-y-4 py-6">
+            <div className="space-y-2">
+              <Label>账号 *</Label>
+              <Input
+                placeholder="请输入账号"
+                value={formData.account}
+                onChange={(e) => setFormData({ ...formData, account: e.target.value })}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>角色</Label>
-                <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择角色" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.filter(r => r !== "全部").map(role => (
-                      <SelectItem key={role} value={role}>{role}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>部门</Label>
-                <Select value={formData.department} onValueChange={(v) => setFormData({ ...formData, department: v })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="选择部门" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departments.filter(d => d !== "全部").map(dept => (
-                      <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label>姓名 *</Label>
+              <Input
+                placeholder="请输入姓名"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>手机号</Label>
-                <Input
-                  placeholder="请输入手机号"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>邮箱</Label>
-                <Input
-                  placeholder="请输入邮箱"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>角色</Label>
+              <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择角色" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map(role => (
+                    <SelectItem key={role.id} value={role.name}>{role.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>部门</Label>
+              <Select value={formData.department} onValueChange={(v) => setFormData({ ...formData, department: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择部门" />
+                </SelectTrigger>
+                <SelectContent>
+                  {departments.filter(d => d !== "全部").map(dept => (
+                    <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>手机号</Label>
+              <Input
+                placeholder="请输入手机号"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>邮箱</Label>
+              <Input
+                placeholder="请输入邮箱"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+          <SheetFooter>
+            <Button variant="outline" onClick={() => setEditSheetOpen(false)}>
               取消
             </Button>
             <Button onClick={handleEdit} disabled={!formData.account || !formData.name}>
               保存
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={roleSheetOpen} onOpenChange={setRoleSheetOpen}>
+        <SheetContent className="w-[450px] sm:w-[500px]">
+          <SheetHeader>
+            <SheetTitle>角色管理</SheetTitle>
+          </SheetHeader>
+          <div className="py-6 space-y-4">
+            <div className="p-4 border rounded-lg space-y-3">
+              <Label className="font-medium">{editingRole ? "编辑角色" : "添加角色"}</Label>
+              <div className="space-y-2">
+                <Input
+                  placeholder="角色名称"
+                  value={roleFormData.name}
+                  onChange={(e) => setRoleFormData({ ...roleFormData, name: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  placeholder="角色描述（可选）"
+                  value={roleFormData.description}
+                  onChange={(e) => setRoleFormData({ ...roleFormData, description: e.target.value })}
+                />
+              </div>
+              <div className="flex gap-2">
+                {editingRole ? (
+                  <>
+                    <Button size="sm" onClick={handleSaveRole} disabled={!roleFormData.name}>
+                      保存
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={handleCancelEditRole}>
+                      取消
+                    </Button>
+                  </>
+                ) : (
+                  <Button size="sm" onClick={handleAddRole} disabled={!roleFormData.name}>
+                    <Plus className="w-4 h-4 mr-1" />
+                    添加
+                  </Button>
+                )}
+              </div>
+            </div>
+            
+            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+              {roles.map((role) => (
+                <div
+                  key={role.id}
+                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50"
+                >
+                  <div>
+                    <div className="font-medium">{role.name}</div>
+                    {role.description && (
+                      <div className="text-sm text-muted-foreground">{role.description}</div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditRole(role)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      onClick={() => handleDeleteRole(role.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </PermissionsLayout>
   )
 }
