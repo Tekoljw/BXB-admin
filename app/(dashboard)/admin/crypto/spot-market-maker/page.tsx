@@ -43,28 +43,19 @@ interface MarketMaker {
 }
 
 const mockMarketMakers: MarketMaker[] = [
-  {
-    id: "2000",
-    makerId: "60856139805",
-    role: "内部",
-    marketName: "",
-    makerFeeDiscount: 0,
-    takerFeeDiscount: 0,
-    effectiveStartTime: new Date("2025-05-31T08:00:00"),
-    effectiveEndTime: new Date("2030-05-31T08:00:00"),
-    enabled: true,
-  },
-  {
-    id: "2001",
-    makerId: "60856140292",
-    role: "内部",
-    marketName: "",
-    makerFeeDiscount: 0,
-    takerFeeDiscount: 0,
-    effectiveStartTime: new Date("2025-05-29T00:00:00"),
-    effectiveEndTime: new Date("2030-06-05T00:00:00"),
-    enabled: true,
-  },
+  { id: "2000", makerId: "60856139805", role: "内部", marketName: "", makerFeeDiscount: 0, takerFeeDiscount: 0, effectiveStartTime: new Date("2025-05-31T08:00:00"), effectiveEndTime: new Date("2030-05-31T08:00:00"), enabled: true },
+  { id: "2001", makerId: "60856140292", role: "内部", marketName: "", makerFeeDiscount: 0, takerFeeDiscount: 0, effectiveStartTime: new Date("2025-05-29T00:00:00"), effectiveEndTime: new Date("2030-06-05T00:00:00"), enabled: true },
+  { id: "2002", makerId: "60856140301", role: "外部", marketName: "BTC/USDT", makerFeeDiscount: 10, takerFeeDiscount: 5, effectiveStartTime: new Date("2025-06-01T00:00:00"), effectiveEndTime: new Date("2030-06-01T00:00:00"), enabled: true },
+  { id: "2003", makerId: "60856140312", role: "内部", marketName: "ETH/USDT", makerFeeDiscount: 15, takerFeeDiscount: 10, effectiveStartTime: new Date("2025-06-05T00:00:00"), effectiveEndTime: new Date("2030-06-05T00:00:00"), enabled: true },
+  { id: "2004", makerId: "60856140323", role: "外部", marketName: "BNB/USDT", makerFeeDiscount: 20, takerFeeDiscount: 15, effectiveStartTime: new Date("2025-06-10T00:00:00"), effectiveEndTime: new Date("2030-06-10T00:00:00"), enabled: false },
+  { id: "2005", makerId: "60856140334", role: "内部", marketName: "SOL/USDT", makerFeeDiscount: 25, takerFeeDiscount: 20, effectiveStartTime: new Date("2025-06-15T00:00:00"), effectiveEndTime: new Date("2030-06-15T00:00:00"), enabled: true },
+  { id: "2006", makerId: "60856140345", role: "外部", marketName: "XRP/USDT", makerFeeDiscount: 30, takerFeeDiscount: 25, effectiveStartTime: new Date("2025-06-20T00:00:00"), effectiveEndTime: new Date("2030-06-20T00:00:00"), enabled: true },
+  { id: "2007", makerId: "60856140356", role: "内部", marketName: "DOGE/USDT", makerFeeDiscount: 35, takerFeeDiscount: 30, effectiveStartTime: new Date("2025-06-25T00:00:00"), effectiveEndTime: new Date("2030-06-25T00:00:00"), enabled: true },
+  { id: "2008", makerId: "60856140367", role: "外部", marketName: "ADA/USDT", makerFeeDiscount: 40, takerFeeDiscount: 35, effectiveStartTime: new Date("2025-07-01T00:00:00"), effectiveEndTime: new Date("2030-07-01T00:00:00"), enabled: false },
+  { id: "2009", makerId: "60856140378", role: "内部", marketName: "AVAX/USDT", makerFeeDiscount: 45, takerFeeDiscount: 40, effectiveStartTime: new Date("2025-07-05T00:00:00"), effectiveEndTime: new Date("2030-07-05T00:00:00"), enabled: true },
+  { id: "2010", makerId: "60856140389", role: "外部", marketName: "LINK/USDT", makerFeeDiscount: 50, takerFeeDiscount: 45, effectiveStartTime: new Date("2025-07-10T00:00:00"), effectiveEndTime: new Date("2030-07-10T00:00:00"), enabled: true },
+  { id: "2011", makerId: "60856140390", role: "内部", marketName: "DOT/USDT", makerFeeDiscount: 55, takerFeeDiscount: 50, effectiveStartTime: new Date("2025-07-15T00:00:00"), effectiveEndTime: new Date("2030-07-15T00:00:00"), enabled: true },
+  { id: "2012", makerId: "60856140401", role: "外部", marketName: "MATIC/USDT", makerFeeDiscount: 60, takerFeeDiscount: 55, effectiveStartTime: new Date("2025-07-20T00:00:00"), effectiveEndTime: new Date("2030-07-20T00:00:00"), enabled: false },
 ]
 
 const roleOptions = ["内部", "外部"]

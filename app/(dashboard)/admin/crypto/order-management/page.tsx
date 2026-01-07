@@ -63,6 +63,13 @@ const mockOrders: Order[] = [
   { id: "ORD006", uid: "100001", username: "用户A", market: "DOGE/USDT", side: "buy", type: "limit", price: "0.085", quantity: "10000", filledQuantity: "5000", status: "partial", createTime: "2025-01-07 10:10:00", updateTime: "2025-01-07 10:12:00" },
   { id: "ORD007", uid: "100006", username: "用户F", market: "XRP/USDT", side: "sell", type: "limit", price: "0.62", quantity: "2000", filledQuantity: "2000", status: "filled", createTime: "2025-01-07 10:05:00", updateTime: "2025-01-07 10:08:00" },
   { id: "ORD008", uid: "100007", username: "用户G", market: "ETH/USDT", side: "buy", type: "limit", price: "2200.00", quantity: "2.5", filledQuantity: "0", status: "pending", createTime: "2025-01-07 10:00:00", updateTime: "2025-01-07 10:00:00" },
+  { id: "ORD009", uid: "100008", username: "用户H", market: "SOL/USDT", side: "sell", type: "limit", price: "96.00", quantity: "30", filledQuantity: "20", status: "partial", createTime: "2025-01-07 09:55:00", updateTime: "2025-01-07 09:58:00" },
+  { id: "ORD010", uid: "100009", username: "用户I", market: "AVAX/USDT", side: "buy", type: "market", price: "市价", quantity: "100", filledQuantity: "100", status: "filled", createTime: "2025-01-07 09:50:00", updateTime: "2025-01-07 09:50:01" },
+  { id: "ORD011", uid: "100010", username: "用户J", market: "LINK/USDT", side: "buy", type: "limit", price: "15.30", quantity: "200", filledQuantity: "0", status: "pending", createTime: "2025-01-07 09:45:00", updateTime: "2025-01-07 09:45:00" },
+  { id: "ORD012", uid: "100011", username: "用户K", market: "DOT/USDT", side: "sell", type: "stop_limit", price: "7.50", quantity: "500", filledQuantity: "0", status: "pending", createTime: "2025-01-07 09:40:00", updateTime: "2025-01-07 09:40:00" },
+  { id: "ORD013", uid: "100012", username: "用户L", market: "ADA/USDT", side: "buy", type: "limit", price: "0.54", quantity: "10000", filledQuantity: "5000", status: "partial", createTime: "2025-01-07 09:35:00", updateTime: "2025-01-07 09:38:00" },
+  { id: "ORD014", uid: "100013", username: "用户M", market: "MATIC/USDT", side: "sell", type: "limit", price: "0.86", quantity: "5000", filledQuantity: "5000", status: "filled", createTime: "2025-01-07 09:30:00", updateTime: "2025-01-07 09:32:00" },
+  { id: "ORD015", uid: "100014", username: "用户N", market: "ATOM/USDT", side: "buy", type: "market", price: "市价", quantity: "100", filledQuantity: "100", status: "filled", createTime: "2025-01-07 09:25:00", updateTime: "2025-01-07 09:25:01" },
 ]
 
 export default function OrderManagementPage() {
