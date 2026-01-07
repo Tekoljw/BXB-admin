@@ -134,12 +134,15 @@ export default function OrderManagementPage() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">管理和查看所有交易委托订单</p>
         </div>
         <div className="flex gap-2">
-          {selectedOrders.length > 0 && (
-            <Button variant="destructive" size="sm" onClick={handleBatchCancel}>
-              <Trash2 className="w-4 h-4 mr-2" />
-              批量撤单 ({selectedOrders.length})
-            </Button>
-          )}
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            onClick={handleBatchCancel}
+            disabled={selectedOrders.length === 0}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            批量撤单{selectedOrders.length > 0 ? ` (${selectedOrders.length})` : ''}
+          </Button>
           <Button variant="outline" size="sm">
             <Download className="w-4 h-4 mr-2" />
             导出
