@@ -209,84 +209,80 @@ export default function KlineManagementPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">类型:</span>
-            <Tabs value={typeFilter} onValueChange={setTypeFilter}>
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="h-7 px-3 text-xs">全部</TabsTrigger>
-                {klineTypes.map(t => (
-                  <TabsTrigger key={t.value} value={t.value} className="h-7 px-3 text-xs">{t.label}</TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">周期:</span>
-            <Tabs value={intervalFilter} onValueChange={setIntervalFilter}>
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="h-7 px-2 text-xs">全部</TabsTrigger>
-                {intervals.map(i => (
-                  <TabsTrigger key={i} value={i} className="h-7 px-2 text-xs">{i}</TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">类型:</span>
+          <Tabs value={typeFilter} onValueChange={setTypeFilter}>
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="h-7 px-2 text-xs">全部</TabsTrigger>
+              {klineTypes.map(t => (
+                <TabsTrigger key={t.value} value={t.value} className="h-7 px-2 text-xs">{t.label}</TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">数据源:</span>
-            <Tabs value={sourceFilter} onValueChange={setSourceFilter}>
-              <TabsList className="h-8">
-                <TabsTrigger value="all" className="h-7 px-3 text-xs">全部</TabsTrigger>
-                {dataSources.map(s => (
-                  <TabsTrigger key={s} value={s} className="h-7 px-3 text-xs">{s}</TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input
-              placeholder="搜索交易对..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-8"
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">周期:</span>
+          <Tabs value={intervalFilter} onValueChange={setIntervalFilter}>
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="h-7 px-2 text-xs">全部</TabsTrigger>
+              {intervals.map(i => (
+                <TabsTrigger key={i} value={i} className="h-7 px-2 text-xs">{i}</TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">数据源:</span>
+          <Tabs value={sourceFilter} onValueChange={setSourceFilter}>
+            <TabsList className="h-8">
+              <TabsTrigger value="all" className="h-7 px-2 text-xs">全部</TabsTrigger>
+              {dataSources.map(s => (
+                <TabsTrigger key={s} value={s} className="h-7 px-2 text-xs">{s}</TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="relative w-[180px]">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Input
+            placeholder="搜索交易对..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 h-8"
+          />
         </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto">
-        <table className="w-full min-w-[1400px]">
+        <table className="w-full min-w-[1200px]">
           <thead className="bg-gray-50 dark:bg-gray-900/50">
             <tr>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">交易对</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">类型</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">周期</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">开盘价</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">最高价</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">最低价</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">收盘价</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">成交量</th>
-              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">成交额</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">数据源</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">同步</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400">操作</th>
+              <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">交易对</th>
+              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">类型</th>
+              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">周期</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">开盘价</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">最高价</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">最低价</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">收盘价</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">成交量</th>
+              <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400">成交额</th>
+              <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">数据源</th>
+              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">同步</th>
+              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredConfigs.map((config) => (
               <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                <td className="px-3 py-3">
-                  <div className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-custom-green" />
-                    <span className="font-medium text-gray-900 dark:text-white text-sm">{config.market}</span>
+                <td className="px-2 py-2">
+                  <div className="flex items-center gap-1">
+                    <BarChart3 className="w-3 h-3 text-custom-green" />
+                    <span className="font-medium text-gray-900 dark:text-white text-xs">{config.market}</span>
                   </div>
                 </td>
-                <td className="px-3 py-3 text-center">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                <td className="px-2 py-2 text-center">
+                  <span className={`px-1.5 py-0.5 rounded text-xs ${
                     config.klineType === "spot" ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400" :
                     config.klineType === "futures" ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400" :
                     "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
@@ -294,30 +290,27 @@ export default function KlineManagementPage() {
                     {getKlineTypeLabel(config.klineType)}
                   </span>
                 </td>
-                <td className="px-3 py-3 text-center">
-                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-medium">{config.interval}</span>
+                <td className="px-2 py-2 text-center">
+                  <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">{config.interval}</span>
                 </td>
                 {["open", "high", "low", "close"].map((field) => (
-                  <td key={field} className="px-3 py-3 text-right">
+                  <td key={field} className="px-2 py-2 text-right">
                     {editingId === config.id && editingField === field ? (
-                      <div className="flex items-center gap-1 justify-end">
-                        <Input
-                          type="number"
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          className="w-24 h-7 text-xs text-right"
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") saveEdit()
-                            if (e.key === "Escape") cancelEdit()
-                          }}
-                        />
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-green-600" onClick={saveEdit}>✓</Button>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-500" onClick={cancelEdit}>✗</Button>
-                      </div>
+                      <Input
+                        type="number"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        className="w-20 h-6 text-xs text-right"
+                        autoFocus
+                        onBlur={saveEdit}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveEdit()
+                          if (e.key === "Escape") cancelEdit()
+                        }}
+                      />
                     ) : (
                       <span 
-                        className="text-sm text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                        className="text-xs text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded"
                         onClick={() => startEdit(config.id, field, config[field as keyof KlineConfig] as number)}
                       >
                         {formatPrice(config[field as keyof KlineConfig] as number)}
@@ -325,72 +318,66 @@ export default function KlineManagementPage() {
                     )}
                   </td>
                 ))}
-                <td className="px-3 py-3 text-right">
+                <td className="px-2 py-2 text-right">
                   {editingId === config.id && editingField === "volume" ? (
-                    <div className="flex items-center gap-1 justify-end">
-                      <Input
-                        type="number"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="w-24 h-7 text-xs text-right"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") saveEdit()
-                          if (e.key === "Escape") cancelEdit()
-                        }}
-                      />
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-green-600" onClick={saveEdit}>✓</Button>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-500" onClick={cancelEdit}>✗</Button>
-                    </div>
+                    <Input
+                      type="number"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="w-20 h-6 text-xs text-right"
+                      autoFocus
+                      onBlur={saveEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit()
+                        if (e.key === "Escape") cancelEdit()
+                      }}
+                    />
                   ) : (
                     <span 
-                      className="text-sm text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                      className="text-xs text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded"
                       onClick={() => startEdit(config.id, "volume", config.volume)}
                     >
                       {formatVolume(config.volume)}
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-3 text-right">
+                <td className="px-2 py-2 text-right">
                   {editingId === config.id && editingField === "turnover" ? (
-                    <div className="flex items-center gap-1 justify-end">
-                      <Input
-                        type="number"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="w-28 h-7 text-xs text-right"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") saveEdit()
-                          if (e.key === "Escape") cancelEdit()
-                        }}
-                      />
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-green-600" onClick={saveEdit}>✓</Button>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-500" onClick={cancelEdit}>✗</Button>
-                    </div>
+                    <Input
+                      type="number"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="w-20 h-6 text-xs text-right"
+                      autoFocus
+                      onBlur={saveEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit()
+                        if (e.key === "Escape") cancelEdit()
+                      }}
+                    />
                   ) : (
                     <span 
-                      className="text-sm text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded"
+                      className="text-xs text-gray-900 dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded"
                       onClick={() => startEdit(config.id, "turnover", config.turnover)}
                     >
                       {formatVolume(config.turnover)}
                     </span>
                   )}
                 </td>
-                <td className="px-3 py-3 text-sm text-gray-600 dark:text-gray-400">{config.dataSource}</td>
-                <td className="px-3 py-3 text-center">
-                  <Switch checked={config.syncStatus} onCheckedChange={() => handleToggleSync(config.id)} />
+                <td className="px-2 py-2 text-xs text-gray-600 dark:text-gray-400">{config.dataSource}</td>
+                <td className="px-2 py-2 text-center">
+                  <Switch checked={config.syncStatus} onCheckedChange={() => handleToggleSync(config.id)} className="scale-75" />
                 </td>
-                <td className="px-3 py-3">
-                  <div className="flex items-center justify-center gap-1">
-                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => { setSelectedConfig(config); setShowEditSheet(true) }}>
-                      <Settings className="w-4 h-4" />
+                <td className="px-2 py-2">
+                  <div className="flex items-center justify-center gap-0.5">
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => { setSelectedConfig(config); setShowEditSheet(true) }}>
+                      <Settings className="w-3 h-3" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-red-500 hover:text-red-700" onClick={() => {
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-500 hover:text-red-700" onClick={() => {
                       setConfigs(prev => prev.filter(c => c.id !== config.id))
                       toast.success("已删除")
                     }}>
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3 h-3" />
                     </Button>
                   </div>
                 </td>
