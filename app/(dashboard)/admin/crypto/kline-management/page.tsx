@@ -254,14 +254,13 @@ export default function KlineManagementPage() {
             </div>
             <div>
               <Label>数据源</Label>
-              <Select value={newConfig.dataSource} onValueChange={(v) => setNewConfig(prev => ({ ...prev, dataSource: v }))}>
-                <SelectTrigger className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {dataSources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                </SelectContent>
-              </Select>
+              <Tabs value={newConfig.dataSource} onValueChange={(v) => setNewConfig(prev => ({ ...prev, dataSource: v }))} className="mt-2">
+                <TabsList className="grid w-full grid-cols-5 h-auto">
+                  {dataSources.map(s => (
+                    <TabsTrigger key={s} value={s} className="text-xs px-2 py-1.5">{s}</TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             </div>
             <Button className="w-full bg-custom-green hover:bg-custom-green-dark text-white" onClick={handleAddConfig}>
               确认添加
@@ -280,20 +279,20 @@ export default function KlineManagementPage() {
             <div className="mt-6 space-y-4">
               <div>
                 <Label>数据源</Label>
-                <Select 
+                <Tabs 
                   value={selectedConfig.dataSource} 
                   onValueChange={(v) => {
                     setConfigs(prev => prev.map(c => c.id === selectedConfig.id ? { ...c, dataSource: v } : c))
                     setSelectedConfig(prev => prev ? { ...prev, dataSource: v } : null)
                   }}
+                  className="mt-2"
                 >
-                  <SelectTrigger className="mt-2">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {dataSources.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                  </SelectContent>
-                </Select>
+                  <TabsList className="grid w-full grid-cols-5 h-auto">
+                    {dataSources.map(s => (
+                      <TabsTrigger key={s} value={s} className="text-xs px-2 py-1.5">{s}</TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
               </div>
               <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                 <span>启用同步</span>
