@@ -49,7 +49,6 @@ interface Staff {
 interface Role {
   id: string
   name: string
-  description: string
 }
 
 const mockStaffData: Staff[] = [
@@ -68,18 +67,18 @@ const mockStaffData: Staff[] = [
 ]
 
 const initialRoles: Role[] = [
-  { id: "1", name: "超级管理员", description: "拥有所有权限" },
-  { id: "2", name: "财务审核员", description: "财务审核相关权限" },
-  { id: "3", name: "风控专员", description: "风控管理权限" },
-  { id: "4", name: "客服主管", description: "客服管理权限" },
-  { id: "5", name: "运营专员", description: "运营相关权限" },
-  { id: "6", name: "技术支持", description: "技术支持权限" },
-  { id: "7", name: "财务主管", description: "财务管理权限" },
-  { id: "8", name: "合规专员", description: "合规审核权限" },
-  { id: "9", name: "产品经理", description: "产品管理权限" },
-  { id: "10", name: "数据分析师", description: "数据查看权限" },
-  { id: "11", name: "安全专员", description: "安全管理权限" },
-  { id: "12", name: "市场专员", description: "市场运营权限" },
+  { id: "1", name: "超级管理员" },
+  { id: "2", name: "财务审核员" },
+  { id: "3", name: "风控专员" },
+  { id: "4", name: "客服主管" },
+  { id: "5", name: "运营专员" },
+  { id: "6", name: "技术支持" },
+  { id: "7", name: "财务主管" },
+  { id: "8", name: "合规专员" },
+  { id: "9", name: "产品经理" },
+  { id: "10", name: "数据分析师" },
+  { id: "11", name: "安全专员" },
+  { id: "12", name: "市场专员" },
 ]
 
 const departments = ["全部", "技术部", "财务部", "风控部", "客服部", "运营部", "合规部", "产品部", "数据部", "安全部", "市场部"]
@@ -110,7 +109,7 @@ export default function StaffManagementPage() {
   })
   
   const [editingRole, setEditingRole] = useState<Role | null>(null)
-  const [roleFormData, setRoleFormData] = useState({ name: "", description: "" })
+  const [roleFormData, setRoleFormData] = useState({ name: "" })
 
   const roleNames = ["全部", ...roles.map(r => r.name)]
 
@@ -202,12 +201,12 @@ export default function StaffManagementPage() {
       ...roleFormData
     }
     setRoles(prev => [...prev, newRole])
-    setRoleFormData({ name: "", description: "" })
+    setRoleFormData({ name: "" })
   }
 
   const handleEditRole = (role: Role) => {
     setEditingRole(role)
-    setRoleFormData({ name: role.name, description: role.description })
+    setRoleFormData({ name: role.name })
   }
 
   const handleSaveRole = () => {
@@ -216,7 +215,7 @@ export default function StaffManagementPage() {
       r.id === editingRole.id ? { ...r, ...roleFormData } : r
     ))
     setEditingRole(null)
-    setRoleFormData({ name: "", description: "" })
+    setRoleFormData({ name: "" })
   }
 
   const handleDeleteRole = (id: string) => {
@@ -225,7 +224,7 @@ export default function StaffManagementPage() {
 
   const handleCancelEditRole = () => {
     setEditingRole(null)
-    setRoleFormData({ name: "", description: "" })
+    setRoleFormData({ name: "" })
   }
 
   return (
@@ -557,13 +556,6 @@ export default function StaffManagementPage() {
                   onChange={(e) => setRoleFormData({ ...roleFormData, name: e.target.value })}
                 />
               </div>
-              <div className="space-y-2">
-                <Input
-                  placeholder="角色描述（可选）"
-                  value={roleFormData.description}
-                  onChange={(e) => setRoleFormData({ ...roleFormData, description: e.target.value })}
-                />
-              </div>
               <div className="flex gap-2">
                 {editingRole ? (
                   <>
@@ -589,12 +581,7 @@ export default function StaffManagementPage() {
                   key={role.id}
                   className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50"
                 >
-                  <div>
-                    <div className="font-medium">{role.name}</div>
-                    {role.description && (
-                      <div className="text-sm text-muted-foreground">{role.description}</div>
-                    )}
-                  </div>
+                  <div className="font-medium">{role.name}</div>
                   <div className="flex items-center gap-1">
                     <Button
                       variant="ghost"
