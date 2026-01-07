@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2, Plus, Settings2, Calendar } from "lucide-react"
+import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2, Plus, Settings2, Calendar, Loader2 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -75,6 +75,16 @@ export default function OrderManagementPage() {
   const [showDetailSheet, setShowDetailSheet] = useState(false)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
   const [filterPresets, setFilterPresets] = useState<FilterPreset[]>(defaultPresets)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(10)
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 10)
+      setIsLoadingMore(false)
+    }, 800)
+  }
   const [activePreset, setActivePreset] = useState("all")
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [newPresetName, setNewPresetName] = useState("")
@@ -371,7 +381,7 @@ export default function OrderManagementPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredOrders.map((order) => (
+            {filteredOrders.slice(0, displayCount).map((order) => (
               <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td className="px-4 py-3 text-center">
                   {(order.status === "pending" || order.status === "partial") ? (
@@ -413,6 +423,26 @@ export default function OrderManagementPage() {
           </tbody>
         </table>
       </div>
+
+      {filteredOrders.length > displayCount && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="min-w-[140px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              `加载更多 (${filteredOrders.length - displayCount})`
+            )}
+          </Button>
+        </div>
+      )}
 
       <Sheet open={showDetailSheet} onOpenChange={setShowDetailSheet}>
         <SheetContent className="w-[500px] sm:max-w-[500px]">

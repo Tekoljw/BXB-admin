@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { Switch } from "@/components/ui/switch"
-import { Search, Plus, Download, CalendarIcon } from "lucide-react"
+import { Search, Plus, Download, CalendarIcon, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
@@ -97,6 +97,16 @@ export default function SpotMarketMakerPage() {
   const [editStartTimeMinute, setEditStartTimeMinute] = useState("00")
   const [editEndTimeHour, setEditEndTimeHour] = useState("00")
   const [editEndTimeMinute, setEditEndTimeMinute] = useState("00")
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(10)
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 10)
+      setIsLoadingMore(false)
+    }, 800)
+  }
 
   const filteredMarketMakers = marketMakers.filter(maker => {
     if (makerIdFilter && !maker.makerId.includes(makerIdFilter)) return false
@@ -339,7 +349,7 @@ export default function SpotMarketMakerPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredMarketMakers.map((maker) => (
+              {filteredMarketMakers.slice(0, displayCount).map((maker) => (
                 <tr key={maker.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-4 text-sm text-gray-900 dark:text-white">{maker.id}</td>
                   <td className="px-4 py-4 text-sm text-gray-900 dark:text-white">{maker.makerId}</td>
@@ -383,6 +393,26 @@ export default function SpotMarketMakerPage() {
           </table>
         </div>
       </div>
+
+      {filteredMarketMakers.length > displayCount && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="min-w-[140px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              `加载更多 (${filteredMarketMakers.length - displayCount})`
+            )}
+          </Button>
+        </div>
+      )}
 
       <Sheet open={showAddDialog} onOpenChange={setShowAddDialog}>
         <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">

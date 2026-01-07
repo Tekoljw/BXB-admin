@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Eye, TrendingUp, TrendingDown, ArrowUpDown } from "lucide-react"
+import { Search, Download, RotateCcw, Eye, TrendingUp, TrendingDown, ArrowUpDown, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -58,6 +58,16 @@ export default function TradeHistoryPage() {
   const [marketType, setMarketType] = useState<"spot" | "leverage">("spot")
   const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(10)
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 10)
+      setIsLoadingMore(false)
+    }, 800)
+  }
 
   const filteredTrades = useMemo(() => {
     return mockTrades.filter(trade => {
@@ -194,7 +204,7 @@ export default function TradeHistoryPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredTrades.map((trade) => (
+            {filteredTrades.slice(0, displayCount).map((trade) => (
               <tr key={trade.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{trade.id}</td>
                 <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{trade.orderId}</td>
@@ -222,6 +232,26 @@ export default function TradeHistoryPage() {
           </tbody>
         </table>
       </div>
+
+      {filteredTrades.length > displayCount && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="min-w-[140px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              `加载更多 (${filteredTrades.length - displayCount})`
+            )}
+          </Button>
+        </div>
+      )}
 
       <Sheet open={showDetailSheet} onOpenChange={setShowDetailSheet}>
         <SheetContent className="w-[500px] sm:max-w-[500px]">

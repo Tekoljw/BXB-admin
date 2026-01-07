@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Edit2, TrendingUp, BarChart3, Settings, Plus, Trash2 } from "lucide-react"
+import React, { useState, useMemo, useCallback } from "react"
+import { Search, Download, RotateCcw, Edit2, TrendingUp, BarChart3, Settings, Plus, Trash2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -74,6 +74,16 @@ export default function KlineManagementPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingField, setEditingField] = useState<string | null>(null)
   const [editValue, setEditValue] = useState("")
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(10)
+
+  const handleLoadMore = useCallback(() => {
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 10)
+      setIsLoadingMore(false)
+    }, 800)
+  }, [])
 
   const filteredConfigs = useMemo(() => {
     return configs.filter(config => {
@@ -243,13 +253,13 @@ export default function KlineManagementPage() {
             </TabsList>
           </Tabs>
         </div>
-        <div className="relative w-[180px]">
+        <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder="搜索交易对..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-8"
+            className="pl-9 h-8 w-full"
           />
         </div>
       </div>
@@ -273,7 +283,7 @@ export default function KlineManagementPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredConfigs.map((config) => (
+            {filteredConfigs.slice(0, displayCount).map((config) => (
               <tr key={config.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td className="px-2 py-2">
                   <div className="flex items-center gap-1">
@@ -386,6 +396,26 @@ export default function KlineManagementPage() {
           </tbody>
         </table>
       </div>
+
+      {filteredConfigs.length > displayCount && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="min-w-[140px]"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </>
+            ) : (
+              `加载更多 (${filteredConfigs.length - displayCount})`
+            )}
+          </Button>
+        </div>
+      )}
 
       <Sheet open={showAddSheet} onOpenChange={setShowAddSheet}>
         <SheetContent className="w-[450px] sm:max-w-[450px]">
