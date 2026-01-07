@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2, Plus, Settings2 } from "lucide-react"
+import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2, Plus, Settings2, Calendar } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -31,15 +32,19 @@ interface FilterPreset {
   status: string
   side: string
   type: string
+  userId?: string
+  market?: string
+  timeRange?: string
+  enabled: boolean
   isDefault?: boolean
 }
 
 const defaultPresets: FilterPreset[] = [
-  { id: "all", name: "全部订单", status: "all", side: "all", type: "all", isDefault: true },
-  { id: "pending", name: "待处理", status: "pending,partial", side: "all", type: "all", isDefault: true },
-  { id: "buy", name: "买入订单", status: "all", side: "buy", type: "all", isDefault: true },
-  { id: "sell", name: "卖出订单", status: "all", side: "sell", type: "all", isDefault: true },
-  { id: "completed", name: "已完成", status: "filled", side: "all", type: "all", isDefault: true },
+  { id: "all", name: "全部订单", status: "all", side: "all", type: "all", enabled: true, isDefault: true },
+  { id: "pending", name: "待处理", status: "pending,partial", side: "all", type: "all", enabled: true, isDefault: true },
+  { id: "buy", name: "买入订单", status: "all", side: "buy", type: "all", enabled: true, isDefault: true },
+  { id: "sell", name: "卖出订单", status: "all", side: "sell", type: "all", enabled: true, isDefault: true },
+  { id: "completed", name: "已完成", status: "filled", side: "all", type: "all", enabled: true, isDefault: true },
 ]
 
 interface Order {
@@ -84,6 +89,10 @@ export default function OrderManagementPage() {
   const [newPresetStatus, setNewPresetStatus] = useState("all")
   const [newPresetSide, setNewPresetSide] = useState("all")
   const [newPresetType, setNewPresetType] = useState("all")
+  const [newPresetUserId, setNewPresetUserId] = useState("")
+  const [newPresetMarket, setNewPresetMarket] = useState("")
+  const [newPresetTimeRange, setNewPresetTimeRange] = useState("all")
+  const [newPresetEnabled, setNewPresetEnabled] = useState(true)
 
   const applyPreset = (presetId: string) => {
     const preset = filterPresets.find(p => p.id === presetId)
@@ -106,6 +115,10 @@ export default function OrderManagementPage() {
       status: newPresetStatus,
       side: newPresetSide,
       type: newPresetType,
+      userId: newPresetUserId || undefined,
+      market: newPresetMarket || undefined,
+      timeRange: newPresetTimeRange,
+      enabled: newPresetEnabled,
       isDefault: false,
     }
     setFilterPresets([...filterPresets, newPreset])
@@ -114,7 +127,17 @@ export default function OrderManagementPage() {
     setNewPresetStatus("all")
     setNewPresetSide("all")
     setNewPresetType("all")
+    setNewPresetUserId("")
+    setNewPresetMarket("")
+    setNewPresetTimeRange("all")
+    setNewPresetEnabled(true)
     toast.success("筛选组合已添加")
+  }
+
+  const handleTogglePreset = (presetId: string, enabled: boolean) => {
+    setFilterPresets(filterPresets.map(p => 
+      p.id === presetId ? { ...p, enabled } : p
+    ))
   }
 
   const handleDeletePreset = (presetId: string) => {
@@ -233,30 +256,6 @@ export default function OrderManagementPage() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
-        {filterPresets.map((preset) => (
-          <div key={preset.id} className="relative group">
-            <Button
-              variant={activePreset === preset.id ? "default" : "outline"}
-              size="sm"
-              onClick={() => applyPreset(preset.id)}
-              className="pr-2"
-            >
-              {preset.name}
-              {!preset.isDefault && (
-                <XIcon
-                  className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleDeletePreset(preset.id)
-                  }}
-                />
-              )}
-            </Button>
-          </div>
-        ))}
-      </div>
-
       <Tabs value={marketType} onValueChange={(v) => setMarketType(v as "spot" | "leverage")} className="w-fit">
         <TabsList>
           <TabsTrigger value="spot">现货委托</TabsTrigger>
@@ -332,6 +331,28 @@ export default function OrderManagementPage() {
             搜索
           </Button>
         </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-gray-500 dark:text-gray-400">快捷筛选:</span>
+        <Tabs value={activePreset} onValueChange={applyPreset} className="w-fit">
+          <TabsList className="h-8">
+            {filterPresets.filter(p => p.enabled).map((preset) => (
+              <TabsTrigger key={preset.id} value={preset.id} className="text-xs px-3 h-7 relative group">
+                {preset.name}
+                {!preset.isDefault && (
+                  <XIcon
+                    className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeletePreset(preset.id)
+                    }}
+                  />
+                )}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -477,64 +498,117 @@ export default function OrderManagementPage() {
       </Sheet>
 
       <Dialog open={showPresetDialog} onOpenChange={setShowPresetDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>添加筛选组合</DialogTitle>
             <DialogDescription>
               配置筛选条件并保存为常用组合，方便快速筛选
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label>组合名称</Label>
-              <Input
-                placeholder="输入筛选组合名称"
-                value={newPresetName}
-                onChange={(e) => setNewPresetName(e.target.value)}
-              />
+          <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>组合名称 *</Label>
+                <Input
+                  placeholder="输入筛选组合名称"
+                  value={newPresetName}
+                  onChange={(e) => setNewPresetName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>用户ID</Label>
+                <Input
+                  placeholder="输入用户ID"
+                  value={newPresetUserId}
+                  onChange={(e) => setNewPresetUserId(e.target.value)}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>状态筛选</Label>
-              <Select value={newPresetStatus} onValueChange={setNewPresetStatus}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">全部状态</SelectItem>
-                  <SelectItem value="pending">待成交</SelectItem>
-                  <SelectItem value="partial">部分成交</SelectItem>
-                  <SelectItem value="pending,partial">待处理（待成交+部分成交）</SelectItem>
-                  <SelectItem value="filled">已成交</SelectItem>
-                  <SelectItem value="cancelled">已取消</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>交易对</Label>
+                <Input
+                  placeholder="如 BTC/USDT"
+                  value={newPresetMarket}
+                  onChange={(e) => setNewPresetMarket(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>时间范围</Label>
+                <Select value={newPresetTimeRange} onValueChange={setNewPresetTimeRange}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">全部时间</SelectItem>
+                    <SelectItem value="today">今天</SelectItem>
+                    <SelectItem value="yesterday">昨天</SelectItem>
+                    <SelectItem value="7days">最近7天</SelectItem>
+                    <SelectItem value="30days">最近30天</SelectItem>
+                    <SelectItem value="thisMonth">本月</SelectItem>
+                    <SelectItem value="lastMonth">上月</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>方向筛选</Label>
-              <Select value={newPresetSide} onValueChange={setNewPresetSide}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">全部方向</SelectItem>
-                  <SelectItem value="buy">买入</SelectItem>
-                  <SelectItem value="sell">卖出</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>状态筛选</Label>
+                <Select value={newPresetStatus} onValueChange={setNewPresetStatus}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">全部状态</SelectItem>
+                    <SelectItem value="pending">待成交</SelectItem>
+                    <SelectItem value="partial">部分成交</SelectItem>
+                    <SelectItem value="pending,partial">待处理（待成交+部分成交）</SelectItem>
+                    <SelectItem value="filled">已成交</SelectItem>
+                    <SelectItem value="cancelled">已取消</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>方向筛选</Label>
+                <Select value={newPresetSide} onValueChange={setNewPresetSide}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">全部方向</SelectItem>
+                    <SelectItem value="buy">买入</SelectItem>
+                    <SelectItem value="sell">卖出</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label>类型筛选</Label>
-              <Select value={newPresetType} onValueChange={setNewPresetType}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">全部类型</SelectItem>
-                  <SelectItem value="limit">限价单</SelectItem>
-                  <SelectItem value="market">市价单</SelectItem>
-                  <SelectItem value="stop_limit">止损限价</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>类型筛选</Label>
+                <Select value={newPresetType} onValueChange={setNewPresetType}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">全部类型</SelectItem>
+                    <SelectItem value="limit">限价单</SelectItem>
+                    <SelectItem value="market">市价单</SelectItem>
+                    <SelectItem value="stop_limit">止损限价</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>启用状态</Label>
+                <div className="flex items-center gap-2 h-10">
+                  <Switch
+                    checked={newPresetEnabled}
+                    onCheckedChange={setNewPresetEnabled}
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {newPresetEnabled ? "启用" : "禁用"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           <DialogFooter>
