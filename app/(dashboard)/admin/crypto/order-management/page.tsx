@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo } from "react"
-import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2 } from "lucide-react"
+import { Search, Download, RotateCcw, Eye, X as XIcon, TrendingUp, TrendingDown, Trash2, Plus, Settings2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -12,9 +12,35 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
+
+interface FilterPreset {
+  id: string
+  name: string
+  status: string
+  side: string
+  type: string
+  isDefault?: boolean
+}
+
+const defaultPresets: FilterPreset[] = [
+  { id: "all", name: "全部订单", status: "all", side: "all", type: "all", isDefault: true },
+  { id: "pending", name: "待处理", status: "pending,partial", side: "all", type: "all", isDefault: true },
+  { id: "buy", name: "买入订单", status: "all", side: "buy", type: "all", isDefault: true },
+  { id: "sell", name: "卖出订单", status: "all", side: "sell", type: "all", isDefault: true },
+  { id: "completed", name: "已完成", status: "filled", side: "all", type: "all", isDefault: true },
+]
 
 interface Order {
   id: string
@@ -51,6 +77,54 @@ export default function OrderManagementPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [showDetailSheet, setShowDetailSheet] = useState(false)
   const [selectedOrders, setSelectedOrders] = useState<string[]>([])
+  const [filterPresets, setFilterPresets] = useState<FilterPreset[]>(defaultPresets)
+  const [activePreset, setActivePreset] = useState("all")
+  const [showPresetDialog, setShowPresetDialog] = useState(false)
+  const [newPresetName, setNewPresetName] = useState("")
+  const [newPresetStatus, setNewPresetStatus] = useState("all")
+  const [newPresetSide, setNewPresetSide] = useState("all")
+  const [newPresetType, setNewPresetType] = useState("all")
+
+  const applyPreset = (presetId: string) => {
+    const preset = filterPresets.find(p => p.id === presetId)
+    if (preset) {
+      setActivePreset(presetId)
+      setStatusFilter(preset.status)
+      setSideFilter(preset.side)
+      setTypeFilter(preset.type)
+    }
+  }
+
+  const handleAddPreset = () => {
+    if (!newPresetName.trim()) {
+      toast.error("请输入筛选组合名称")
+      return
+    }
+    const newPreset: FilterPreset = {
+      id: `custom_${Date.now()}`,
+      name: newPresetName.trim(),
+      status: newPresetStatus,
+      side: newPresetSide,
+      type: newPresetType,
+      isDefault: false,
+    }
+    setFilterPresets([...filterPresets, newPreset])
+    setShowPresetDialog(false)
+    setNewPresetName("")
+    setNewPresetStatus("all")
+    setNewPresetSide("all")
+    setNewPresetType("all")
+    toast.success("筛选组合已添加")
+  }
+
+  const handleDeletePreset = (presetId: string) => {
+    setFilterPresets(filterPresets.filter(p => p.id !== presetId))
+    if (activePreset === presetId) {
+      setActivePreset("all")
+      applyPreset("all")
+    }
+    toast.success("筛选组合已删除")
+  }
 
   const filteredOrders = useMemo(() => {
     return mockOrders.filter(order => {
@@ -59,7 +133,8 @@ export default function OrderManagementPage() {
         order.uid.includes(searchQuery) ||
         order.username.includes(searchQuery) ||
         order.market.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchesStatus = statusFilter === "all" || order.status === statusFilter
+      const statusValues = statusFilter.split(",")
+      const matchesStatus = statusFilter === "all" || statusValues.includes(order.status)
       const matchesSide = sideFilter === "all" || order.side === sideFilter
       const matchesType = typeFilter === "all" || order.type === typeFilter
       return matchesSearch && matchesStatus && matchesSide && matchesType
@@ -151,7 +226,35 @@ export default function OrderManagementPage() {
             <RotateCcw className="w-4 h-4 mr-2" />
             刷新
           </Button>
+          <Button variant="outline" size="sm" onClick={() => setShowPresetDialog(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            添加筛选组合
+          </Button>
         </div>
+      </div>
+
+      <div className="flex items-center gap-2 flex-wrap">
+        {filterPresets.map((preset) => (
+          <div key={preset.id} className="relative group">
+            <Button
+              variant={activePreset === preset.id ? "default" : "outline"}
+              size="sm"
+              onClick={() => applyPreset(preset.id)}
+              className="pr-2"
+            >
+              {preset.name}
+              {!preset.isDefault && (
+                <XIcon
+                  className="w-3 h-3 ml-2 opacity-0 group-hover:opacity-100 hover:text-red-500 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeletePreset(preset.id)
+                  }}
+                />
+              )}
+            </Button>
+          </div>
+        ))}
       </div>
 
       <Tabs value={marketType} onValueChange={(v) => setMarketType(v as "spot" | "leverage")} className="w-fit">
@@ -372,6 +475,78 @@ export default function OrderManagementPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      <Dialog open={showPresetDialog} onOpenChange={setShowPresetDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>添加筛选组合</DialogTitle>
+            <DialogDescription>
+              配置筛选条件并保存为常用组合，方便快速筛选
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>组合名称</Label>
+              <Input
+                placeholder="输入筛选组合名称"
+                value={newPresetName}
+                onChange={(e) => setNewPresetName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>状态筛选</Label>
+              <Select value={newPresetStatus} onValueChange={setNewPresetStatus}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部状态</SelectItem>
+                  <SelectItem value="pending">待成交</SelectItem>
+                  <SelectItem value="partial">部分成交</SelectItem>
+                  <SelectItem value="pending,partial">待处理（待成交+部分成交）</SelectItem>
+                  <SelectItem value="filled">已成交</SelectItem>
+                  <SelectItem value="cancelled">已取消</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>方向筛选</Label>
+              <Select value={newPresetSide} onValueChange={setNewPresetSide}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部方向</SelectItem>
+                  <SelectItem value="buy">买入</SelectItem>
+                  <SelectItem value="sell">卖出</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>类型筛选</Label>
+              <Select value={newPresetType} onValueChange={setNewPresetType}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">全部类型</SelectItem>
+                  <SelectItem value="limit">限价单</SelectItem>
+                  <SelectItem value="market">市价单</SelectItem>
+                  <SelectItem value="stop_limit">止损限价</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
+              取消
+            </Button>
+            <Button onClick={handleAddPreset}>
+              保存组合
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
