@@ -1,31 +1,29 @@
-# Use Node.js 20 Alpine for optimal performance
-FROM node:20-alpine
+# Multi-stage build for Next.js (standalone output)
 
-# Set working directory
+FROM node:20-alpine AS deps
 WORKDIR /app
-
-# Install system dependencies
 RUN apk add --no-cache libc6-compat
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Copy package files
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
-
-# Install dependencies
-RUN npm ci --only=production
-
-# Copy source code
+FROM node:20-alpine AS builder
+WORKDIR /app
+RUN apk add --no-cache libc6-compat
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Expose port 5000 (required for Replit)
-EXPOSE 5000
+FROM node:20-alpine AS runner
+WORKDIR /app
+RUN apk add --no-cache libc6-compat
 
-# Set environment to production
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Start the application
-CMD ["npm", "start"]
+# Next.js standalone output includes the minimal server + dependencies
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 5000
+CMD ["node", "server.js"]
