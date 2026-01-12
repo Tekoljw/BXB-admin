@@ -1,10 +1,25 @@
 import OpenAI from "openai";
 
-// DeepSeek API configuration using OpenAI-compatible client
-const deepseek = new OpenAI({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: "https://api.deepseek.com/v1",
-});
+/**
+ * DeepSeek API configuration using OpenAI-compatible client.
+ *
+ * IMPORTANT:
+ * - Do NOT instantiate OpenAI client at module scope.
+ *   Next.js may evaluate route modules during build ("collecting page data"),
+ *   and missing env vars would fail the entire build.
+ * - Instantiate lazily at runtime when the API is actually called.
+ */
+function getDeepseekClient(): OpenAI {
+  // Prefer DeepSeek key; allow OPENAI_API_KEY for compatibility with some environments.
+  const apiKey = process.env.DEEPSEEK_API_KEY || process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing API key: set DEEPSEEK_API_KEY (recommended) or OPENAI_API_KEY.");
+  }
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://api.deepseek.com/v1",
+  });
+}
 
 export interface ContractGenerationData {
   transactionType: string;
@@ -18,6 +33,7 @@ export interface ContractGenerationData {
 
 export async function generateContract(data: ContractGenerationData): Promise<string> {
   try {
+    const deepseek = getDeepseekClient();
     const prompt = `请为以下担保交易生成一份专业的合同模板：
 
 交易类型：${data.transactionType}
@@ -69,6 +85,7 @@ export async function analyzeTransaction(description: string): Promise<{
   contract_points: string[];
 }> {
   try {
+    const deepseek = getDeepseekClient();
     const response = await deepseek.chat.completions.create({
       model: "deepseek-chat",
       messages: [
