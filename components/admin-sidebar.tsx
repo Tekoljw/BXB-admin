@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
+import { fetchMenu } from "@/lib/menu-api"
+import { convertMenuDataToUI, type UIMenuConfig, type UIMenuItem, type UIMenuGroup } from "@/lib/menu-utils"
 import {
   BarChart3,
   TrendingUp,
@@ -360,8 +362,40 @@ interface AdminSidebarV2PropsExtended extends AdminSidebarV2Props {
 
 export default function AdminSidebarV2({ currentModule, currentPage, onNavigate, isOpen = false, onToggle }: AdminSidebarV2PropsExtended) {
   const { theme } = useTheme()
+  const [apiMenuData, setApiMenuData] = useState<UIMenuConfig | null>(null)
+  const [isLoadingMenu, setIsLoadingMenu] = useState(true)
   
-  const menuConfig = moduleMenus[currentModule] || []
+  // 从API获取菜单数据
+  useEffect(() => {
+    const loadMenu = async () => {
+      try {
+        setIsLoadingMenu(true)
+        const apiData = await fetchMenu()
+        if (apiData && apiData.length > 0) {
+          const convertedMenu = convertMenuDataToUI(apiData)
+          setApiMenuData(convertedMenu)
+        }
+      } catch (error) {
+        console.error('Failed to load menu from API:', error)
+        // API失败时使用硬编码菜单
+        setApiMenuData(null)
+      } finally {
+        setIsLoadingMenu(false)
+      }
+    }
+    
+    loadMenu()
+  }, [])
+  
+  // 优先使用API菜单，如果不存在则使用硬编码菜单
+  const getMenuConfig = (): MenuConfig => {
+    if (apiMenuData) {
+      return apiMenuData as MenuConfig
+    }
+    return moduleMenus[currentModule] || []
+  }
+  
+  const menuConfig = getMenuConfig()
   
   // 检查是否为分组菜单
   const isGroupedMenu = menuConfig.length > 0 && 'group' in menuConfig[0]
@@ -369,9 +403,9 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
   // 管理分组的展开/收起状态，默认全部展开
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   
-  // 当切换模块时，重新初始化展开状态
+  // 当切换模块或菜单数据变化时，重新初始化展开状态
   useEffect(() => {
-    const config = moduleMenus[currentModule] || []
+    const config = getMenuConfig()
     const isGrouped = config.length > 0 && 'group' in config[0]
     
     if (isGrouped) {
@@ -383,7 +417,7 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
     } else {
       setExpandedGroups({})
     }
-  }, [currentModule])
+  }, [currentModule, apiMenuData])
   
   // 切换分组展开/收起
   const toggleGroup = (groupName: string) => {
@@ -470,16 +504,22 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
 
         {/* 二级菜单列表 */}
         <div className="flex-1 overflow-y-auto py-4">
-          {isGroupedMenu ? (
+          {isLoadingMenu ? (
+            <div className="flex items-center justify-center py-8">
+              <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                加载菜单中...
+              </div>
+            </div>
+          ) : isGroupedMenu ? (
             // 分组菜单渲染
             <nav className="space-y-3 px-3">
-              {(menuConfig as MenuGroup[]).map((group, index) => {
+              {(menuConfig as MenuGroup[] | UIMenuGroup[]).map((group, index) => {
                 const isExpanded = expandedGroups[group.group]
                 const ChevronIcon = isExpanded ? ChevronDown : ChevronRight
                 const GroupIcon = group.icon
                 
                 return (
-                  <div key={group.group}>
+                  <div key={group.group || index}>
                     {/* 可点击的分组标题 */}
                     <button
                       onClick={() => toggleGroup(group.group)}
@@ -511,7 +551,7 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
           ) : (
             // 平面菜单渲染
             <nav className="space-y-1 px-3">
-              {(menuConfig as MenuItem[]).map(item => renderMenuItem(item))}
+              {(menuConfig as MenuItem[] | UIMenuItem[]).map(item => renderMenuItem(item))}
             </nav>
           )}
         </div>
