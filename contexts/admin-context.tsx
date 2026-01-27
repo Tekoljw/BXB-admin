@@ -1,12 +1,17 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from "react"
+import { storageUtils } from "@/lib/storage"
+import { uaaApis, type UserInfo as UaaUserInfo } from "@/lib/uaa-api"
 
 interface UserInfo {
   name: string
   email: string
   role: string
   avatar: string
+  userId?: string
+  sysUserId?: number
+  access?: Set<string>
 }
 
 interface AdminContextType {
@@ -15,16 +20,17 @@ interface AdminContextType {
   userInfo: UserInfo | null
   login: (userData?: UserInfo, callback?: () => void) => void
   logout: () => void
+  fetchUserInfo: () => Promise<void>
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
-  // 同步初始化登录状态，避免首次渲染时错误地触发守卫
   const getInitialLoginState = () => {
     if (typeof window === 'undefined') return false
-    return sessionStorage.getItem("isAdminLoggedIn") === "true" || 
-           localStorage.getItem("isAdminLoggedIn") === "true"
+    const accessToken = storageUtils.disk.get<string>('accessToken', '')
+    const refreshToken = storageUtils.disk.get<string>('refreshToken', '')
+    return !!(accessToken || refreshToken)
   }
 
   const getInitialUserInfo = () => {
@@ -44,49 +50,100 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [userInfo, setUserInfo] = useState<UserInfo | null>(getInitialUserInfo)
 
-  const login = (userData?: UserInfo, callback?: () => void) => {
+  const fetchUserInfo = async () => {
+    try {
+      const uaaUserInfo = await uaaApis.queryCurrentUser()
+      if (uaaUserInfo) {
+        const localUserInfo: UserInfo = {
+          name: uaaUserInfo.userName,
+          email: `${uaaUserInfo.userName}@bedao.com`,
+          role: "超级管理员",
+          avatar: "",
+          userId: uaaUserInfo.userId,
+          sysUserId: uaaUserInfo.sysUserId,
+          access: uaaUserInfo.access,
+        }
+        setUserInfo(localUserInfo)
+        localStorage.setItem("adminUserInfo", JSON.stringify(localUserInfo))
+        setIsAdminLoggedIn(true)
+        sessionStorage.setItem("isAdminLoggedIn", "true")
+        localStorage.setItem("isAdminLoggedIn", "true")
+      } else {
+        logout()
+      }
+    } catch (error) {
+      console.error('Failed to fetch user info:', error)
+      logout()
+    }
+  }
+
+  const login = async (userData?: UserInfo, callback?: () => void) => {
     setIsAdminLoggedIn(true)
     sessionStorage.setItem("isAdminLoggedIn", "true")
     localStorage.setItem("isAdminLoggedIn", "true")
     
-    // 使用提供的用户数据或默认值
-    const userInfoToSet: UserInfo = userData || {
-      name: "管理员",
-      email: "admin@bedao.com",
-      role: "超级管理员",
-      avatar: ""
+    if (userData) {
+      setUserInfo(userData)
+      localStorage.setItem("adminUserInfo", JSON.stringify(userData))
+    } else {
+      await fetchUserInfo()
     }
-    setUserInfo(userInfoToSet)
-    localStorage.setItem("adminUserInfo", JSON.stringify(userInfoToSet))
     
-    // 如果提供了回调，在下一个事件循环中执行，确保状态已更新
     if (callback) {
       setTimeout(callback, 0)
     }
   }
 
   const logout = () => {
-    // 立即设置登出状态，阻止渲染受保护内容
     setIsLoggingOut(true)
     setIsAdminLoggedIn(false)
     setUserInfo(null)
+    
+    // 清除sessionStorage
     sessionStorage.removeItem("isAdminLoggedIn")
+    
+    // 清除localStorage
     localStorage.removeItem("isAdminLoggedIn")
     localStorage.removeItem("adminUserInfo")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("lastActivity")
+    localStorage.removeItem("clientCode")
     
-    // 跳转到登录页
-    window.dispatchEvent(new CustomEvent('navigate', { 
-      detail: { 
-        path: "/admin/login"
-      } 
-    }))
+    // 清除disk存储（带前缀的）
+    storageUtils.disk.remove("accessToken")
+    storageUtils.disk.remove("refreshToken")
+    storageUtils.disk.remove("lang")
     
-    // 重置登出状态
+    // 清除所有admin相关的localStorage项
+    if (typeof window !== 'undefined') {
+      const keys = Object.keys(localStorage)
+      keys.forEach(key => {
+        if (key.startsWith('admin.')) {
+          localStorage.removeItem(key)
+        }
+      })
+      
+      // 清除cookie
+      document.cookie = "admin.accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      document.cookie = "admin.refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      document.cookie = "isAdminLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      
+      // 跳转到登录页
+      window.location.href = "/admin/login"
+    }
+    
     setTimeout(() => setIsLoggingOut(false), 100)
   }
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isAdminLoggedIn && !userInfo) {
+      fetchUserInfo()
+    }
+  }, [])
+
   return (
-    <AdminContext.Provider value={{ isAdminLoggedIn, isLoggingOut, userInfo, login, logout }}>
+    <AdminContext.Provider value={{ isAdminLoggedIn, isLoggingOut, userInfo, login, logout, fetchUserInfo }}>
       {children}
     </AdminContext.Provider>
   )

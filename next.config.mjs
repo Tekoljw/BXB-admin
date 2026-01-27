@@ -117,6 +117,23 @@ const nextConfig = {
     return config;
   },
   
+  // API代理配置（解决开发环境跨域问题）
+  async rewrites() {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    
+    // 如果配置了API基础URL，在开发环境使用代理
+    if (process.env.NODE_ENV === 'development' && apiBaseUrl) {
+      return [
+        {
+          source: '/api/proxy/:path*',
+          destination: `${apiBaseUrl}/:path*`,
+        },
+      ];
+    }
+    
+    return [];
+  },
+  
   // Conditional redirects based on deployment type
   async redirects() {
     // Skip redirects for static export to avoid build issues

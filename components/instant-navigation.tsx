@@ -7,6 +7,7 @@ import { useMaintenance } from "@/contexts/maintenance-context"
 import AdminTopNav from "@/components/admin-top-nav"
 import AdminSidebar from "@/components/admin-sidebar"
 import MaintenancePage from "@/components/maintenance-page"
+import { getModuleFromPath as getModuleFromPathUtil, getModuleDefaultPath as getModuleDefaultPathUtil, getModuleName as getModuleNameUtil } from "@/lib/routes"
 
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"
@@ -125,35 +126,15 @@ export default function InstantNavigation() {
   const { isAdminLoggedIn, isLoggingOut } = useAdmin()
   const { isModuleUnderMaintenance } = useMaintenance()
 
-  // 根据路径确定当前模块
+  // 根据路径确定当前模块（使用统一的路由配置）
   const getModuleFromPath = (path: string): string => {
-    if (path.startsWith('/admin/permissions')) return 'permissions'
-    if (path.startsWith('/admin/marketing')) return 'marketing'
-    // operations页面现在属于marketing模块
-    if (path.startsWith('/admin/operations')) return 'marketing'
-    if (path.startsWith('/admin/system')) return 'system'
-    if (path.startsWith('/admin/users')) return 'users'
-    if (path.startsWith('/admin/im')) return 'im'
-    if (path.startsWith('/admin/social')) return 'social'
-    if (path.startsWith('/admin/c2c')) return 'c2c'
-    if (path.startsWith('/admin/escrow')) return 'escrow'
-    if (path.startsWith('/admin/ucard')) return 'ucard'
-    if (path.startsWith('/admin/spot')) return 'spot'
-    if (path.startsWith('/admin/futures')) return 'futures'
-    if (path.startsWith('/admin/copytrade')) return 'copytrade'
-    if (path.startsWith('/admin/finance')) return 'finance'
-    if (path.startsWith('/admin/commission')) return 'commission'
-    if (path.startsWith('/admin/crypto')) return 'crypto'
-    if (path.startsWith('/admin/fiat')) return 'fiat'
-    if (path.startsWith('/admin/orders')) return 'orders'
-    if (path.startsWith('/admin/options')) return 'options'
-    if (path.startsWith('/admin/maintenance')) return 'maintenance'
-    return 'permissions'
+    return getModuleFromPathUtil(path)
   }
 
-  // 获取模块的默认页面
+  // 获取模块的默认页面（使用统一的路由配置，但保留业务特定的默认路径）
   const getModuleDefaultPath = (module: string): string => {
-    const defaults: Record<string, string> = {
+    // 业务特定的默认路径映射（覆盖路由配置中的默认值）
+    const businessDefaults: Record<string, string> = {
       permissions: '/admin/permissions/business-lines',
       marketing: '/admin/marketing/registration-whitelist',
       operations: '/admin/operations/dashboard',
@@ -175,7 +156,9 @@ export default function InstantNavigation() {
       system: '/admin/system/users',
       maintenance: '/admin/maintenance/plan',
     }
-    return defaults[module] || '/admin/permissions/business-lines'
+    
+    // 优先使用业务特定的默认路径，否则使用路由配置中的默认路径
+    return businessDefaults[module] || getModuleDefaultPathUtil(module) || '/admin/permissions/business-lines'
   }
 
   useEffect(() => {
@@ -251,30 +234,16 @@ export default function InstantNavigation() {
     navigate(defaultPath)
   }
 
-  // 获取模块的中文名称
+  // 获取模块的中文名称（使用统一的路由配置）
   const getModuleName = (moduleId: string): string => {
-    const names: Record<string, string> = {
-      permissions: '权限管理',
-      marketing: '运营管理',
-      operations: '运营报表',
-      users: '用户管理',
-      im: 'IM管理',
-      social: '社交管理',
-      c2c: 'C2C',
-      escrow: '担保管理',
-      ucard: 'U卡管理',
-      spot: '现货管理',
-      futures: '合约管理',
-      copytrade: '跟单管理',
-      finance: '理财管理',
-      commission: '佣金管理',
-      'crypto': 'Crypto',
-      fiat: '法币',
-      orders: '财务管理',
-      options: '期权管理',
-      system: '系统管理',
+    // 业务特定的模块名称映射（覆盖路由配置中的名称）
+    const businessNames: Record<string, string> = {
+      operations: '运营报表', // operations在业务上属于marketing模块，但保留独立名称
+      maintenance: '维护管理',
     }
-    return names[moduleId] || '此模块'
+    
+    // 优先使用业务特定的名称，否则使用路由配置中的名称
+    return businessNames[moduleId] || getModuleNameUtil(moduleId) || '此模块'
   }
 
   const renderCurrentPage = () => {

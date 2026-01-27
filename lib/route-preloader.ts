@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import { userRoutes, adminRoutes } from "./routes"
 
 // Pre-warm all routes to avoid compilation delays
 export const useRoutePreloader = () => {
@@ -9,16 +10,7 @@ export const useRoutePreloader = () => {
 
   useEffect(() => {
     // Pre-load all main routes
-    const routes = [
-      "/chat",
-      "/moments", 
-      "/mall",
-      "/usdt-trade",
-      "/market",
-      "/spot",
-      "/futures",
-      "/wallet"
-    ]
+    const routes = [...userRoutes, ...adminRoutes]
 
     // Prefetch routes in the background
     routes.forEach(route => {

@@ -6,6 +6,10 @@ import { useAdmin } from "@/contexts/admin-context"
 import { toast } from "sonner"
 import { authenticator } from 'otplib'
 import QRCode from 'qrcode'
+import { uaaApis } from "@/lib/uaa-api"
+import { APIError } from "@/lib/api-request"
+import { encryptPassword, isRSAEncryptAvailable } from "@/lib/rsa-encrypt"
+import { storageUtils } from "@/lib/storage"
 import {
   Dialog,
   DialogContent,
@@ -18,7 +22,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export default function AdminLoginPage() {
-  const { login } = useAdmin()
+  const { login, fetchUserInfo } = useAdmin()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
@@ -29,152 +33,177 @@ export default function AdminLoginPage() {
   const [codeSent, setCodeSent] = useState(false)
   const [countdown, setCountdown] = useState(0)
   
-  // 谷歌验证码绑定相关状态
+  const [mfaId, setMfaId] = useState("")
+  const [hasBind, setHasBind] = useState(false)
+  const [showGoogleAuthStep, setShowGoogleAuthStep] = useState(false)
   const [showBindDialog, setShowBindDialog] = useState(false)
   const [googleSecret, setGoogleSecret] = useState("")
   const [qrcodeUrl, setQrcodeUrl] = useState("")
   const [googleCode, setGoogleCode] = useState("")
   const [isBinding, setIsBinding] = useState(false)
 
-  // 生成谷歌验证码二维码
-  const generateGoogleAuthQR = async () => {
-    const secret = authenticator.generateSecret()
-    setGoogleSecret(secret)
-    
-    // 生成TOTP URI
-    const otpauthUrl = authenticator.keyuri(
-      username || 'admin@bedao.com',
-      'BeDAO Admin',
-      secret
-    )
-    
-    // 生成二维码
-    try {
-      const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl)
-      setQrcodeUrl(qrCodeDataUrl)
-    } catch (err) {
-      console.error('生成二维码失败', err)
-      toast.error('生成二维码失败')
-    }
-  }
-  
-  // 打开绑定弹窗
-  const handleOpenBindDialog = () => {
-    if (!username) {
-      setError("请先输入管理员账号")
+  const handleOpenBindDialog = async () => {
+    if (!mfaId) {
+      setError("请先完成用户名密码登录")
       return
     }
-    setShowBindDialog(true)
-    generateGoogleAuthQR()
+    
+    setIsBinding(true)
+    try {
+      const response = await uaaApis.getGoogleValidateQrCode(mfaId)
+      setGoogleSecret(response.secret)
+      
+      const otpauthUrl = authenticator.keyuri(
+        username || 'admin@bedao.com',
+        'BXB Admin',
+        response.secret
+      )
+      
+      const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl)
+      setQrcodeUrl(qrCodeDataUrl)
+      
+      setShowBindDialog(true)
+    } catch (error) {
+      console.error('获取二维码失败:', error)
+      const errorMessage = error instanceof Error ? error.message : '请重试'
+      toast.error('获取二维码失败', {
+        description: errorMessage
+      })
+    } finally {
+      setIsBinding(false)
+    }
   }
-  
-  // 验证并绑定谷歌验证码
-  const handleBindGoogleAuth = () => {
+  const handleBindGoogleAuth = async () => {
     if (!googleCode || googleCode.length !== 6) {
       toast.error('请输入6位验证码')
       return
     }
     
+    if (!mfaId) {
+      toast.error('登录会话已过期，请重新登录')
+      return
+    }
+    
     setIsBinding(true)
     
-    // 验证谷歌验证码
-    const isValid = authenticator.verify({
-      token: googleCode,
-      secret: googleSecret
-    })
-    
-    setTimeout(() => {
-      if (isValid) {
-        // 保存到localStorage（实际应该保存到后端数据库）
-        localStorage.setItem(`google_secret_${username}`, googleSecret)
-        toast.success('绑定成功', {
-          description: '谷歌验证码已成功绑定'
-        })
-        setShowBindDialog(false)
-        setGoogleCode("")
-      } else {
-        toast.error('验证码错误', {
-          description: '请检查验证码是否正确'
-        })
-      }
+    try {
+      await uaaApis.doSetupGoogleValidate(mfaId, googleCode)
+      
+      toast.success('绑定成功', {
+        description: '谷歌验证码已成功绑定'
+      })
+      
+      setShowBindDialog(false)
+      setGoogleCode("")
+      setHasBind(true)
+      
+      await handleGoogleValidate(googleCode)
+    } catch (error) {
+      console.error('绑定失败:', error)
+      const errorMessage = error instanceof APIError ? error.message : '请检查验证码是否正确'
+      toast.error('绑定失败', {
+        description: errorMessage
+      })
+    } finally {
       setIsBinding(false)
-    }, 800)
+    }
+  }
+  
+  // 验证谷歌验证码并完成登录
+  const handleGoogleValidate = async (code?: string) => {
+    const codeToValidate = code || verificationCode
+    
+    if (!codeToValidate || codeToValidate.length !== 6) {
+      setError("验证码应为6位数字")
+      return
+    }
+    
+    if (!mfaId) {
+      setError("登录会话已过期，请重新登录")
+      return
+    }
+    
+    setIsLoading(true)
+    setError("")
+    
+    try {
+      const tokenResponse = await uaaApis.googleValidate(mfaId, codeToValidate)
+      
+      storageUtils.disk.set('accessToken', tokenResponse.accessToken)
+      storageUtils.disk.set('refreshToken', tokenResponse.refreshToken)
+      localStorage.setItem('refreshToken', tokenResponse.refreshToken)
+      localStorage.setItem('lastActivity', String(Date.now()))
+      localStorage.setItem("adminEmail", username)
+      
+      toast.success("登录成功", {
+        description: "欢迎回到 BXB 管理后台",
+        duration: 2000,
+      })
+      
+      await fetchUserInfo()
+      
+      window.dispatchEvent(new CustomEvent('navigate', { 
+        detail: { 
+          path: "/admin/profile"
+        } 
+      }))
+    } catch (error) {
+      console.error('验证失败:', error)
+      const errorMessage = error instanceof APIError ? error.message : "验证码错误，请重试"
+      setError(errorMessage)
+      setIsLoading(false)
+    }
   }
 
   const handleSendCode = async () => {
-    if (!username) {
-      setError("请先输入管理员账号")
-      return
-    }
-
-    setIsSendingCode(true)
-    setError("")
-
-    setTimeout(() => {
-      setCodeSent(true)
-      setIsSendingCode(false)
-      setCountdown(60)
-      
-      const timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer)
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-    }, 1000)
+    toast.info("请使用Google Authenticator应用生成验证码")
   }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
-    if (!username || !password || !verificationCode) {
-      setError("请填写所有必填项")
-      return
-    }
-
-    if (verificationCode.length !== 6) {
-      setError("验证码应为6位数字")
+    if (!username || !password) {
+      setError("请填写用户名和密码")
       return
     }
 
     setIsLoading(true)
 
-    setTimeout(() => {
-      if (username === "123123" && password === "123123" && verificationCode === "123123") {
-        localStorage.setItem("adminEmail", username)
-        
-        // 显示登录成功提示
-        toast.success("登录成功", {
-          description: "欢迎回到 BeDAO 管理后台",
-          duration: 2000,
-        })
-        
-        // 模拟从API获取的用户数据（实际应该从登录API响应中获取）
-        const userData = {
-          name: "管理员",
-          email: "admin@bedao.com",
-          role: "超级管理员",
-          avatar: ""
-        }
-        
-        // 调用 context 的 login 方法，传入用户数据，并在回调中触发导航
-        // 确保 context 状态更新后再导航，避免认证检查失败
-        login(userData, () => {
-          window.dispatchEvent(new CustomEvent('navigate', { 
-            detail: { 
-              path: "/admin/profile"
-            } 
-          }))
-        })
-      } else {
-        setError("账号、密码或验证码错误")
-        setIsLoading(false)
+    try {
+      if (!isRSAEncryptAvailable()) {
+        throw new Error('RSA加密功能不可用，请确保已安装jsencrypt包')
       }
-    }, 1500)
+
+      const publicKey = await uaaApis.getPublicKey()
+      const encryptedPassword = encryptPassword(publicKey, password)
+      const loginResponse = await uaaApis.login(username, encryptedPassword)
+      
+      setMfaId(loginResponse.mfaId)
+      setHasBind(loginResponse.hasBind)
+      
+      if (loginResponse.hasBind) {
+        setShowGoogleAuthStep(true)
+        setIsLoading(false)
+        toast.info("请输入Google Authenticator验证码")
+      } else {
+        setIsLoading(false)
+        await handleOpenBindDialog()
+      }
+    } catch (error) {
+      console.error('登录失败:', error)
+      const errorMessage = error instanceof APIError ? error.message : "登录失败，请检查用户名和密码"
+      toast.error('登录失败', {
+        description: errorMessage
+      })
+      setError("")
+      setIsLoading(false)
+      setShowGoogleAuthStep(false)
+    }
+  }
+  const handleSubmitGoogleCode = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await handleGoogleValidate()
   }
 
   return (
@@ -258,13 +287,13 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            {/* 验证码输入 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                验证码
-              </label>
-              <div className="flex gap-2">
-                <div className="relative flex-1">
+            {/* 谷歌验证码输入（仅在已绑定且需要验证时显示） */}
+            {showGoogleAuthStep && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Google Authenticator 验证码
+                </label>
+                <div className="relative">
                   {/* Google Logo SVG */}
                   <svg 
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
@@ -285,38 +314,41 @@ export default function AdminLoginPage() {
                     required
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleSendCode}
-                  disabled={isSendingCode || countdown > 0}
-                  className="px-4 py-3 bg-custom-green text-white rounded-lg hover:bg-custom-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm"
-                >
-                  {isSendingCode ? "发送中..." : countdown > 0 ? `${countdown}秒` : codeSent ? "重新发送" : "发送验证码"}
-                </button>
+                <p className="mt-2 text-xs text-gray-400">
+                  请打开Google Authenticator应用，输入6位验证码
+                </p>
               </div>
-            </div>
+            )}
 
             {/* 登录按钮 */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-custom-green to-custom-green/90 text-white font-semibold rounded-lg hover:from-custom-green/90 hover:to-custom-green/80 focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-custom-green/20"
-            >
-              {isLoading ? "登录中..." : "登录"}
-            </button>
+            {!showGoogleAuthStep ? (
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-3 bg-gradient-to-r from-custom-green to-custom-green/90 text-white font-semibold rounded-lg hover:from-custom-green/90 hover:to-custom-green/80 focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-custom-green/20"
+              >
+                {isLoading ? "登录中..." : "登录"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSubmitGoogleCode}
+                disabled={isLoading || verificationCode.length !== 6}
+                className="w-full py-3 bg-gradient-to-r from-custom-green to-custom-green/90 text-white font-semibold rounded-lg hover:from-custom-green/90 hover:to-custom-green/80 focus:outline-none focus:ring-2 focus:ring-custom-green focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-custom-green/20"
+              >
+                {isLoading ? "验证中..." : "验证并登录"}
+              </button>
+            )}
           </form>
 
-          {/* 绑定谷歌验证码按钮 */}
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handleOpenBindDialog}
-              className="w-full py-3 bg-gray-700/50 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all flex items-center justify-center gap-2"
-            >
-              <Smartphone className="w-5 h-5" />
-              绑定谷歌验证码
-            </button>
-          </div>
+          {/* 绑定谷歌验证码按钮（仅在未绑定时显示） */}
+          {!hasBind && !showGoogleAuthStep && (
+            <div className="mt-6">
+              <p className="text-center text-sm text-gray-400 mb-2">
+                首次登录需要绑定Google Authenticator
+              </p>
+            </div>
+          )}
         </div>
         
         {/* 绑定谷歌验证码弹窗 */}
