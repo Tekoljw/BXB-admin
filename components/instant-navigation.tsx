@@ -118,17 +118,28 @@ import MaintenancePlanPage from "@/app/(dashboard)/admin/system/maintenance-plan
 import MaintenanceWhitelistPage from "@/app/(dashboard)/admin/system/maintenance-whitelist/page"
 
 export default function InstantNavigation() {
-  const [currentPage, setCurrentPage] = useState("/admin/login")
-  const [currentModule, setCurrentModule] = useState("operations")
+  // 初始化时从 URL 读取当前路径，避免刷新时显示登录页
+  const getInitialPage = () => {
+    if (typeof window === 'undefined') return "/admin/login"
+    const path = window.location.pathname
+    return path || "/admin/login"
+  }
+  
+  const [currentPage, setCurrentPage] = useState(getInitialPage)
+  const [currentModule, setCurrentModule] = useState(() => {
+    if (typeof window === 'undefined') return "operations"
+    return getModuleFromPathUtil(window.location.pathname)
+  })
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(true)
   const { theme } = useTheme()
   const { isAdminLoggedIn, isLoggingOut } = useAdmin()
   const { isModuleUnderMaintenance } = useMaintenance()
 
   // 根据路径确定当前模块（使用统一的路由配置）
   const getModuleFromPath = (path: string): string => {
-    return getModuleFromPathUtil(path)
+    return getModuleFromPathUtil(path) || "operations"
   }
 
   // 获取模块的默认页面（使用统一的路由配置，但保留业务特定的默认路径）
@@ -163,9 +174,25 @@ export default function InstantNavigation() {
 
   useEffect(() => {
     // 初始化当前页面
-    const path = window.location.pathname
-    setCurrentPage(path || "/admin/login")
-    setCurrentModule(getModuleFromPath(path))
+    const path = window.location.pathname || "/admin/login"
+    
+    // 检查登录状态：优先从 storage 读取（同步，避免闪烁）
+    const isLoggedIn = sessionStorage.getItem("isAdminLoggedIn") === "true" || 
+                      localStorage.getItem("isAdminLoggedIn") === "true" ||
+                      isAdminLoggedIn
+    
+    // 如果已登录但当前页是登录页，且URL不是登录页，立即更新到实际页面
+    if (isLoggedIn && path !== "/admin/login") {
+      setCurrentPage(path)
+      setCurrentModule(getModuleFromPath(path))
+    } else if (path !== currentPage) {
+      // 如果路径变化了，更新状态
+      setCurrentPage(path)
+      setCurrentModule(getModuleFromPath(path))
+    }
+    
+    // 标记初始化完成
+    setIsInitializing(false)
 
     // 监听popstate事件，用于其他组件触发的导航
     const handlePopState = () => {
@@ -248,7 +275,16 @@ export default function InstantNavigation() {
 
   const renderCurrentPage = () => {
     // 登录页面不受维护影响
-    if (currentPage === "/admin/login") return <AdminLoginPage />
+    // 只有在确实需要显示登录页时才显示（路径是登录页 且 未登录）
+    if (currentPage === "/admin/login") {
+      // 如果已登录但路径是登录页，可能是刷新时的短暂状态，检查实际URL
+      const actualPath = typeof window !== 'undefined' ? window.location.pathname : currentPage
+      if (actualPath !== "/admin/login" && isAdminLoggedIn) {
+        // 已登录但状态未更新，返回null等待状态更新
+        return null
+      }
+      return <AdminLoginPage />
+    }
     if (currentPage === "/admin") return <AdminPage />
     
     // 检查当前模块是否处于维护状态（业务线配置页面除外）
@@ -381,8 +417,29 @@ export default function InstantNavigation() {
     return <AdminLoginPage />
   }
 
+  // 初始化中：显示加载状态，避免闪烁登录页
+  if (isInitializing) {
+    return (
+      <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} flex items-center justify-center`}>
+        <div className="text-center">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-gray-700 border-t-custom-green rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-custom-green/30 rounded-full animate-spin mx-auto" style={{ animationDuration: '1.5s' }}></div>
+          </div>
+          <p className="mt-6 text-gray-400 text-lg font-medium">加载中...</p>
+        </div>
+      </div>
+    )
+  }
+
   // 登出中或登录页面不显示导航栏
-  if (isLoggingOut || currentPage === "/admin/login") {
+  // 但需要检查：如果已登录且实际URL不是登录页，不应该显示登录页
+  const actualPath = typeof window !== 'undefined' ? window.location.pathname : currentPage
+  const shouldShowLoginPage = currentPage === "/admin/login" && 
+                              actualPath === "/admin/login" && 
+                              !isAdminLoggedIn
+  
+  if (isLoggingOut || shouldShowLoginPage) {
     return (
       <div className={`h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'} overflow-auto`}>
         {renderCurrentPage()}
