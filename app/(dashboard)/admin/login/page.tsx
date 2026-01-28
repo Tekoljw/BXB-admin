@@ -6,10 +6,10 @@ import { useAdmin } from "@/contexts/admin-context"
 import { toast } from "sonner"
 import { authenticator } from 'otplib'
 import QRCode from 'qrcode'
-import { uaaApis } from "@/lib/uaa-api"
-import { APIError } from "@/lib/api-request"
-import { encryptPassword, isRSAEncryptAvailable } from "@/lib/rsa-encrypt"
-import { storageUtils } from "@/lib/storage"
+import { authApis } from "@/router/auth-api"
+import { APIError } from "@/utils/api-request-util"
+import { encryptPassword, isRSAEncryptAvailable } from "@/utils/rsa-encrypt-util"
+import { storageUtils } from "@/utils/storage-util"
 import {
   Dialog,
   DialogContent,
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
     
     setIsBinding(true)
     try {
-      const response = await uaaApis.getGoogleValidateQrCode(mfaId)
+      const response = await authApis.getGoogleValidateQrCode(mfaId)
       setGoogleSecret(response.secret)
       
       const otpauthUrl = authenticator.keyuri(
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
     setIsBinding(true)
     
     try {
-      await uaaApis.doSetupGoogleValidate(mfaId, googleCode)
+      await authApis.doSetupGoogleValidate(mfaId, googleCode)
       
       toast.success('绑定成功', {
         description: '谷歌验证码已成功绑定'
@@ -127,7 +127,7 @@ export default function AdminLoginPage() {
     setError("")
     
     try {
-      const tokenResponse = await uaaApis.googleValidate(mfaId, codeToValidate)
+      const tokenResponse = await authApis.googleValidate(mfaId, codeToValidate)
       
       storageUtils.disk.set('accessToken', tokenResponse.accessToken)
       storageUtils.disk.set('refreshToken', tokenResponse.refreshToken)
@@ -175,9 +175,9 @@ export default function AdminLoginPage() {
         throw new Error('RSA加密功能不可用，请确保已安装jsencrypt包')
       }
 
-      const publicKey = await uaaApis.getPublicKey()
+      const publicKey = await authApis.getPublicKey()
       const encryptedPassword = encryptPassword(publicKey, password)
-      const loginResponse = await uaaApis.login(username, encryptedPassword)
+      const loginResponse = await authApis.login(username, encryptedPassword)
       
       setMfaId(loginResponse.mfaId)
       setHasBind(loginResponse.hasBind)

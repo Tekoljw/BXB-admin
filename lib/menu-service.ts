@@ -1,6 +1,6 @@
 // 统一的菜单服务：支持根据模块或 sys-code 获取菜单
-import { fetchMenu, type MenuItem } from './menu-api';
-import { uaaApis, type SubSystem } from './uaa-api';
+import { fetchMenu, type MenuItem } from '../router/menu-api';
+import { authApis, type SubSystem } from '../router/auth-api';
 
 // 模块ID到sys-code的映射
 const moduleToSysCodeMap: Record<string, string> = {
@@ -44,7 +44,7 @@ export async function getSystemBySysCode(
   
   if (!systemList) {
     try {
-      systemList = await uaaApis.getUserSys();
+      systemList = await authApis.getUserSys();
     } catch (error) {
       console.error('Failed to get system list:', error);
       return null;
@@ -79,7 +79,7 @@ export async function getMenuBySysCode(sysCode: string): Promise<MenuItem[]> {
  */
 export async function getAvailableSystems(): Promise<SubSystem[]> {
   try {
-    return await uaaApis.getUserSys();
+    return await authApis.getUserSys();
   } catch (error) {
     console.error('Failed to get available systems:', error);
     return [];

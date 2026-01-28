@@ -72,7 +72,7 @@ import {
   Upload,
   RefreshCw,
 } from "lucide-react"
-import type { MenuItem as ApiMenuItem } from "./menu-api"
+import type { MenuItem as ApiMenuItem } from "../router/menu-api"
 
 // 图标映射表：根据菜单code映射到对应的图标
 const iconMap: Record<string, any> = {

@@ -7,7 +7,7 @@ import { useMaintenance } from "@/contexts/maintenance-context"
 import AdminTopNav from "@/components/admin-top-nav"
 import AdminSidebar from "@/components/admin-sidebar"
 import MaintenancePage from "@/components/maintenance-page"
-import { getModuleFromPath as getModuleFromPathUtil, getModuleDefaultPath as getModuleDefaultPathUtil, getModuleName as getModuleNameUtil } from "@/lib/routes"
+import { getModuleFromPath as getModuleFromPathUtil, getModuleDefaultPath as getModuleDefaultPathUtil, getModuleName as getModuleNameUtil } from "@/router/route-paths"
 
 // 只导入管理后台页面组件
 import AdminPage from "@/app/(dashboard)/admin/page"

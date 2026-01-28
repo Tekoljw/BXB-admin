@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import { userRoutes, adminRoutes } from "./routes"
+import { userRoutes, adminRoutes } from "../router/route-paths"
 
 // Pre-warm all routes to avoid compilation delays
 export const useRoutePreloader = () => {

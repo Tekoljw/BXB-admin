@@ -1,7 +1,6 @@
-// UAA API服务：登录相关接口
-import apiRequest from './api-request';
-import { APIError } from './api-request';
-import { storageUtils } from './storage';
+// 认证API服务：登录、认证、用户信息相关接口
+import apiRequest from '../utils/api-request-util';
+import { storageUtils } from '../utils/storage-util';
 
 export interface PublicKeyResponse {
   publicKey: string;
@@ -78,7 +77,7 @@ export interface MenuOption {
   options: null;
 }
 
-class UaaAPI {
+class AuthAPI {
   private request = apiRequest.newInstance().withUrlPrefix('v1/admin/admin-uaa');
 
   async getPublicKey(): Promise<string> {
@@ -311,4 +310,4 @@ class UaaAPI {
 }
 
 // 导出单例
-export const uaaApis = new UaaAPI();
+export const authApis = new AuthAPI();

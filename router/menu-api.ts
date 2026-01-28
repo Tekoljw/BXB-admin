@@ -1,5 +1,5 @@
 // 菜单API服务
-import apiRequest from './api-request';
+import apiRequest from '../utils/api-request-util';
 
 export interface MenuOption {
   code: string;

@@ -3,7 +3,7 @@
  * 支持自动添加Token、错误处理、请求拦截等
  */
 
-import { storageUtils } from './storage';
+import { storageUtils } from './storage-util';
 
 export class APIError extends Error {
   code: number;
@@ -295,9 +295,9 @@ class APIRequest {
     localStorage.removeItem('isAdminLoggedIn');
 
     // 避免重复跳转
-    if (window.location.pathname !== '/login' && window.location.pathname !== '/admin/login') {
+    if (window.location.pathname !== '/admin/login') {
       // 使用 window.location 跳转，确保页面完全刷新
-      window.location.href = '/login';
+      window.location.href = '/admin/login';
     }
   }
 
@@ -306,10 +306,12 @@ class APIRequest {
     const headers = this.buildHeaders(options || {});
 
     try {
+      // 从options中排除headers，避免覆盖已构建的headers（包括Token）
+      const { headers: _, skipAuth: __, urlPrefix: ___, ...restOptions } = options || {};
       const response = await fetch(fullUrl, {
         method: 'GET',
         headers,
-        ...options,
+        ...restOptions,
       });
 
       return await this.handleResponse<T>(response);
@@ -330,11 +332,13 @@ class APIRequest {
     const headers = this.buildHeaders(options || {});
 
     try {
+      // 从options中排除headers，避免覆盖已构建的headers（包括Token）
+      const { headers: _, skipAuth: __, urlPrefix: ___, ...restOptions } = options || {};
       const response = await fetch(fullUrl, {
         method: 'POST',
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        ...options,
+        ...restOptions,
       });
 
       return await this.handleResponse<T>(response);
@@ -354,11 +358,13 @@ class APIRequest {
     const headers = this.buildHeaders(options || {});
 
     try {
+      // 从options中排除headers，避免覆盖已构建的headers（包括Token）
+      const { headers: _, skipAuth: __, urlPrefix: ___, ...restOptions } = options || {};
       const response = await fetch(fullUrl, {
         method: 'PUT',
         headers,
         body: data ? JSON.stringify(data) : undefined,
-        ...options,
+        ...restOptions,
       });
 
       return await this.handleResponse<T>(response);
@@ -377,10 +383,12 @@ class APIRequest {
     const fullUrl = `${this.baseURL}${url}`;
     const headers = this.buildHeaders(options || {});
 
+    // 从options中排除headers，避免覆盖已构建的headers（包括Token）
+    const { headers: _, skipAuth: __, urlPrefix: ___, ...restOptions } = options || {};
     const response = await fetch(fullUrl, {
       method: 'DELETE',
       headers,
-      ...options,
+      ...restOptions,
     });
 
     return this.handleResponse<T>(response);

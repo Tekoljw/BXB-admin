@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { useRoutePreloader, instantNavigate } from "@/lib/route-preloader"
+import { useRoutePreloader, instantNavigate } from "@/utils/route-preloader-util"
 import { useTheme } from "@/contexts/theme-context"
 import {
   MessageCircle,

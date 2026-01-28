@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { getMenuByModule, getSysCodeByModule } from "@/lib/menu-service"
+import { getMenuByModule } from "@/lib/menu-service"
 import { convertMenuDataToUI, type UIMenuConfig, type UIMenuItem, type UIMenuGroup } from "@/utils/menu-util"
 import {
   BarChart3,
@@ -367,13 +367,12 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
   const { theme } = useTheme()
   const [apiMenuData, setApiMenuData] = useState<UIMenuConfig | null>(null)
   const [isLoadingMenu, setIsLoadingMenu] = useState(true)
-  const [apiFailed, setApiFailed] = useState(false)
   const lastModuleRef = useRef<string>('')
   
   // 根据当前模块从API获取菜单数据（带缓存）
   useEffect(() => {
     // 如果模块没有变化，不重新请求
-    if (lastModuleRef.current === currentModule) {
+    if (lastModuleRef.current === currentModule && apiMenuData !== null) {
       return
     }
     
@@ -383,37 +382,27 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
       if (cachedMenu) {
         setApiMenuData(cachedMenu)
         setIsLoadingMenu(false)
-        setApiFailed(false)
         lastModuleRef.current = currentModule
         return
       }
       
       try {
         setIsLoadingMenu(true)
-        setApiFailed(false)
         // 根据当前模块获取对应的菜单
         const apiData = await getMenuByModule(currentModule)
-        console.log(`[Menu] Loaded menu for module ${currentModule}, sysCode: ${getSysCodeByModule(currentModule)}, data:`, apiData)
-        
-        // 无论API返回什么，都使用API数据（即使是空数组）
-        if (apiData) {
+        if (apiData && apiData.length > 0) {
           const convertedMenu = convertMenuDataToUI(apiData)
-          console.log(`[Menu] Converted menu for module ${currentModule}:`, convertedMenu)
-          // 存入缓存（即使是空数组也缓存，表示API已调用）
+          // 存入缓存
           menuCache.set(currentModule, convertedMenu)
           setApiMenuData(convertedMenu)
-          setApiFailed(false)
         } else {
-          // API返回null或undefined，使用空数组
-          console.warn(`[Menu] API returned null/undefined for module ${currentModule}`)
-          setApiMenuData([])
-          setApiFailed(false)
+          // 如果没有获取到菜单数据，使用硬编码菜单
+          setApiMenuData(null)
         }
       } catch (error) {
-        console.error(`[Menu] Failed to load menu for module ${currentModule}:`, error)
-        // API失败时标记为失败，使用硬编码菜单
+        console.error(`Failed to load menu for module ${currentModule}:`, error)
+        // API失败时使用硬编码菜单
         setApiMenuData(null)
-        setApiFailed(true)
       } finally {
         setIsLoadingMenu(false)
         lastModuleRef.current = currentModule
@@ -421,23 +410,14 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
     }
     
     loadMenu()
-  }, [currentModule]) // 只依赖 currentModule，避免循环依赖
+  }, [currentModule, apiMenuData]) // 当模块变化时重新加载菜单
   
-  // 优先使用API菜单，如果不存在则使用硬编码菜单（仅作为备用）
+  // 优先使用API菜单，如果不存在则使用硬编码菜单
   const getMenuConfig = (): MenuConfig => {
-    // 如果API调用失败，使用硬编码菜单作为备用
-    if (apiFailed) {
-      console.log(`[Menu] API failed, using fallback menu for module ${currentModule}`)
-      return moduleMenus[currentModule] || []
-    }
-    
-    // API调用成功，使用API返回的数据（即使是空数组也使用）
-    if (apiMenuData !== null) {
+    if (apiMenuData) {
       return apiMenuData as MenuConfig
     }
-    
-    // 正在加载中，返回空数组
-    return []
+    return moduleMenus[currentModule] || []
   }
   
   const menuConfig = getMenuConfig()
@@ -553,15 +533,6 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
             <div className="flex items-center justify-center py-8">
               <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 加载菜单中...
-              </div>
-            </div>
-          ) : menuConfig.length === 0 ? (
-            <div className="flex items-center justify-center py-8 px-3">
-              <div className={`text-sm text-center ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                {apiFailed 
-                  ? '菜单加载失败，使用备用菜单'
-                  : '暂无菜单数据'
-                }
               </div>
             </div>
           ) : isGroupedMenu ? (

@@ -1,8 +1,8 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from "react"
-import { storageUtils } from "@/lib/storage"
-import { uaaApis, type UserInfo as UaaUserInfo } from "@/lib/uaa-api"
+import { storageUtils } from "@/utils/storage-util"
+import { authApis, type UserInfo as AuthUserInfo } from "@/router/auth-api"
 
 interface UserInfo {
   name: string
@@ -52,16 +52,16 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const fetchUserInfo = async () => {
     try {
-      const uaaUserInfo = await uaaApis.queryCurrentUser()
-      if (uaaUserInfo) {
+      const authUserInfo = await authApis.queryCurrentUser()
+      if (authUserInfo) {
         const localUserInfo: UserInfo = {
-          name: uaaUserInfo.userName,
-          email: `${uaaUserInfo.userName}@bedao.com`,
+          name: authUserInfo.userName,
+          email: `${authUserInfo.userName}@bedao.com`,
           role: "超级管理员",
           avatar: "",
-          userId: uaaUserInfo.userId,
-          sysUserId: uaaUserInfo.sysUserId,
-          access: uaaUserInfo.access,
+          userId: authUserInfo.userId,
+          sysUserId: authUserInfo.sysUserId,
+          access: authUserInfo.access,
         }
         setUserInfo(localUserInfo)
         localStorage.setItem("adminUserInfo", JSON.stringify(localUserInfo))
