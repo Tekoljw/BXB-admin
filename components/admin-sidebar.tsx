@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useTheme } from "@/contexts/theme-context"
-import { fetchMenu } from "@/lib/menu-api"
+import { getMenuByModule } from "@/lib/menu-service"
 import { convertMenuDataToUI, type UIMenuConfig, type UIMenuItem, type UIMenuGroup } from "@/lib/menu-utils"
 import {
   BarChart3,
@@ -360,32 +360,57 @@ interface AdminSidebarV2PropsExtended extends AdminSidebarV2Props {
   onToggle?: () => void
 }
 
+// 菜单缓存：避免重复请求同一模块的菜单
+const menuCache = new Map<string, UIMenuConfig>();
+
 export default function AdminSidebarV2({ currentModule, currentPage, onNavigate, isOpen = false, onToggle }: AdminSidebarV2PropsExtended) {
   const { theme } = useTheme()
   const [apiMenuData, setApiMenuData] = useState<UIMenuConfig | null>(null)
   const [isLoadingMenu, setIsLoadingMenu] = useState(true)
+  const lastModuleRef = useRef<string>('')
   
-  // 从API获取菜单数据
+  // 根据当前模块从API获取菜单数据（带缓存）
   useEffect(() => {
+    // 如果模块没有变化，不重新请求
+    if (lastModuleRef.current === currentModule && apiMenuData !== null) {
+      return
+    }
+    
     const loadMenu = async () => {
+      // 检查缓存
+      const cachedMenu = menuCache.get(currentModule)
+      if (cachedMenu) {
+        setApiMenuData(cachedMenu)
+        setIsLoadingMenu(false)
+        lastModuleRef.current = currentModule
+        return
+      }
+      
       try {
         setIsLoadingMenu(true)
-        const apiData = await fetchMenu()
+        // 根据当前模块获取对应的菜单
+        const apiData = await getMenuByModule(currentModule)
         if (apiData && apiData.length > 0) {
           const convertedMenu = convertMenuDataToUI(apiData)
+          // 存入缓存
+          menuCache.set(currentModule, convertedMenu)
           setApiMenuData(convertedMenu)
+        } else {
+          // 如果没有获取到菜单数据，使用硬编码菜单
+          setApiMenuData(null)
         }
       } catch (error) {
-        console.error('Failed to load menu from API:', error)
+        console.error(`Failed to load menu for module ${currentModule}:`, error)
         // API失败时使用硬编码菜单
         setApiMenuData(null)
       } finally {
         setIsLoadingMenu(false)
+        lastModuleRef.current = currentModule
       }
     }
     
     loadMenu()
-  }, [])
+  }, [currentModule, apiMenuData]) // 当模块变化时重新加载菜单
   
   // 优先使用API菜单，如果不存在则使用硬编码菜单
   const getMenuConfig = (): MenuConfig => {

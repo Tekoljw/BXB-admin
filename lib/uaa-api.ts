@@ -50,27 +50,32 @@ export interface UserLangResponse {
   lang: string;
 }
 
-export interface UserSysResponse {
-  subSystems: SubSystem[];
-}
+// 导航接口返回的数据结构：{ code: 0, msg: "Success.", data: SubSystem[] }
+export type UserSysResponse = SubSystem[];
 
-export interface MenuResponse {
-  menus: MenuItem[];
-}
+// 菜单接口返回的数据结构：{ code: 0, msg: "Success.", data: MenuItem[] }
+export type MenuResponse = MenuItem[];
 
 export interface MenuItem {
-  menuId: number;
-  menuCode: string;
-  menuName: string;
-  parentId: number;
-  children?: MenuItem[];
-  options?: MenuOption[];
+  code: string;
+  name: string;
+  showWeights: number;
+  verification: boolean;
+  method: string;
+  url: string;
+  children?: MenuItem[] | null;
+  options?: MenuOption[] | null;
 }
 
 export interface MenuOption {
-  optionId: number;
-  optionCode: string;
-  optionName: string;
+  code: string;
+  name: string;
+  showWeights: number;
+  verification: boolean;
+  method: string;
+  url: string;
+  children: null;
+  options: null;
 }
 
 class UaaAPI {
@@ -161,10 +166,12 @@ class UaaAPI {
 
   async getUserSys(): Promise<SubSystem[]> {
     try {
-      const response = await apiRequest.get<UserSysResponse>(
+      // 导航接口返回：{ code: 0, msg: "Success.", data: SubSystem[] }
+      // apiRequest.get 已经处理了响应，直接返回 data 部分
+      const response = await apiRequest.get<SubSystem[]>(
         '/v1/admin/admin/profile/sys'
       );
-      return response.subSystems || [];
+      return response || [];
     } catch (error) {
       console.warn('Failed to get user sys:', error);
       return [];
@@ -172,7 +179,9 @@ class UaaAPI {
   }
 
   async getMenu(sysCode: string): Promise<MenuItem[]> {
-    const response = await apiRequest.get<MenuResponse>(
+    // 菜单接口返回：{ code: 0, msg: "Success.", data: MenuItem[] }
+    // apiRequest.get 已经处理了响应，直接返回 data 部分
+    const response = await apiRequest.get<MenuItem[]>(
       '/v1/admin/admin/profile/menu',
       {
         headers: {
@@ -180,7 +189,7 @@ class UaaAPI {
         },
       }
     );
-    return response.menus;
+    return response || [];
   }
 
   // 解析Token获取用户信息
@@ -214,11 +223,13 @@ class UaaAPI {
 
     const traverse = (items: MenuItem[]) => {
       items.forEach((menu) => {
-        access.add(`${sysCode}.menu.${menu.menuCode}`);
+        // 使用 menu.code 而不是 menu.menuCode（API 返回的字段名是 code）
+        access.add(`${sysCode}.menu.${menu.code}`);
 
         if (menu.options) {
           menu.options.forEach((option) => {
-            access.add(`${sysCode}.menu.${menu.menuCode}.${option.optionCode}`);
+            // 使用 option.code 而不是 option.optionCode（API 返回的字段名是 code）
+            access.add(`${sysCode}.menu.${menu.code}.${option.code}`);
           });
         }
 
@@ -270,22 +281,16 @@ class UaaAPI {
       }
 
       const subSystems = await this.getUserSys();
-      const allAccess = new Set<string>();
       
       // 排除旧系统
       const builtInSystems = (subSystems || []).filter(
         (sys) => !sys.sysCode.includes('old')
       );
 
-      for (const subSystem of builtInSystems) {
-        try {
-          const menus = await this.getMenu(subSystem.sysCode);
-          const access = this.buildAccessSet(menus, subSystem.sysCode);
-          access.forEach((perm) => allAccess.add(perm));
-        } catch (error) {
-          console.warn(`Failed to get menu for ${subSystem.sysCode}:`, error);
-        }
-      }
+      // 注意：不再在登录时遍历获取所有系统的菜单
+      // 菜单应该在用户切换导航时按需获取（通过 Sys-Code 请求头）
+      // 权限控制交给后端，前端只负责展示后端返回的菜单
+      
       const userInfo: UserInfo = {
         sysUserId: tokenInfo.sysUserId,
         userId: tokenInfo.userId,
@@ -293,8 +298,8 @@ class UaaAPI {
         exp: tokenInfo.exp,
         lang,
         accessToken,
-        subSystems,
-        access: allAccess,
+        subSystems: builtInSystems,
+        access: new Set<string>(), // 权限由后端菜单接口控制，不再前端计算
       };
 
       return userInfo;

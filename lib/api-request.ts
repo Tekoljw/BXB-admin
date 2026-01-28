@@ -70,25 +70,64 @@ class APIRequest {
   private buildHeaders(options: RequestOptions): HeadersInit {
     const headers: Record<string, string> = {
       ...this.defaultHeaders,
-      ...options.headers,
     };
 
+    // 先合并用户自定义的headers（但保留Token头的位置）
+    if (options.headers) {
+      Object.assign(headers, options.headers);
+    }
+
+    // 最后添加token头（如果不需要跳过认证），确保Token头不会被覆盖
     if (!options.skipAuth) {
-      const accessToken = storageUtils.disk.get<string>('accessToken', '');
+      const accessToken = this.getAccessToken();
       if (accessToken) {
         headers['Token'] = accessToken;
       }
     }
 
+    // Client-Code: 客户端唯一标识
     const clientCode = this.getOrCreateClientCode();
-    headers['Client-Code'] = clientCode;
-
-    if (typeof navigator !== 'undefined') {
-      headers['Client-Device-Name'] = navigator.userAgent;
+    if (clientCode) {
+      headers['Client-Code'] = clientCode;
     }
 
+    // Client-Device-Name: 设备名称（简化格式）
+    if (typeof navigator !== 'undefined') {
+      const platform = navigator.platform || '';
+      const userAgent = navigator.userAgent || '';
+      // 简化设备名称：优先使用平台信息，否则使用操作系统信息
+      let deviceName = 'Unknown';
+      if (platform.includes('Mac')) {
+        deviceName = 'Mac OS';
+      } else if (platform.includes('Win')) {
+        deviceName = 'Windows';
+      } else if (platform.includes('Linux')) {
+        deviceName = 'Linux';
+      } else if (userAgent.includes('Android')) {
+        deviceName = 'Android';
+      } else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+        deviceName = 'iOS';
+      }
+      headers['Client-Device-Name'] = deviceName;
+    }
+
+    // Lang: 语言设置（使用简化的格式，如 'cn' 而不是 'zh-CN'）
     const lang = storageUtils.disk.get<string>('lang', 'zh-CN');
-    headers['Lang'] = lang;
+    // 将 'zh-CN' 转换为 'cn'，其他语言保持原样或简化
+    let langHeader = lang;
+    if (lang === 'zh-CN' || lang === 'zh') {
+      langHeader = 'cn';
+    } else if (lang === 'en-US' || lang === 'en') {
+      langHeader = 'en';
+    }
+    headers['Lang'] = langHeader;
+
+    // Api-Version: API版本标识（参考图一：xt4，可通过环境变量配置）
+    const apiVersion = process.env.NEXT_PUBLIC_API_VERSION || 'xt4';
+    headers['Api-Version'] = apiVersion;
+
+    // Device: 设备类型（参考图一：web）
+    headers['Device'] = 'web';
 
     return headers;
   }
@@ -109,8 +148,105 @@ class APIRequest {
     return clientCode;
   }
 
+  /**
+   * 从多个来源获取 accessToken
+   * 优先级：localStorage (accessToken) > Cookie (token) > sessionStorage (accessToken) > localStorage (admin.accessToken)
+   */
+  private getAccessToken(): string {
+    if (typeof window === 'undefined') {
+      return '';
+    }
+
+    // 1. 尝试从 localStorage 获取（通过 storageUtils，key为 'accessToken'）
+    let token = storageUtils.disk.get<string>('accessToken', '');
+    if (token) {
+      return token;
+    }
+
+    // 2. 尝试从 Cookie 获取（优先从 'token' cookie获取）
+    token = this.getCookieValue('token');
+    if (token) {
+      return token;
+    }
+
+    // 3. 尝试从 sessionStorage 获取
+    try {
+      token = sessionStorage.getItem('accessToken') || '';
+      if (token) {
+        return token;
+      }
+    } catch (e) {
+      // sessionStorage 可能不可用
+    }
+
+    // 4. 尝试从 localStorage 直接获取（不带前缀）
+    try {
+      token = localStorage.getItem('accessToken') || '';
+      if (token) {
+        return token;
+      }
+    } catch (e) {
+      // localStorage 可能不可用
+    }
+
+    // 5. 尝试从 localStorage 获取（带 'admin.' 前缀）
+    try {
+      token = localStorage.getItem('admin.accessToken') || '';
+      if (token) {
+        return token;
+      }
+    } catch (e) {
+      // localStorage 可能不可用
+    }
+
+    return '';
+  }
+
+  /**
+   * 从 Cookie 中获取指定名称的值
+   * 注意：JWT token 中可能包含 '=' 字符，需要正确处理
+   */
+  private getCookieValue(name: string): string {
+    if (typeof document === 'undefined') {
+      return '';
+    }
+
+    try {
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (!trimmed) continue;
+        
+        const eqIndex = trimmed.indexOf('=');
+        if (eqIndex === -1) continue;
+        
+        const cookieName = trimmed.substring(0, eqIndex).trim();
+        const cookieValue = trimmed.substring(eqIndex + 1).trim();
+        
+        if (cookieName === name && cookieValue) {
+          try {
+            // 尝试解码，如果失败则返回原始值
+            const decoded = decodeURIComponent(cookieValue);
+            return decoded || cookieValue;
+          } catch {
+            // 解码失败，返回原始值（可能包含特殊字符）
+            return cookieValue;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to get cookie value:', e);
+    }
+    
+    return '';
+  }
+
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
+      // HTTP 401 状态码也表示认证失败/Token过期
+      if (response.status === 401) {
+        this.handleTokenExpired();
+      }
       const text = await response.text().catch(() => '');
       throw new APIError(
         text || `HTTP ${response.status} ${response.statusText}`,
@@ -131,10 +267,38 @@ class APIRequest {
     const result: APIResponse<T> = await response.json();
 
     if (result.code !== 0) {
+      // 处理 Token 过期（code: 401）
+      if (result.code === 401) {
+        this.handleTokenExpired();
+      }
       throw new APIError(result.msg || '请求失败', result.code, result.data);
     }
 
     return result.data;
+  }
+
+  /**
+   * 处理 Token 过期
+   * 清除本地存储的认证信息并跳转到登录页
+   */
+  private handleTokenExpired(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    // 清除所有认证相关的存储
+    storageUtils.disk.remove('accessToken');
+    storageUtils.disk.remove('refreshToken');
+    
+    // 清除 sessionStorage 中的登录状态
+    sessionStorage.removeItem('isAdminLoggedIn');
+    localStorage.removeItem('isAdminLoggedIn');
+
+    // 避免重复跳转
+    if (window.location.pathname !== '/login' && window.location.pathname !== '/admin/login') {
+      // 使用 window.location 跳转，确保页面完全刷新
+      window.location.href = '/login';
+    }
   }
 
   async get<T>(url: string, options?: RequestOptions): Promise<T> {
