@@ -17,6 +17,8 @@ const moduleToSysCodeMap: Record<string, string> = {
   system: 'admin-ops',
   ucard: 'admin-ubcard',
   orders: 'admin-asset', // 订单/资金管理可能对应资产管理系统
+  crypto: 'admin-crypto',
+  options: 'admin-binaryOptions',
   // 默认值
   default: 'management',
 };

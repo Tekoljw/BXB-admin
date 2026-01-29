@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { convertSubSystemToModule, sortSystemsByWeights } from "@/utils/module-mapping-util"
+import { convertSubSystemToModule, sortSystemsByWeights, getSysCodeByModuleId } from "@/utils/module-mapping-util"
 import type { SubSystem } from "@/router/auth-api"
 
 interface AdminTopNavProps {
@@ -72,7 +72,7 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
       } catch (error) {
         console.error('Failed to load modules from API:', error)
         // API失败时使用备用模块
-        setModules(fallbackModules.map(m => ({ ...m, sysCode: m.id })))
+        setModules(fallbackModules.map(m => ({ ...m, sysCode: getSysCodeByModuleId(m.id) })))
       } finally {
         setIsLoadingModules(false)
       }

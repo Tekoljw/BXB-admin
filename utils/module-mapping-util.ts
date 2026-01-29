@@ -36,6 +36,8 @@ export const sysCodeToModuleIdMap: Record<string, string> = {
   'admin-ops': 'system',
   'admin-ubcard': 'ucard',
   'admin-asset': 'orders',
+  'admin-crypto': 'crypto',
+  'admin-binaryOptions': 'options',
   'management': 'orders', // 默认值
 }
 
@@ -54,6 +56,8 @@ export const moduleIdToSysCodeMap: Record<string, string> = {
   system: 'admin-ops',
   ucard: 'admin-ubcard',
   orders: 'admin-asset',
+  crypto: 'admin-crypto',
+  options: 'admin-binaryOptions',
 }
 
 // sysCode 到图标的映射
@@ -70,6 +74,8 @@ export const sysCodeToIconMap: Record<string, any> = {
   'admin-ops': FileCheck,
   'admin-ubcard': CreditCard,
   'admin-asset': Wallet,
+  'admin-crypto': Repeat,
+  'admin-binaryOptions': LineChart,
   'management': Wallet, // 默认值
 }
 

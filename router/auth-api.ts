@@ -163,18 +163,24 @@ class AuthAPI {
     return response.lang;
   }
 
+  private _sysPromise: Promise<SubSystem[]> | null = null;
+
   async getUserSys(): Promise<SubSystem[]> {
-    try {
-      // 导航接口返回：{ code: 0, msg: "Success.", data: SubSystem[] }
-      // apiRequest.get 已经处理了响应，直接返回 data 部分
-      const response = await apiRequest.get<SubSystem[]>(
-        '/v1/admin/admin/profile/sys'
-      );
-      return response || [];
-    } catch (error) {
-      console.warn('Failed to get user sys:', error);
-      return [];
-    }
+    if (this._sysPromise) return this._sysPromise;
+    this._sysPromise = (async () => {
+      try {
+        const response = await apiRequest.get<SubSystem[]>(
+          '/v1/admin/admin/profile/sys'
+        );
+        return response || [];
+      } catch (error) {
+        console.warn('Failed to get user sys:', error);
+        return [];
+      } finally {
+        this._sysPromise = null;
+      }
+    })();
+    return this._sysPromise;
   }
 
   async getMenu(sysCode: string): Promise<MenuItem[]> {

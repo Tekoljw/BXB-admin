@@ -82,6 +82,8 @@ class APIRequest {
       const accessToken = this.getAccessToken();
       if (accessToken) {
         headers['Token'] = accessToken;
+        // 添加统一的Authorization Bearer header
+        headers['Authorization'] = `Bearer ${accessToken}`;
       }
     }
 
