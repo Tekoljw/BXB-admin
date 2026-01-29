@@ -116,7 +116,7 @@ class FiatReportsAPI {
   }
 
   // 创建支付系统专用的API请求实例
-  private async paymentApiRequest<T>(url: string): Promise<T> {
+  private async paymentApiRequest<T>(url: string, options?: { signal?: AbortSignal }): Promise<T> {
     const baseURL = this.getPaymentApiBaseUrl();
     const fullUrl = `${baseURL}${url}`;
     
@@ -181,10 +181,17 @@ class FiatReportsAPI {
       console.log('[Payment API Request]', 'GET', fullUrl);
     }
 
-    const response = await fetch(fullUrl, {
+    const requestOptions: RequestInit = {
       method: 'GET',
       headers,
-    });
+    };
+
+    // 支持 AbortController
+    if (options?.signal) {
+      requestOptions.signal = options.signal;
+    }
+
+    const response = await fetch(fullUrl, requestOptions);
 
     if (!response.ok) {
       const text = await response.text().catch(() => '');
@@ -221,9 +228,10 @@ class FiatReportsAPI {
    * 获取经营报表概览统计
    * GET /api/fiat/reports/summary
    */
-  async getSummary(): Promise<ReportsSummaryResponse> {
+  async getSummary(options?: { signal?: AbortSignal }): Promise<ReportsSummaryResponse> {
     return await this.paymentApiRequest<ReportsSummaryResponse>(
-      '/api/fiat/reports/summary'
+      '/api/fiat/reports/summary',
+      options
     );
   }
 

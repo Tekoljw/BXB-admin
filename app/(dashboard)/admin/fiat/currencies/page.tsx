@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect, useMemo } from "react"
+import { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,7 +20,8 @@ import {
   X,
   Settings,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  Loader2
 } from "lucide-react"
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
@@ -35,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { fiatApis, type FiatCurrency as ApiFiatCurrency } from "@/router/fiat-api"
 
 type CurrencyRegion = "asia" | "africa" | "americas" | "europe" | "other"
 
@@ -93,6 +95,8 @@ export default function CurrenciesPage() {
   const editFileInputRef = useRef<HTMLInputElement>(null)
   const [editingSortOrder, setEditingSortOrder] = useState<string | null>(null)
   const [tempSortOrder, setTempSortOrder] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const initialCurrencies: Currency[] = [
     {
       id: "CUR001",
@@ -224,11 +228,157 @@ export default function CurrenciesPage() {
     }
   ]
 
-  const [currencies, setCurrencies] = useState<Currency[]>(initialCurrencies)
+  const [currencies, setCurrencies] = useState<Currency[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const fetchingRef = useRef(false)
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const hasInitializedRef = useRef(false)
+
+  const mapApiDataToCurrency = useCallback((item: ApiFiatCurrency, index: number): Currency => ({
+    id: item.id.toString(),
+    code: item.currencyCode,
+    name: item.currencyCode,
+    shortName: item.currencyCode,
+    icon: item.avatar || "",
+    region: "asia" as CurrencyRegion,
+    status: item.isShow && !item.deleted ? "active" : "inactive",
+    sortOrder: index + 1,
+    createdAt: item.createdAt || new Date().toISOString(),
+    exchangeRate: {
+      buyPrice: item.buyRate,
+      sellPrice: item.sellRate,
+      config: {
+        source: "manual" as const,
+        floatType: "percentage" as const,
+        floatBuy: 0,
+        floatSell: 0,
+        manualConfig: {
+          validityPeriod: 24 as const,
+          baseBuyPrice: item.buyRate,
+          baseSellPrice: item.sellRate,
+          lastUpdated: item.updatedAt || item.createdAt || new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        }
+      }
+    }
+  }), [])
+
+  const refreshCurrencies = useCallback(async (size: number = 1000) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    if (fetchingRef.current) {
+      return
+    }
+
+    try {
+      fetchingRef.current = true
+      setIsLoading(true)
+      setError(null)
+
+      abortControllerRef.current = new AbortController()
+
+      const response = await fiatApis.getFiatList({ 
+        current: 1, 
+        size,
+        signal: abortControllerRef.current.signal
+      })
+      
+      if (abortControllerRef.current?.signal.aborted) {
+        return
+      }
+      
+      const mappedCurrencies: Currency[] = response.records.map((item, index) => mapApiDataToCurrency(item, index))
+      
+      setCurrencies(mappedCurrencies)
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        return
+      }
+      
+      console.error("获取币种列表失败:", err)
+      setError(err instanceof Error ? err.message : "获取币种列表失败")
+      setCurrencies(initialCurrencies)
+    } finally {
+      setIsLoading(false)
+      fetchingRef.current = false
+      abortControllerRef.current = null
+    }
+  }, [mapApiDataToCurrency])
 
   useEffect(() => {
-    localStorage.setItem("fiat_currencies", JSON.stringify(currencies))
-  }, [currencies])
+    if (hasInitializedRef.current) {
+      return
+    }
+
+    if (fetchingRef.current) {
+      return
+    }
+
+    hasInitializedRef.current = true
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    abortControllerRef.current = new AbortController()
+    const signal = abortControllerRef.current.signal
+
+    let isMounted = true
+
+    const loadData = async () => {
+      try {
+        fetchingRef.current = true
+        setIsLoading(true)
+        setError(null)
+
+        const response = await fiatApis.getFiatList({ 
+          current: 1, 
+          size: 1000,
+          signal
+        })
+        
+        if (signal.aborted || !isMounted) {
+          return
+        }
+        
+        const mappedCurrencies: Currency[] = response.records.map((item, index) => mapApiDataToCurrency(item, index))
+        
+        setCurrencies(mappedCurrencies)
+      } catch (err) {
+        if (signal.aborted || !isMounted) {
+          return
+        }
+        
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
+        
+        console.error("获取币种列表失败:", err)
+        setError(err instanceof Error ? err.message : "获取币种列表失败")
+        setCurrencies(initialCurrencies)
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
+        }
+        fetchingRef.current = false
+        abortControllerRef.current = null
+      }
+    }
+
+    loadData()
+
+    return () => {
+      isMounted = false
+      hasInitializedRef.current = false
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+      fetchingRef.current = false
+    }
+  }, [mapApiDataToCurrency])
   
   const [newCurrency, setNewCurrency] = useState({
     code: "",
@@ -258,71 +408,107 @@ export default function CurrenciesPage() {
     }
   }
 
-  const saveBuyPrice = (currencyId: string) => {
+  const saveBuyPrice = async (currencyId: string) => {
     const value = parseFloat(tempBuyPrice)
     if (isNaN(value) || value <= 0) {
       alert("请输入有效的买入价")
       return
     }
     
-    setCurrencies(currencies.map(c => {
-      if (c.id === currencyId && c.exchangeRate && c.exchangeRate.config.source === "manual") {
-        const newExpiresAt = new Date(Date.now() + (c.exchangeRate.config.manualConfig?.validityPeriod || 24) * 60 * 60 * 1000).toISOString()
-        return {
-          ...c,
-          exchangeRate: {
-            ...c.exchangeRate,
-            buyPrice: value,
-            config: {
-              ...c.exchangeRate.config,
-              manualConfig: {
-                ...c.exchangeRate.config.manualConfig!,
-                baseBuyPrice: value,
-                lastUpdated: new Date().toISOString(),
-                expiresAt: newExpiresAt
+    try {
+      const currency = currencies.find(c => c.id === currencyId)
+      if (!currency) return
+      
+      const id = parseInt(currencyId)
+      await fiatApis.updateFiat(id, {
+        currencyCode: currency.code,
+        buyRate: value,
+        sellRate: currency.exchangeRate?.sellPrice || 1.0,
+        avatar: currency.icon || undefined,
+        isShow: currency.status === "active",
+        isUserShow: currency.status === "active"
+      })
+      
+      setCurrencies(currencies.map(c => {
+        if (c.id === currencyId && c.exchangeRate && c.exchangeRate.config.source === "manual") {
+          const newExpiresAt = new Date(Date.now() + (c.exchangeRate.config.manualConfig?.validityPeriod || 24) * 60 * 60 * 1000).toISOString()
+          return {
+            ...c,
+            exchangeRate: {
+              ...c.exchangeRate,
+              buyPrice: value,
+              config: {
+                ...c.exchangeRate.config,
+                manualConfig: {
+                  ...c.exchangeRate.config.manualConfig!,
+                  baseBuyPrice: value,
+                  lastUpdated: new Date().toISOString(),
+                  expiresAt: newExpiresAt
+                }
               }
             }
           }
         }
-      }
-      return c
-    }))
-    setEditingBuyPrice(null)
+        return c
+      }))
+      setEditingBuyPrice(null)
+    } catch (err) {
+      console.error("更新买入价失败:", err)
+      alert(err instanceof Error ? err.message : "更新买入价失败")
+    }
   }
 
-  const saveSellPrice = (currencyId: string) => {
+  const saveSellPrice = async (currencyId: string) => {
     const value = parseFloat(tempSellPrice)
     if (isNaN(value) || value <= 0) {
       alert("请输入有效的卖出价")
       return
     }
     
-    setCurrencies(currencies.map(c => {
-      if (c.id === currencyId && c.exchangeRate && c.exchangeRate.config.source === "manual") {
-        const newExpiresAt = new Date(Date.now() + (c.exchangeRate.config.manualConfig?.validityPeriod || 24) * 60 * 60 * 1000).toISOString()
-        return {
-          ...c,
-          exchangeRate: {
-            ...c.exchangeRate,
-            sellPrice: value,
-            config: {
-              ...c.exchangeRate.config,
-              manualConfig: {
-                ...c.exchangeRate.config.manualConfig!,
-                baseSellPrice: value,
-                lastUpdated: new Date().toISOString(),
-                expiresAt: newExpiresAt
+    try {
+      const currency = currencies.find(c => c.id === currencyId)
+      if (!currency) return
+      
+      const id = parseInt(currencyId)
+      await fiatApis.updateFiat(id, {
+        currencyCode: currency.code,
+        buyRate: currency.exchangeRate?.buyPrice || 1.0,
+        sellRate: value,
+        avatar: currency.icon || undefined,
+        isShow: currency.status === "active",
+        isUserShow: currency.status === "active"
+      })
+      
+      setCurrencies(currencies.map(c => {
+        if (c.id === currencyId && c.exchangeRate && c.exchangeRate.config.source === "manual") {
+          const newExpiresAt = new Date(Date.now() + (c.exchangeRate.config.manualConfig?.validityPeriod || 24) * 60 * 60 * 1000).toISOString()
+          return {
+            ...c,
+            exchangeRate: {
+              ...c.exchangeRate,
+              sellPrice: value,
+              config: {
+                ...c.exchangeRate.config,
+                manualConfig: {
+                  ...c.exchangeRate.config.manualConfig!,
+                  baseSellPrice: value,
+                  lastUpdated: new Date().toISOString(),
+                  expiresAt: newExpiresAt
+                }
               }
             }
           }
         }
-      }
-      return c
-    }))
-    setEditingSellPrice(null)
+        return c
+      }))
+      setEditingSellPrice(null)
+    } catch (err) {
+      console.error("更新卖出价失败:", err)
+      alert(err instanceof Error ? err.message : "更新卖出价失败")
+    }
   }
 
-  const saveSortOrder = (currencyId: string) => {
+  const saveSortOrder = async (currencyId: string) => {
     if (!tempSortOrder || tempSortOrder.trim() === '') {
       setEditingSortOrder(null)
       setTempSortOrder("")
@@ -335,11 +521,35 @@ export default function CurrenciesPage() {
       return
     }
     
-    setCurrencies(currencies.map(c => 
-      c.id === currencyId ? { ...c, sortOrder: value } : c
-    ))
-    setEditingSortOrder(null)
-    setTempSortOrder("")
+    try {
+      const currency = currencies.find(c => c.id === currencyId)
+      if (!currency) return
+      
+      const id = parseInt(currencyId)
+      await fiatApis.updateFiat(id, {
+        currencyCode: currency.code,
+        buyRate: currency.exchangeRate?.buyPrice || 1.0,
+        sellRate: currency.exchangeRate?.sellPrice || 1.0,
+        avatar: currency.icon || undefined,
+        isShow: currency.status === "active",
+        isUserShow: currency.status === "active",
+        sortOrder: value
+      })
+      
+      setCurrencies(currencies.map(c => 
+        c.id === currencyId ? { ...c, sortOrder: value } : c
+      ))
+      setEditingSortOrder(null)
+      setTempSortOrder("")
+    } catch (err) {
+      console.error("更新排序失败:", err)
+      const errorMessage = err instanceof Error ? err.message : "更新排序失败"
+      if (errorMessage.includes("sortOrder") || errorMessage.includes("排序")) {
+        alert("后端API暂不支持排序字段，请联系开发人员添加支持")
+      } else {
+        alert(errorMessage)
+      }
+    }
   }
 
   const openRateConfig = (currency: Currency) => {
@@ -347,29 +557,35 @@ export default function CurrenciesPage() {
     setIsRateConfigOpen(true)
   }
 
-  // 链式过滤逻辑：搜索词 -> 状态 -> 地区 -> 排序
   const filteredCurrencies = useMemo(() => {
     return currencies.filter(currency => {
-      // 搜索词过滤
       const matchesSearch = 
         currency.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
         currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         currency.shortName.toLowerCase().includes(searchTerm.toLowerCase())
       
-      // 一级页签（状态）过滤
       const matchesStatus = 
         statusTab === "all" || 
         (statusTab === "active" && currency.status === "active") ||
         (statusTab === "inactive" && currency.status === "inactive")
       
-      // 二级页签（地区）过滤
       const matchesRegion = regionTab === "all" || currency.region === regionTab
       
       return matchesSearch && matchesStatus && matchesRegion
     }).sort((a, b) => a.sortOrder - b.sortOrder)
   }, [currencies, searchTerm, statusTab, regionTab])
 
-  // 当一级页签改变时，重置二级页签
+  const totalPages = Math.ceil(filteredCurrencies.length / pageSize)
+  const paginatedCurrencies = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    return filteredCurrencies.slice(startIndex, endIndex)
+  }, [filteredCurrencies, currentPage, pageSize])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, statusTab, regionTab])
+
   const handleStatusChange = (value: string) => {
     setStatusTab(value)
     setRegionTab("all")
@@ -409,49 +625,104 @@ export default function CurrenciesPage() {
     }
   }
 
-  const handleAddCurrency = () => {
-    const maxSortOrder = currencies.length > 0 ? Math.max(...currencies.map(c => c.sortOrder)) : 0
-    const currency: Currency = {
-      id: `CUR${String(currencies.length + 1).padStart(3, '0')}`,
-      ...newCurrency,
-      status: "active",
-      sortOrder: maxSortOrder + 1,
-      createdAt: new Date().toLocaleString('zh-CN')
+  const handleAddCurrency = async () => {
+    try {
+      await fiatApis.createFiat({
+        currencyCode: newCurrency.code,
+        buyRate: 1.0,
+        sellRate: 1.0,
+        avatar: newCurrency.icon || undefined,
+        isShow: true,
+        isUserShow: true
+      })
+      
+      await refreshCurrencies(1000)
+      setNewCurrency({ code: "", name: "", shortName: "", icon: "", region: "asia" })
+      setIsAddDialogOpen(false)
+    } catch (err) {
+      console.error("创建币种失败:", err)
+      alert(err instanceof Error ? err.message : "创建币种失败")
     }
-    setCurrencies([...currencies, currency])
-    setNewCurrency({ code: "", name: "", shortName: "", icon: "", region: "asia" })
-    setIsAddDialogOpen(false)
   }
 
-  const handleEditCurrency = () => {
+  const handleEditCurrency = async () => {
     if (!selectedCurrency) return
     
-    setCurrencies(currencies.map(c => 
-      c.id === selectedCurrency.id ? selectedCurrency : c
-    ))
-    setIsEditDialogOpen(false)
-    setSelectedCurrency(null)
-  }
-
-  const handleDeleteCurrency = (id: string) => {
-    if (confirm("确定要删除这个币种吗？")) {
-      setCurrencies(currencies.filter(c => c.id !== id))
+    try {
+      const currencyId = parseInt(selectedCurrency.id)
+      await fiatApis.updateFiat(currencyId, {
+        currencyCode: selectedCurrency.code,
+        buyRate: selectedCurrency.exchangeRate?.buyPrice || 1.0,
+        sellRate: selectedCurrency.exchangeRate?.sellPrice || 1.0,
+        avatar: selectedCurrency.icon || undefined,
+        isShow: selectedCurrency.status === "active",
+        isUserShow: selectedCurrency.status === "active"
+      })
+      
+      await refreshCurrencies(1000)
+      setIsEditDialogOpen(false)
+      setSelectedCurrency(null)
+    } catch (err) {
+      console.error("更新币种失败:", err)
+      alert(err instanceof Error ? err.message : "更新币种失败")
     }
   }
 
-  const toggleStatus = (id: string) => {
-    setCurrencies(currencies.map(currency => {
-      if (currency.id === id) {
-        const newStatus = currency.status === "active" ? "inactive" : "active"
-        return { ...currency, status: newStatus }
-      }
-      return currency
-    }))
+  const handleDeleteCurrency = async (id: string) => {
+    if (!confirm("确定要删除这个币种吗？")) return
+    
+    try {
+      const currencyId = parseInt(id)
+      await fiatApis.deleteFiat(currencyId)
+      
+      await refreshCurrencies(1000)
+    } catch (err) {
+      console.error("删除币种失败:", err)
+      alert(err instanceof Error ? err.message : "删除币种失败")
+    }
+  }
+
+  const toggleStatus = async (id: string) => {
+    try {
+      const currency = currencies.find(c => c.id === id)
+      if (!currency) return
+      
+      const currencyId = parseInt(id)
+      const newStatus = currency.status === "active" ? "inactive" : "active"
+      
+      await fiatApis.disableFiat(id, newStatus === "inactive")
+      
+      setCurrencies(currencies.map(c => 
+        c.id === id ? { ...c, status: newStatus } : c
+      ))
+    } catch (err) {
+      console.error("更新币种状态失败:", err)
+      alert(err instanceof Error ? err.message : "更新币种状态失败")
+    }
   }
 
   const openEditDialog = (currency: Currency) => {
     setSelectedCurrency({ ...currency })
     setIsEditDialogOpen(true)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-custom-green" />
+        <span className="ml-2 text-gray-600 dark:text-gray-400">加载中...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <p className="text-red-800 dark:text-red-200">错误: {error}</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -526,7 +797,7 @@ export default function CurrenciesPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredCurrencies.map((currency) => (
+              {paginatedCurrencies.map((currency) => (
                 <tr key={currency.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   <td className="py-3 px-4 text-sm">
                     {editingSortOrder === currency.id ? (
@@ -584,8 +855,22 @@ export default function CurrenciesPage() {
                   </td>
                   <td className="py-3 px-4">
                     {currency.icon ? (
-                      currency.icon.startsWith('data:') ? (
-                        <img src={currency.icon} alt={currency.code} className="w-6 h-6 object-contain" />
+                      currency.icon.startsWith('data:') || 
+                      currency.icon.startsWith('http://') || 
+                      currency.icon.startsWith('https://') ? (
+                        <img 
+                          src={currency.icon} 
+                          alt={currency.code} 
+                          className="w-6 h-6 object-contain"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.style.display = 'none'
+                            const parent = target.parentElement
+                            if (parent) {
+                              parent.innerHTML = '<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                            }
+                          }}
+                        />
                       ) : (
                         <span className="text-2xl">{currency.icon}</span>
                       )
@@ -813,7 +1098,75 @@ export default function CurrenciesPage() {
         )}
 
         {filteredCurrencies.length > 0 && (
-          <DataTotal total={filteredCurrencies.length} />
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                显示 {Math.min((currentPage - 1) * pageSize + 1, filteredCurrencies.length)} - {Math.min(currentPage * pageSize, filteredCurrencies.length)} 条，共 {filteredCurrencies.length} 条
+              </div>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={pageSize.toString()}
+                  onValueChange={(value) => {
+                    setPageSize(Number(value))
+                    setCurrentPage(1)
+                  }}
+                >
+                  <SelectTrigger className="w-20 h-8">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="20">20</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="h-8"
+                  >
+                    上一页
+                  </Button>
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum: number
+                    if (totalPages <= 5) {
+                      pageNum = i + 1
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i
+                    } else {
+                      pageNum = currentPage - 2 + i
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`h-8 ${currentPage === pageNum ? "bg-custom-green hover:bg-custom-green/90" : ""}`}
+                      >
+                        {pageNum}
+                      </Button>
+                    )
+                  })}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="h-8"
+                  >
+                    下一页
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </Card>
 

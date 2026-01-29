@@ -1,4 +1,15 @@
-// 商户管理API服务
+/**
+ * 法币用户列表（商户管理）API服务
+ * 
+ * 根据法币管理模块 API 接口文档实现
+ * 文档版本: 1.0.0
+ * 最后更新: 2026-01-29
+ * 
+ * 基础说明:
+ * - 所有接口需要在请求头中携带认证信息: Authorization: Bearer <token>
+ * - 统一响应格式: { code: 0, msg: "success", data: {}, sign: null }
+ * - 分页响应格式: { code: 0, msg: "success", data: { records: [], total: 100, current: 1, hasNext: true } }
+ */
 import { storageUtils } from '../utils/storage-util';
 
 export interface MchApp {
@@ -95,7 +106,8 @@ export interface UpdateMchInfoRequest {
 
 class MchInfoAPI {
   private getPaymentApiBaseUrl(): string {
-    const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz:9217';
+    // 文档中的 base URL 是 http://pay.ubtai.biz/manager
+    const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz/manager';
     if (typeof window !== 'undefined' && 
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       return paymentApiBaseUrl;

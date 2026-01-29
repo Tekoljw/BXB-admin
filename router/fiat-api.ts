@@ -1,4 +1,15 @@
-// 法币币种管理API服务
+/**
+ * 法币币种管理API服务
+ * 
+ * 根据法币管理模块 API 接口文档实现
+ * 文档版本: 1.0.0
+ * 最后更新: 2026-01-29
+ * 
+ * 基础说明:
+ * - 所有接口需要在请求头中携带认证信息: Authorization: Bearer <token>
+ * - 统一响应格式: { code: 0, msg: "success", data: {}, sign: null }
+ * - 分页响应格式: { code: 0, msg: "success", data: { records: [], total: 100, current: 1, hasNext: true } }
+ */
 import { storageUtils } from '../utils/storage-util';
 
 export interface FiatCurrency {
@@ -43,11 +54,13 @@ export interface UpdateFiatRequest {
   avatar?: string;
   isShow?: boolean;
   isUserShow?: boolean;
+  sortOrder?: number; // 排序字段（可选，用于部分更新）
 }
 
 class FiatAPI {
   private getPaymentApiBaseUrl(): string {
-    const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz:9217';
+    // 文档中的 base URL 是 http://pay.ubtai.biz/manager
+    const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz/manager';
     if (typeof window !== 'undefined' && 
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
       return paymentApiBaseUrl;
@@ -101,6 +114,7 @@ class FiatAPI {
       method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
       body?: any;
       headers?: Record<string, string>;
+      signal?: AbortSignal;
     }
   ): Promise<T> {
     const baseURL = this.getPaymentApiBaseUrl();
@@ -128,6 +142,11 @@ class FiatAPI {
       method: options?.method || 'GET',
       headers,
     };
+
+    // 支持 AbortController
+    if (options?.signal) {
+      requestOptions.signal = options.signal;
+    }
 
     if (options?.body) {
       if (options.headers?.['Content-Type'] === 'application/x-www-form-urlencoded') {
@@ -168,7 +187,7 @@ class FiatAPI {
   }
 
   // GET /api/wallet/fiat | 权限：ENT_C_FIATS_LIST
-  async getFiatList(params?: GetFiatListParams): Promise<PaginatedResponse<FiatCurrency>> {
+  async getFiatList(params?: GetFiatListParams & { signal?: AbortSignal }): Promise<PaginatedResponse<FiatCurrency>> {
     const queryParams = new URLSearchParams();
     
     if (params?.currencyCode) {
@@ -184,7 +203,9 @@ class FiatAPI {
     const queryString = queryParams.toString();
     const url = `/api/wallet/fiat${queryString ? `?${queryString}` : ''}`;
     
-    return await this.paymentApiRequest<PaginatedResponse<FiatCurrency>>(url);
+    return await this.paymentApiRequest<PaginatedResponse<FiatCurrency>>(url, {
+      signal: params?.signal
+    });
   }
 
   // GET /api/wallet/fiat/{fiatId} | 权限：ENT_C_FIATS_LIST 或 ENT_C_FIATS_EDIT

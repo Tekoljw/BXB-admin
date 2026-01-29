@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
-import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, CheckCircle, XCircle } from "lucide-react"
+import React, { useState, useEffect } from "react"
+import { Plus, Edit, Trash2, Lock, Unlock, Settings, Key, Eye, Check, X, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { mchInfoApis, type MchInfo } from "@/router/mch-info-api"
 import { DataTotal } from "@/components/data-total"
 import { SearchControls } from "@/components/admin/search-controls"
 import { useDeferredSearch } from "@/hooks/use-deferred-search"
@@ -827,9 +828,81 @@ const mockMerchants: Merchant[] = [
   },
 ]
 
+// 将 API 返回的 MchInfo 转换为页面需要的 Merchant 格式
+const mapMchInfoToMerchant = (mchInfo: MchInfo): Merchant => {
+  return {
+    id: mchInfo.mchNo,
+    name: mchInfo.mchName,
+    userId: mchInfo.walletBindUserId,
+    bxbUserId: mchInfo.walletBindUserId,
+    email: mchInfo.contactEmail || "",
+    phone: mchInfo.contactTel || "",
+    isKYC: false, // API 没有 KYC 信息
+    registeredAt: mchInfo.createdAt || new Date().toISOString(),
+    apiKeys: mchInfo.mchApp ? [{
+      keyId: mchInfo.mchApp.appId || "",
+      key: mchInfo.mchApp.appSecret || "",
+      callbackDomain: "",
+      domainStatus: "approved" as const,
+      createdAt: mchInfo.createdAt || new Date().toISOString()
+    }] : [],
+    balance: mchInfo.fiatAssets || 0,
+    paymentBalance: mchInfo.fiatTransferAssets || 0,
+    frozenBalance: mchInfo.frozenFiatAssets || 0,
+    currencyBalances: [
+      { currency: "USD", balance: mchInfo.fiatAssets || 0, paymentBalance: mchInfo.fiatTransferAssets || 0, frozenBalance: mchInfo.frozenFiatAssets || 0 }
+    ],
+    dailyProfit: 0,
+    monthlyProfit: 0,
+    totalProfit: 0,
+    currencyProfits: [],
+    profitDataByTimeRange: {
+      today: [],
+      yesterday: [],
+      thisMonth: [],
+      total: []
+    },
+    dailyVolume: 0,
+    monthlyVolume: 0,
+    totalVolume: 0,
+    currencyVolumes: [],
+    totalOrders: 0,
+    feeConfigs: [],
+    status: mchInfo.state === 1 ? "active" : "disabled",
+    hasPendingDomain: false,
+    createdAt: mchInfo.createdAt || new Date().toISOString()
+  }
+}
+
 export default function MerchantsPage() {
-  const [merchants, setMerchants] = useState<Merchant[]>(mockMerchants)
+  const [merchants, setMerchants] = useState<Merchant[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
+
+  // 从 API 获取商户列表
+  useEffect(() => {
+    const fetchMerchants = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const response = await mchInfoApis.getMchInfoList({ current: 1, size: 100 })
+        
+        // 将 API 数据转换为页面需要的格式
+        const mappedMerchants = response.records.map(mapMchInfoToMerchant)
+        setMerchants(mappedMerchants)
+      } catch (err) {
+        console.error("获取商户列表失败:", err)
+        setError(err instanceof Error ? err.message : "获取商户列表失败")
+        // 如果 API 失败，使用 mock 数据作为后备
+        setMerchants(mockMerchants)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchMerchants()
+  }, [])
   const [merchantFilter, setMerchantFilter] = useState<"normal" | "hasApi" | "pending" | "all">("all")
   const [sortBy, setSortBy] = useState<"none" | "profit" | "volume">("none")
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -1004,11 +1077,24 @@ export default function MerchantsPage() {
     setIsApiKeysDialogOpen(true)
   }
 
-  const handleEdit = () => {
-    if (currentMerchant) {
-      setMerchants(merchants.map(m => 
-        m.id === currentMerchant.id ? { ...m, ...formData } : m
-      ))
+  const handleEdit = async () => {
+    if (!currentMerchant) return
+    
+    try {
+      // 调用 API 更新商户
+      await mchInfoApis.updateMchInfo(currentMerchant.id, {
+        mchName: formData.name,
+        contactEmail: formData.email,
+        contactTel: formData.phone,
+        walletBindUserId: currentMerchant.userId,
+        state: formData.status === "active" ? 1 : 0
+      })
+      
+      // 重新获取列表
+      const response = await mchInfoApis.getMchInfoList({ current: 1, size: 100 })
+      const mappedMerchants = response.records.map(mapMchInfoToMerchant)
+      setMerchants(mappedMerchants)
+      
       setIsEditDialogOpen(false)
       setCurrentMerchant(null)
       setFormData({
@@ -1017,14 +1103,29 @@ export default function MerchantsPage() {
         phone: "",
         status: "active"
       })
+    } catch (err) {
+      console.error("更新商户失败:", err)
+      alert(err instanceof Error ? err.message : "更新商户失败")
     }
   }
 
-  const handleDelete = () => {
-    if (currentMerchant) {
-      setMerchants(merchants.filter(m => m.id !== currentMerchant.id))
+  const handleDelete = async () => {
+    if (!currentMerchant) return
+    
+    try {
+      // 调用 API 删除商户
+      await mchInfoApis.deleteMchInfo(currentMerchant.id)
+      
+      // 重新获取列表
+      const response = await mchInfoApis.getMchInfoList({ current: 1, size: 100 })
+      const mappedMerchants = response.records.map(mapMchInfoToMerchant)
+      setMerchants(mappedMerchants)
+      
       setIsDeleteDialogOpen(false)
       setCurrentMerchant(null)
+    } catch (err) {
+      console.error("删除商户失败:", err)
+      alert(err instanceof Error ? err.message : "删除商户失败")
     }
   }
 
@@ -1066,15 +1167,27 @@ export default function MerchantsPage() {
     }
   }
 
-  const handleMerchantStatusToggle = (merchant: Merchant, checked: boolean) => {
+  const handleMerchantStatusToggle = async (merchant: Merchant, checked: boolean) => {
     if (merchant.status === "disabled") {
       return
     }
     
-    const newStatus = checked ? "active" : "frozen"
-    setMerchants(merchants.map(m => 
-      m.id === merchant.id ? { ...m, status: newStatus } : m
-    ))
+    try {
+      const newStatus = checked ? "active" : "frozen"
+      // 调用 API 更新商户状态
+      await mchInfoApis.updateMchInfo(merchant.id, {
+        walletBindUserId: merchant.userId,
+        state: newStatus === "active" ? 1 : 0
+      })
+      
+      // 更新本地状态
+      setMerchants(merchants.map(m => 
+        m.id === merchant.id ? { ...m, status: newStatus } : m
+      ))
+    } catch (err) {
+      console.error("更新商户状态失败:", err)
+      alert(err instanceof Error ? err.message : "更新商户状态失败")
+    }
   }
 
   const openEditDialog = (merchant: Merchant) => {
@@ -1378,6 +1491,25 @@ export default function MerchantsPage() {
       }
       updateMerchantState(updatedMerchant)
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-custom-green" />
+        <span className="ml-2 text-gray-600 dark:text-gray-400">加载中...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <p className="text-red-800 dark:text-red-200">错误: {error}</p>
+        </div>
+      </div>
+    )
   }
 
   return (

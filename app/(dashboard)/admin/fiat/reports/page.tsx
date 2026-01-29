@@ -198,12 +198,73 @@ export default function ReportsPage() {
   // 使用ref防止重复请求
   const fetchingRef = useRef<string>('')
   const prevQueryParamsRef = useRef<string>('')
+  const summaryInitializedRef = useRef(false) // 防止 summary 重复请求
+  const summaryAbortControllerRef = useRef<AbortController | null>(null) // summary 请求的 AbortController
 
   // 初始化加载数据 - 只在组件挂载时执行一次
   useEffect(() => {
-    fetchSummary()
+    // 如果已经初始化过，直接返回（防止 React StrictMode 导致的重复执行）
+    if (summaryInitializedRef.current) {
+      return
+    }
+
+    // 标记为已初始化（必须在检查后立即设置，防止并发执行）
+    summaryInitializedRef.current = true
+
+    // 取消之前的请求（如果有）
+    if (summaryAbortControllerRef.current) {
+      summaryAbortControllerRef.current.abort()
+    }
+
+    // 创建新的 AbortController
+    summaryAbortControllerRef.current = new AbortController()
+    const signal = summaryAbortControllerRef.current.signal
+
+    let isMounted = true
+
+    const loadSummary = async () => {
+      try {
+        const data = await fiatReportsApis.getSummary({ signal })
+        
+        // 检查请求是否被取消或组件已卸载
+        if (signal.aborted || !isMounted) {
+          return
+        }
+        
+        setSummaryData(data)
+        setError(null)
+      } catch (err) {
+        // 如果请求被取消或组件已卸载，不更新状态
+        if (signal.aborted || !isMounted) {
+          return
+        }
+        
+        // 如果是 AbortError，不显示错误
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
+        
+        console.error('Failed to fetch summary:', err)
+        const errorMessage = err instanceof APIError ? err.message : '获取概览数据失败'
+        setError(errorMessage)
+        toast.error('加载失败', {
+          description: errorMessage
+        })
+      }
+    }
+
+    loadSummary()
+
+    // 清理函数：组件卸载时取消未完成的请求并重置初始化标记
+    return () => {
+      isMounted = false
+      summaryInitializedRef.current = false // 重置标记，允许下次挂载时重新初始化
+      if (summaryAbortControllerRef.current) {
+        summaryAbortControllerRef.current.abort()
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // 空依赖数组确保只执行一次
+  }, []) // 空依赖数组，只在组件挂载时执行一次
 
   // 加载报表数据 - 合并逻辑，避免重复请求
   useEffect(() => {
