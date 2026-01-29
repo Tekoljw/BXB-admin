@@ -1,743 +1,510 @@
 "use client"
 
-import React, { useState } from "react"
-import { Eye, Edit, Check, X, Plus } from "lucide-react"
-import { DataTotal } from "@/components/data-total"
-import { SearchControls } from "@/components/admin/search-controls"
-import { useDeferredSearch } from "@/hooks/use-deferred-search"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Edit2, Link2, Loader2, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import { DataTotal } from "@/components/data-total"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
 } from "@/components/ui/sheet"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  payProviderApis,
+  type PayProvider,
+  type PaginatedResponse,
+} from "@/router/pay-provider-api"
+import { mchPayProviderApis, type MchPayProviderConfig } from "@/router/mch-pay-provider-api"
 
-interface ChannelCost {
-  channelName: string
-  interface: string
-  feeRate: string
-  minFee: string
-}
+type StateFilter = "all" | "0" | "1"
+type ProviderType = "1" | "2"
 
-interface Supplier {
-  id: number
-  tgid: string
-  name: string
-  tgAccount: string
-  status: "active" | "inactive" | "suspended"
-  merchantId: string
-  apiKey: string
-  supportedInterfaces: string[]
-  supportedMerchants: string[]
-  balances: Array<{ currency: string; deposit: string; pending: string }>
-  channelCosts: ChannelCost[]
-}
-
-const mockInterfaces = [
-  { id: "IF001", name: "Bitzpay", status: "active" },
-  { id: "IF002", name: "BePayOTC", status: "active" },
-  { id: "IF003", name: "CFpay", status: "active" },
-  { id: "IF004", name: "PayTrust", status: "active" },
-  { id: "IF005", name: "FastPay", status: "active" },
-]
-
-const mockSuppliers: Supplier[] = [
-  {
-    id: 1,
-    tgid: "TG001",
-    name: "供应商A",
-    tgAccount: "@supplier_a",
-    status: "active",
-    merchantId: "MERCHANT_A_001",
-    apiKey: "sk_live_abc123xyz456",
-    supportedInterfaces: ["Bitzpay", "BePayOTC", "CFpay"],
-    supportedMerchants: ["云端收银", "星际支付", "月光商户"],
-    balances: [
-      { currency: "USDT", deposit: "10,000", pending: "2,500" },
-      { currency: "BTC", deposit: "1.5", pending: "0.3" },
-      { currency: "CNY", deposit: "50,000", pending: "12,000" },
-    ],
-    channelCosts: [
-      { channelName: "支付宝", interface: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
-      { channelName: "微信支付", interface: "Bitzpay", feeRate: "0.5%", minFee: "¥1.00" },
-      { channelName: "银行转账", interface: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
-      { channelName: "PIX支付", interface: "BePayOTC", feeRate: "0.4%", minFee: "¥0.80" },
-      { channelName: "云闪付", interface: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
-      { channelName: "数字钱包", interface: "CFpay", feeRate: "0.6%", minFee: "¥1.20" },
-    ],
-  },
-  {
-    id: 2,
-    tgid: "TG002",
-    name: "供应商B",
-    tgAccount: "@supplier_b",
-    status: "active",
-    merchantId: "MERCHANT_B_002",
-    apiKey: "sk_live_def789uvw321",
-    supportedInterfaces: ["Bitzpay", "PayTrust"],
-    supportedMerchants: ["快捷支付", "安全商户"],
-    balances: [
-      { currency: "USDT", deposit: "25,000", pending: "5,000" },
-      { currency: "ETH", deposit: "10.5", pending: "2.1" },
-    ],
-    channelCosts: [
-      { channelName: "支付宝", interface: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
-      { channelName: "微信支付", interface: "Bitzpay", feeRate: "0.45%", minFee: "¥0.90" },
-      { channelName: "信用卡", interface: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
-      { channelName: "借记卡", interface: "PayTrust", feeRate: "0.55%", minFee: "¥1.10" },
-    ],
-  },
-  {
-    id: 3,
-    tgid: "TG003",
-    name: "供应商C",
-    tgAccount: "@supplier_c",
-    status: "inactive",
-    merchantId: "MERCHANT_C_003",
-    apiKey: "sk_live_ghi012rst654",
-    supportedInterfaces: ["BePayOTC", "FastPay"],
-    supportedMerchants: ["便利商户"],
-    balances: [
-      { currency: "USDT", deposit: "5,000", pending: "1,000" },
-    ],
-    channelCosts: [
-      { channelName: "银行转账", interface: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
-      { channelName: "PIX支付", interface: "BePayOTC", feeRate: "0.7%", minFee: "¥1.40" },
-      { channelName: "PayPal", interface: "FastPay", feeRate: "0.5%", minFee: "¥1.00" },
-    ],
-  },
-]
+const stateLabel = (v?: number) => (v === 1 ? "正常" : v === 0 ? "停用" : "-")
+const typeLabel = (v?: number) => (v === 1 ? "法币直充" : v === 2 ? "法币买币" : "-")
 
 export default function SuppliersPage() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(mockSuppliers)
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [isParamSheetOpen, setIsParamSheetOpen] = useState(false)
-  const [isInterfaceSheetOpen, setIsInterfaceSheetOpen] = useState(false)
-  const [isMerchantSheetOpen, setIsMerchantSheetOpen] = useState(false)
-  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false)
-  const [isFeeSheetOpen, setIsFeeSheetOpen] = useState(false)
-  const [isAddSheetOpen, setIsAddSheetOpen] = useState(false)
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null)
-  const [tempMerchantId, setTempMerchantId] = useState("")
-  const [tempApiKey, setTempApiKey] = useState("")
-  const [tempInterfaces, setTempInterfaces] = useState<string[]>([])
-  const [selectedFeeInterface, setSelectedFeeInterface] = useState("全部")
-  const [editingTgAccount, setEditingTgAccount] = useState<number | null>(null)
-  const [tempTgAccount, setTempTgAccount] = useState("")
-  const [newSupplierForm, setNewSupplierForm] = useState({
-    tgid: "",
-    name: "",
-    tgAccount: "",
-    merchantId: "",
-    apiKey: "",
-    status: "active" as "active" | "inactive" | "suspended"
+  const [providerNo, setProviderNo] = useState("")
+  const [providerName, setProviderName] = useState("")
+  const [state, setState] = useState<StateFilter>("all")
+  const [applied, setApplied] = useState({ providerNo: "", providerName: "", state: "all" as StateFilter })
+
+  const [current, setCurrent] = useState(1)
+  const size = 10
+
+  const [data, setData] = useState<PaginatedResponse<PayProvider> | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const abortRef = useRef<AbortController | null>(null)
+
+  const fetchList = useCallback(async () => {
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
+
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await payProviderApis.getPayProviderList({
+        providerNo: applied.providerNo || undefined,
+        providerName: applied.providerName || undefined,
+        state: applied.state === "all" ? undefined : Number(applied.state),
+        current,
+        size,
+        signal: abortRef.current.signal,
+      })
+      if (abortRef.current.signal.aborted) return
+      setData(res)
+    } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") return
+      setError(e instanceof Error ? e.message : "加载失败")
+      setData(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [applied, current])
+
+  useEffect(() => {
+    fetchList()
+    return () => abortRef.current?.abort()
+  }, [fetchList])
+
+  const records = data?.records ?? []
+  const total = data?.total ?? 0
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(total / size)), [total, size])
+
+  const [editOpen, setEditOpen] = useState(false)
+  const [editing, setEditing] = useState<PayProvider | null>(null)
+  const [form, setForm] = useState({
+    providerName: "",
+    providerShortName: "",
+    type: "1" as ProviderType,
+    contactName: "",
+    contactTel: "",
+    contactEmail: "",
+    state: "1" as "0" | "1",
+    remark: "",
   })
+  const [saving, setSaving] = useState(false)
 
-  const filteredSuppliers = suppliers.filter(supplier =>
-    supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.tgid.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    supplier.tgAccount.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const openParamSheet = (supplier: Supplier) => {
-    setSelectedSupplier(supplier)
-    setTempMerchantId(supplier.merchantId)
-    setTempApiKey(supplier.apiKey)
-    setIsParamSheetOpen(true)
-  }
-
-  const saveParams = () => {
-    if (selectedSupplier) {
-      setSuppliers(suppliers.map(s =>
-        s.id === selectedSupplier.id
-          ? { ...s, merchantId: tempMerchantId, apiKey: tempApiKey }
-          : s
-      ))
-      setIsParamSheetOpen(false)
-    }
-  }
-
-  const openInterfaceSheet = (supplier: Supplier) => {
-    setSelectedSupplier(supplier)
-    setTempInterfaces([...supplier.supportedInterfaces])
-    setIsInterfaceSheetOpen(true)
-  }
-
-  const toggleInterface = (interfaceName: string) => {
-    setTempInterfaces(prev =>
-      prev.includes(interfaceName)
-        ? prev.filter(i => i !== interfaceName)
-        : [...prev, interfaceName]
-    )
-  }
-
-  const saveInterfaces = () => {
-    if (selectedSupplier) {
-      setSuppliers(suppliers.map(s =>
-        s.id === selectedSupplier.id
-          ? { ...s, supportedInterfaces: tempInterfaces }
-          : s
-      ))
-      setIsInterfaceSheetOpen(false)
-    }
-  }
-
-  const openMerchantSheet = (supplier: Supplier) => {
-    setSelectedSupplier(supplier)
-    setIsMerchantSheetOpen(true)
-  }
-
-  const openBalanceDialog = (supplier: Supplier) => {
-    setSelectedSupplier(supplier)
-    setIsBalanceDialogOpen(true)
-  }
-
-  const openFeeSheet = (supplier: Supplier) => {
-    setSelectedSupplier(supplier)
-    setSelectedFeeInterface("全部")
-    setIsFeeSheetOpen(true)
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-      case "inactive":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
-      case "suspended":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "active":
-        return "活跃"
-      case "inactive":
-        return "停用"
-      case "suspended":
-        return "暂停"
-      default:
-        return status
-    }
-  }
-
-  const startEditTgAccount = (supplierId: number, currentTgAccount: string) => {
-    setEditingTgAccount(supplierId)
-    setTempTgAccount(currentTgAccount)
-  }
-
-  const saveTgAccount = () => {
-    if (editingTgAccount !== null) {
-      setSuppliers(suppliers.map(s =>
-        s.id === editingTgAccount
-          ? { ...s, tgAccount: tempTgAccount }
-          : s
-      ))
-      setEditingTgAccount(null)
-      setTempTgAccount("")
-    }
-  }
-
-  const cancelEditTgAccount = () => {
-    setEditingTgAccount(null)
-    setTempTgAccount("")
-  }
-
-  const openAddSheet = () => {
-    setNewSupplierForm({
-      tgid: "",
-      name: "",
-      tgAccount: "",
-      merchantId: "",
-      apiKey: "",
-      status: "active"
+  const openCreate = () => {
+    setEditing(null)
+    setForm({
+      providerName: "",
+      providerShortName: "",
+      type: "1",
+      contactName: "",
+      contactTel: "",
+      contactEmail: "",
+      state: "1",
+      remark: "",
     })
-    setIsAddSheetOpen(true)
+    setEditOpen(true)
   }
 
-  const addSupplier = () => {
-    if (!newSupplierForm.tgid || !newSupplierForm.name || !newSupplierForm.tgAccount) {
-      alert("请填写TGID、供应商名称和TG账号")
-      return
-    }
+  const openEdit = (p: PayProvider) => {
+    setEditing(p)
+    setForm({
+      providerName: p.providerName || "",
+      providerShortName: p.providerShortName || "",
+      type: String(p.type || 1) as ProviderType,
+      contactName: p.contactName || "",
+      contactTel: p.contactTel || "",
+      contactEmail: p.contactEmail || "",
+      state: String(p.state ?? 1) as "0" | "1",
+      remark: p.remark || "",
+    })
+    setEditOpen(true)
+  }
 
-    const maxId = suppliers.length ? Math.max(...suppliers.map(s => s.id)) : 0
-    const newId = maxId + 1
-    const newSupplier: Supplier = {
-      id: newId,
-      tgid: newSupplierForm.tgid,
-      name: newSupplierForm.name,
-      tgAccount: newSupplierForm.tgAccount,
-      status: newSupplierForm.status,
-      merchantId: newSupplierForm.merchantId,
-      apiKey: newSupplierForm.apiKey,
-      supportedInterfaces: [],
-      supportedMerchants: [],
-      balances: [],
-      channelCosts: []
+  const saveProvider = async () => {
+    if (!form.providerName.trim()) return
+    setSaving(true)
+    try {
+      const payload = {
+        providerName: form.providerName.trim(),
+        providerShortName: form.providerShortName.trim() || undefined,
+        type: Number(form.type),
+        contactName: form.contactName.trim() || undefined,
+        contactTel: form.contactTel.trim() || undefined,
+        contactEmail: form.contactEmail.trim() || undefined,
+        state: Number(form.state),
+        remark: form.remark.trim() || undefined,
+      }
+      if (editing) {
+        await payProviderApis.updatePayProvider(editing.providerNo, payload)
+      } else {
+        await payProviderApis.createPayProvider(payload)
+      }
+      setEditOpen(false)
+      await fetchList()
+    } finally {
+      setSaving(false)
     }
-    setSuppliers([...suppliers, newSupplier])
-    setIsAddSheetOpen(false)
+  }
+
+  const deleteProvider = async (p: PayProvider) => {
+    if (!confirm(`确定删除供应商 ${p.providerNo} 吗？`)) return
+    await payProviderApis.deletePayProvider(p.providerNo)
+    await fetchList()
+  }
+
+  const toggleState = async (p: PayProvider, checked: boolean) => {
+    await payProviderApis.updatePayProvider(p.providerNo, { state: checked ? 1 : 0 })
+    await fetchList()
+  }
+
+  const onSearch = () => {
+    setCurrent(1)
+    setApplied({ providerNo: providerNo.trim(), providerName: providerName.trim(), state })
+  }
+
+  const onReset = () => {
+    setProviderNo("")
+    setProviderName("")
+    setState("all")
+    setCurrent(1)
+    setApplied({ providerNo: "", providerName: "", state: "all" })
+  }
+
+  const [bindOpen, setBindOpen] = useState(false)
+  const [bindTarget, setBindTarget] = useState<PayProvider | null>(null)
+  const [bindMchNo, setBindMchNo] = useState("")
+  const [bindIfCode, setBindIfCode] = useState("FIAT_SUPPLIER")
+  const [bindList, setBindList] = useState<MchPayProviderConfig[]>([])
+  const [bindLoading, setBindLoading] = useState(false)
+  const [bindError, setBindError] = useState<string | null>(null)
+
+  const openBind = (p: PayProvider) => {
+    setBindTarget(p)
+    setBindList([])
+    setBindError(null)
+    setBindOpen(true)
+  }
+
+  const loadBind = async () => {
+    if (!bindMchNo.trim() || !bindIfCode.trim()) return
+    setBindLoading(true)
+    setBindError(null)
+    try {
+      const list = await mchPayProviderApis.getMchPayProviderConfigList({
+        mchNo: bindMchNo.trim(),
+        ifCode: bindIfCode.trim(),
+      })
+      setBindList(list)
+    } catch (e) {
+      setBindError(e instanceof Error ? e.message : "加载失败")
+      setBindList([])
+    } finally {
+      setBindLoading(false)
+    }
+  }
+
+  const bindEnabled = useMemo(() => {
+    if (!bindTarget) return false
+    const hit = bindList.find((x) => x.providerNo === bindTarget.providerNo)
+    return hit?.state === 1
+  }, [bindList, bindTarget])
+
+  const saveBindState = async (checked: boolean) => {
+    if (!bindTarget) return
+    const mchNoV = bindMchNo.trim()
+    const ifCodeV = bindIfCode.trim()
+    if (!mchNoV || !ifCodeV) return
+    await mchPayProviderApis.saveOrUpdate({
+      mchNo: mchNoV,
+      ifCode: ifCodeV,
+      providerNo: bindTarget.providerNo,
+      state: checked ? 1 : 0,
+    })
+    await loadBind()
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-6">
-      <div className="max-w-full mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">供应商管理</h1>
-          <Button
-            onClick={openAddSheet}
-            className="bg-custom-green hover:bg-custom-green/90 text-white"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            添加供应商
-          </Button>
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">供应商管理</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">支付供应商基础信息</p>
         </div>
-
-        <SearchControls
-          placeholder="搜索供应商名称、TGID或TG账号..."
-          value={searchInput}
-          onChange={setSearchInput}
-          onSearch={handleSearch}
-          onReset={handleReset}
-        />
-
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-900/50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">TGID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">名称</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">TG账号</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">状态</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">参数配置</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">支持接口</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">支持商户</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">余额查询</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">费率成本</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredSuppliers.map((supplier) => (
-                  <tr key={supplier.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/30">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      {supplier.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      {supplier.tgid}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                      {supplier.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {editingTgAccount === supplier.id ? (
-                        <div className="flex items-center gap-2">
-                          <Input
-                            value={tempTgAccount}
-                            onChange={(e) => setTempTgAccount(e.target.value)}
-                            className="h-8 text-sm py-1 px-2 w-32"
-                            placeholder="TG账号"
-                            autoFocus
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') saveTgAccount()
-                              else if (e.key === 'Escape') cancelEditTgAccount()
-                            }}
-                          />
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-green-600" onClick={saveTgAccount}>
-                            <Check className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-gray-500" onClick={cancelEditTgAccount}>
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div 
-                          className="text-gray-600 dark:text-gray-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 group"
-                          onClick={() => startEditTgAccount(supplier.id, supplier.tgAccount)}
-                        >
-                          <span>{supplier.tgAccount}</span>
-                          <Edit className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(supplier.status)}`}>
-                        {getStatusText(supplier.status)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openParamSheet(supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Edit className="w-4 h-4" />
-                        <span>编辑</span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openInterfaceSheet(supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>管理</span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openMerchantSheet(supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>查看</span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openBalanceDialog(supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>查询</span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => openFeeSheet(supplier)}
-                        className="inline-flex items-center gap-1 text-sm text-custom-green hover:text-custom-green/80 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>查看</span>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {filteredSuppliers.length === 0 && (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              暂无数据
-            </div>
-          )}
-
-          {filteredSuppliers.length > 0 && (
-            <DataTotal total={filteredSuppliers.length} />
-          )}
-        </div>
+        <Button onClick={openCreate} className="bg-custom-green hover:bg-custom-green/90 text-white">
+          <Plus className="w-4 h-4 mr-2" />
+          新增
+        </Button>
       </div>
 
-      <Sheet open={isParamSheetOpen} onOpenChange={setIsParamSheetOpen}>
-        <SheetContent className="sm:max-w-lg">
-          <SheetHeader>
-            <SheetTitle>参数配置</SheetTitle>
-            <SheetDescription>
-              编辑供应商 {selectedSupplier?.name} 的参数配置
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-6 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="merchantId">供应商ID</Label>
-              <Input
-                id="merchantId"
-                value={tempMerchantId}
-                onChange={(e) => setTempMerchantId(e.target.value)}
-                placeholder="输入供应商ID..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="apiKey">BePay供应商系统API密钥</Label>
-              <Input
-                id="apiKey"
-                type="password"
-                value={tempApiKey}
-                onChange={(e) => setTempApiKey(e.target.value)}
-                placeholder="输入BePay供应商系统API密钥..."
-              />
-            </div>
-          </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setIsParamSheetOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={saveParams} className="bg-custom-green hover:bg-custom-green/90">
-              保存
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+      <Card className="p-4 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Input placeholder="服务商号" value={providerNo} onChange={(e) => setProviderNo(e.target.value)} />
+          <Input placeholder="服务商名称" value={providerName} onChange={(e) => setProviderName(e.target.value)} />
+          <Select value={state} onValueChange={(v) => setState(v as StateFilter)}>
+            <SelectTrigger>
+              <SelectValue placeholder="状态" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">全部</SelectItem>
+              <SelectItem value="1">正常</SelectItem>
+              <SelectItem value="0">停用</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <Sheet open={isInterfaceSheetOpen} onOpenChange={setIsInterfaceSheetOpen}>
-        <SheetContent className="sm:max-w-lg">
-          <SheetHeader>
-            <SheetTitle>支持接口管理</SheetTitle>
-            <SheetDescription>
-              管理供应商 {selectedSupplier?.name} 支持的接口
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-6 space-y-3">
-            {mockInterfaces.map((iface) => (
-              <div
-                key={iface.id}
-                className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50"
-              >
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-white">{iface.name}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">ID: {iface.id}</div>
-                </div>
-                <Switch
-                  checked={tempInterfaces.includes(iface.name)}
-                  onCheckedChange={() => toggleInterface(iface.name)}
-                />
-              </div>
-            ))}
-          </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setIsInterfaceSheetOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={saveInterfaces} className="bg-custom-green hover:bg-custom-green/90">
-              保存
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-
-      <Sheet open={isMerchantSheetOpen} onOpenChange={setIsMerchantSheetOpen}>
-        <SheetContent className="sm:max-w-lg">
-          <SheetHeader>
-            <SheetTitle>支持的商户</SheetTitle>
-            <SheetDescription>
-              供应商 {selectedSupplier?.name} 当前支持的商户列表
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-6">
-            {selectedSupplier && selectedSupplier.supportedMerchants.length > 0 ? (
-              <div className="space-y-2">
-                {selectedSupplier.supportedMerchants.map((merchant, index) => (
-                  <div
-                    key={index}
-                    className="px-4 py-3 bg-gray-50 dark:bg-gray-900/30 rounded-lg border border-gray-200 dark:border-gray-700"
-                  >
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{merchant}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无支持的商户
-              </div>
+        <div className="flex items-center gap-2">
+          <Button onClick={onSearch} className="bg-custom-green hover:bg-custom-green/90 text-white" disabled={loading}>
+            搜索
+          </Button>
+          <Button onClick={onReset} variant="outline" disabled={loading}>
+            重置
+          </Button>
+          <div className="ml-auto text-sm text-gray-500 dark:text-gray-400">
+            {loading && (
+              <span className="inline-flex items-center">
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </span>
             )}
           </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setIsMerchantSheetOpen(false)}>
-              关闭
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+        </div>
+      </Card>
 
-      <Dialog open={isBalanceDialogOpen} onOpenChange={setIsBalanceDialogOpen}>
-        <DialogContent className="max-w-2xl">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>服务商号</TableHead>
+                <TableHead>名称</TableHead>
+                <TableHead>TG号</TableHead>
+                <TableHead>类型</TableHead>
+                <TableHead>状态</TableHead>
+                <TableHead>备注</TableHead>
+                <TableHead>创建时间</TableHead>
+                <TableHead className="text-right">操作</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {records.map((p) => (
+                <TableRow key={p.providerNo} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <TableCell className="font-medium">{p.providerNo}</TableCell>
+                  <TableCell>{p.providerName}</TableCell>
+                  <TableCell>{p.contactTel || "-"}</TableCell>
+                  <TableCell>{typeLabel(p.type)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">{stateLabel(p.state)}</span>
+                      <Switch checked={p.state === 1} onCheckedChange={(v) => toggleState(p, v)} />
+                    </div>
+                  </TableCell>
+                  <TableCell className="max-w-[240px] truncate">{p.remark || "-"}</TableCell>
+                  <TableCell>{p.createdAt ? p.createdAt.replace("T", " ") : "-"}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="inline-flex items-center gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => openEdit(p)} title="编辑">
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => openBind(p)} title="绑定状态">
+                        <Link2 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => deleteProvider(p)} title="删除" className="text-red-600">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+              {!loading && records.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={8} className="py-10 text-center text-sm text-gray-500 dark:text-gray-400">
+                    暂无数据
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
+          <DataTotal total={total} />
+          <div className="p-4 flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrent((p) => Math.max(1, p - 1))}
+              disabled={loading || current <= 1}
+            >
+              上一页
+            </Button>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              第 {current} / {totalPages} 页
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrent((p) => Math.min(totalPages, p + 1))}
+              disabled={loading || current >= totalPages || !(data?.hasNext ?? false)}
+            >
+              下一页
+            </Button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="p-4 text-center text-red-600 dark:text-red-400 text-sm border-t border-gray-200 dark:border-gray-700">
+            {error}
+          </div>
+        )}
+      </div>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-[640px]">
           <DialogHeader>
-            <DialogTitle>余额查询</DialogTitle>
-            <DialogDescription>
-              供应商 {selectedSupplier?.name} 的各币种余额详情
-            </DialogDescription>
+            <DialogTitle>{editing ? "编辑供应商" : "新增供应商"}</DialogTitle>
           </DialogHeader>
-          <div className="mt-4">
-            {selectedSupplier && selectedSupplier.balances.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-900/50">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">币种</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">保证金</th>
-                      <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">待结算金额</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {selectedSupplier.balances.map((balance, index) => (
-                      <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{balance.currency}</td>
-                        <td className="px-4 py-3 text-sm text-right text-green-600 dark:text-green-400 font-medium">{balance.deposit}</td>
-                        <td className="px-4 py-3 text-sm text-right text-orange-600 dark:text-orange-400 font-medium">{balance.pending}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无余额数据
-              </div>
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 py-4">
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">服务商名称 *</div>
+              <Input
+                value={form.providerName}
+                onChange={(e) => setForm((s) => ({ ...s, providerName: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">服务商简称</div>
+              <Input
+                value={form.providerShortName}
+                onChange={(e) => setForm((s) => ({ ...s, providerShortName: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">类型</div>
+              <Select value={form.type} onValueChange={(v) => setForm((s) => ({ ...s, type: v as ProviderType }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">法币直充服务商</SelectItem>
+                  <SelectItem value="2">法币买币服务商</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">状态</div>
+              <Select value={form.state} onValueChange={(v) => setForm((s) => ({ ...s, state: v as "0" | "1" }))}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">正常</SelectItem>
+                  <SelectItem value="0">停用</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">联系人</div>
+              <Input value={form.contactName} onChange={(e) => setForm((s) => ({ ...s, contactName: e.target.value }))} />
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400">TG号</div>
+              <Input value={form.contactTel} onChange={(e) => setForm((s) => ({ ...s, contactTel: e.target.value }))} />
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <div className="text-sm text-gray-600 dark:text-gray-400">邮箱</div>
+              <Input
+                value={form.contactEmail}
+                onChange={(e) => setForm((s) => ({ ...s, contactEmail: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <div className="text-sm text-gray-600 dark:text-gray-400">备注</div>
+              <Textarea value={form.remark} onChange={(e) => setForm((s) => ({ ...s, remark: e.target.value }))} rows={3} />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setEditOpen(false)} disabled={saving}>
+              取消
+            </Button>
+            <Button onClick={saveProvider} className="bg-custom-green hover:bg-custom-green/90" disabled={saving || !form.providerName.trim()}>
+              {saving ? (
+                <span className="inline-flex items-center">
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  保存中
+                </span>
+              ) : (
+                "保存"
+              )}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      <Sheet open={isFeeSheetOpen} onOpenChange={setIsFeeSheetOpen}>
-        <SheetContent className="sm:max-w-2xl">
+      <Sheet open={bindOpen} onOpenChange={setBindOpen}>
+        <SheetContent className="sm:max-w-lg overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>费率成本</SheetTitle>
-            <SheetDescription>
-              供应商 {selectedSupplier?.name} 各支付通道的成本费率（数据从供应商后台获取，仅供参考）
-            </SheetDescription>
+            <SheetTitle>绑定状态</SheetTitle>
           </SheetHeader>
           <div className="py-6 space-y-4">
-            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-              <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                <span className="font-semibold">提示：</span>以下费率数据从供应商后台实时同步获取，仅供查看，无法在此处修改。
-              </p>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              供应商：<span className="font-medium text-gray-900 dark:text-white">{bindTarget?.providerNo}</span>
+            </div>
+            <Input placeholder="商户号 mchNo" value={bindMchNo} onChange={(e) => setBindMchNo(e.target.value)} />
+            <Input placeholder="接口编码 ifCode" value={bindIfCode} onChange={(e) => setBindIfCode(e.target.value)} />
+            <div className="flex items-center gap-2">
+              <Button onClick={loadBind} disabled={bindLoading || !bindMchNo.trim() || !bindIfCode.trim()}>
+                {bindLoading ? (
+                  <span className="inline-flex items-center">
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    加载中
+                  </span>
+                ) : (
+                  "查询"
+                )}
+              </Button>
+              {bindError && <span className="text-sm text-red-600">{bindError}</span>}
             </div>
 
-            <Tabs value={selectedFeeInterface} onValueChange={setSelectedFeeInterface}>
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="全部">全部</TabsTrigger>
-                <TabsTrigger value="Bitzpay">Bitzpay</TabsTrigger>
-                <TabsTrigger value="BePayOTC">BePayOTC</TabsTrigger>
-                <TabsTrigger value="CFpay">CFpay</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            {selectedSupplier && selectedSupplier.channelCosts.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-900/50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">通道名称</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">接口来源</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">手续费率</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">单笔最低手续费</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {selectedSupplier.channelCosts
-                      .filter(cost => selectedFeeInterface === "全部" || cost.interface === selectedFeeInterface)
-                      .map((cost, index) => (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'}>
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{cost.channelName}</td>
-                          <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{cost.interface}</td>
-                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{cost.feeRate}</td>
-                          <td className="px-4 py-3 text-sm text-right text-yellow-600 dark:text-yellow-400 font-medium">{cost.minFee}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+            <div className="flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+              <div>
+                <div className="text-sm font-medium text-gray-900 dark:text-white">启用</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  {bindMchNo.trim() && bindIfCode.trim() ? `${bindMchNo.trim()} / ${bindIfCode.trim()}` : "-"}
+                </div>
               </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                暂无通道成本数据
-              </div>
-            )}
-          </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setIsFeeSheetOpen(false)}>
-              关闭
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-
-      <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
-        <SheetContent className="sm:max-w-lg">
-          <SheetHeader>
-            <SheetTitle>添加供应商</SheetTitle>
-            <SheetDescription>
-              填写新供应商的基本信息
-            </SheetDescription>
-          </SheetHeader>
-          <div className="py-6 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="add-tgid">TGID</Label>
-              <Input
-                id="add-tgid"
-                value={newSupplierForm.tgid}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, tgid: e.target.value})}
-                placeholder="例如：TG004"
+              <Switch
+                checked={bindEnabled}
+                onCheckedChange={(v) => saveBindState(v)}
+                disabled={!bindTarget || !bindMchNo.trim() || !bindIfCode.trim() || bindLoading}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="add-name">供应商名称</Label>
-              <Input
-                id="add-name"
-                value={newSupplierForm.name}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, name: e.target.value})}
-                placeholder="例如：供应商D"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="add-tgAccount">TG账号</Label>
-              <Input
-                id="add-tgAccount"
-                value={newSupplierForm.tgAccount}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, tgAccount: e.target.value})}
-                placeholder="例如：@supplier_d"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="add-merchantId">供应商ID</Label>
-              <Input
-                id="add-merchantId"
-                value={newSupplierForm.merchantId}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, merchantId: e.target.value})}
-                placeholder="输入供应商ID..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="add-apiKey">BePay供应商系统API密钥</Label>
-              <Input
-                id="add-apiKey"
-                type="password"
-                value={newSupplierForm.apiKey}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, apiKey: e.target.value})}
-                placeholder="输入BePay供应商系统API密钥..."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="add-status">状态</Label>
-              <select
-                id="add-status"
-                value={newSupplierForm.status}
-                onChange={(e) => setNewSupplierForm({...newSupplierForm, status: e.target.value as "active" | "inactive" | "suspended"})}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-custom-green"
-              >
-                <option value="active">活跃</option>
-                <option value="inactive">停用</option>
-                <option value="suspended">暂停</option>
-              </select>
             </div>
           </div>
-          <SheetFooter>
-            <Button variant="outline" onClick={() => setIsAddSheetOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={addSupplier} className="bg-custom-green hover:bg-custom-green/90">
-              添加
-            </Button>
-          </SheetFooter>
         </SheetContent>
       </Sheet>
     </div>
   )
 }
+

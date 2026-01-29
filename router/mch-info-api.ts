@@ -1,15 +1,3 @@
-/**
- * 法币用户列表（商户管理）API服务
- * 
- * 根据法币管理模块 API 接口文档实现
- * 文档版本: 1.0.0
- * 最后更新: 2026-01-29
- * 
- * 基础说明:
- * - 所有接口需要在请求头中携带认证信息: Authorization: Bearer <token>
- * - 统一响应格式: { code: 0, msg: "success", data: {}, sign: null }
- * - 分页响应格式: { code: 0, msg: "success", data: { records: [], total: 100, current: 1, hasNext: true } }
- */
 import { storageUtils } from '../utils/storage-util';
 
 export interface MchApp {
@@ -106,7 +94,6 @@ export interface UpdateMchInfoRequest {
 
 class MchInfoAPI {
   private getPaymentApiBaseUrl(): string {
-    // 文档中的 base URL 是 http://pay.ubtai.biz/manager
     const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz/manager';
     if (typeof window !== 'undefined' && 
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
@@ -161,6 +148,7 @@ class MchInfoAPI {
       method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
       body?: any;
       headers?: Record<string, string>;
+      signal?: AbortSignal;
     }
   ): Promise<T> {
     const baseURL = this.getPaymentApiBaseUrl();
@@ -188,6 +176,10 @@ class MchInfoAPI {
       method: options?.method || 'GET',
       headers,
     };
+
+    if (options?.signal) {
+      requestOptions.signal = options.signal;
+    }
 
     if (options?.body) {
       if (options.headers?.['Content-Type'] === 'application/x-www-form-urlencoded') {
@@ -227,8 +219,7 @@ class MchInfoAPI {
     return result.data !== undefined ? result.data : result;
   }
 
-  // GET /api/mchInfo | 权限：ENT_MCH_LIST
-  async getMchInfoList(params?: GetMchInfoListParams): Promise<PaginatedResponse<MchInfo>> {
+  async getMchInfoList(params?: GetMchInfoListParams & { signal?: AbortSignal }): Promise<PaginatedResponse<MchInfo>> {
     const queryParams = new URLSearchParams();
     
     if (params?.mchNo) {
@@ -256,15 +247,13 @@ class MchInfoAPI {
     const queryString = queryParams.toString();
     const url = `/api/mchInfo${queryString ? `?${queryString}` : ''}`;
     
-    return await this.paymentApiRequest<PaginatedResponse<MchInfo>>(url);
+    return await this.paymentApiRequest<PaginatedResponse<MchInfo>>(url, { signal: params?.signal });
   }
 
-  // GET /api/mchInfo/{mchNo} | 权限：ENT_MCH_INFO_VIEW 或 ENT_MCH_INFO_EDIT
-  async getMchInfoDetail(mchNo: string): Promise<MchInfo> {
-    return await this.paymentApiRequest<MchInfo>(`/api/mchInfo/${mchNo}`);
+  async getMchInfoDetail(mchNo: string, options?: { signal?: AbortSignal }): Promise<MchInfo> {
+    return await this.paymentApiRequest<MchInfo>(`/api/mchInfo/${mchNo}`, { signal: options?.signal });
   }
 
-  // POST /api/mchInfo | 权限：ENT_MCH_INFO_ADD
   async createMchInfo(data: CreateMchInfoRequest): Promise<void> {
     return await this.paymentApiRequest<void>('/api/mchInfo', {
       method: 'POST',
@@ -272,7 +261,6 @@ class MchInfoAPI {
     });
   }
 
-  // PUT /api/mchInfo/{mchNo} | 权限：ENT_MCH_INFO_EDIT
   async updateMchInfo(mchNo: string, data: UpdateMchInfoRequest): Promise<void> {
     return await this.paymentApiRequest<void>(`/api/mchInfo/${mchNo}`, {
       method: 'PUT',
@@ -280,7 +268,6 @@ class MchInfoAPI {
     });
   }
 
-  // DELETE /api/mchInfo/{mchNo} | 权限：ENT_MCH_INFO_DEL
   async deleteMchInfo(mchNo: string): Promise<void> {
     return await this.paymentApiRequest<void>(`/api/mchInfo/${mchNo}`, {
       method: 'DELETE',
