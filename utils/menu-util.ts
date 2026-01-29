@@ -108,8 +108,13 @@ function getIconByCode(code: string): any {
 }
 
 // 根据菜单code生成路径
-function generatePathFromCode(code: string, parentCode?: string): string {
-  // 路径映射表：根据菜单code映射到实际路由路径
+function generatePathFromCode(code: string, module?: string, parentCode?: string): string {
+  // 如果指定了模块，直接使用模块路径拼接code
+  if (module) {
+    return `/admin/${module}/${code}`
+  }
+  
+  // 路径映射表：根据菜单code映射到实际路由路径（仅用于没有指定模块的情况）
   const pathMap: Record<string, string> = {
     // 财务管理相关
     management: '/admin/orders/finance',
@@ -149,16 +154,16 @@ export type UIMenuGroup = { group: string; icon?: any; items: UIMenuItem[] }
 export type UIMenuConfig = UIMenuItem[] | UIMenuGroup[]
 
 // 将API菜单项转换为UI菜单项
-function convertApiMenuItemToUI(apiItem: ApiMenuItem, parentCode?: string): UIMenuItem {
+function convertApiMenuItemToUI(apiItem: ApiMenuItem, module?: string, parentCode?: string): UIMenuItem {
   return {
-    path: generatePathFromCode(apiItem.code, parentCode),
+    path: generatePathFromCode(apiItem.code, module, parentCode),
     icon: getIconByCode(apiItem.code),
     label: apiItem.name,
   }
 }
 
 // 转换API菜单数据为UI格式
-export function convertMenuDataToUI(apiMenuData: ApiMenuItem[]): UIMenuConfig {
+export function convertMenuDataToUI(apiMenuData: ApiMenuItem[], module?: string): UIMenuConfig {
   const groups: UIMenuGroup[] = []
   const flatItems: UIMenuItem[] = []
   
@@ -168,12 +173,12 @@ export function convertMenuDataToUI(apiMenuData: ApiMenuItem[]): UIMenuConfig {
       const group: UIMenuGroup = {
         group: item.name,
         icon: getIconByCode(item.code),
-        items: item.children.map(child => convertApiMenuItemToUI(child, item.code)),
+        items: item.children.map(child => convertApiMenuItemToUI(child, module, item.code)),
       }
       groups.push(group)
     } else {
       // 没有children，直接添加为平面项
-      flatItems.push(convertApiMenuItemToUI(item))
+      flatItems.push(convertApiMenuItemToUI(item, module))
     }
   }
   
@@ -188,5 +193,5 @@ export function convertMenuDataToUI(apiMenuData: ApiMenuItem[]): UIMenuConfig {
 export function getMenuByModule(module: string, apiMenuData: ApiMenuItem[]): UIMenuConfig {
   // 根据模块过滤菜单
   // 这里可以根据实际需求进行过滤
-  return convertMenuDataToUI(apiMenuData)
+  return convertMenuDataToUI(apiMenuData, module)
 }

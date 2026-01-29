@@ -250,6 +250,16 @@ class APIRequest {
         this.handleTokenExpired();
       }
       const text = await response.text().catch(() => '');
+      
+      // 检查是否是HTML响应（通常是错误页面）
+      if (text.trim().startsWith('<!') || text.includes('<html')) {
+        console.error('API returned HTML instead of JSON:', text.substring(0, 500));
+        throw new APIError(
+          `服务器返回了HTML页面而不是JSON数据。请检查API地址是否正确。HTTP ${response.status}`,
+          response.status
+        );
+      }
+      
       throw new APIError(
         text || `HTTP ${response.status} ${response.statusText}`,
         response.status
@@ -260,8 +270,18 @@ class APIRequest {
     
     if (!contentType?.includes('application/json')) {
       const text = await response.text();
+      
+      // 检查是否是HTML响应
+      if (text.trim().startsWith('<!') || text.includes('<html')) {
+        console.error('API returned HTML instead of JSON:', text.substring(0, 500));
+        throw new APIError(
+          `服务器返回了HTML页面而不是JSON数据。请检查API地址是否正确。Content-Type: ${contentType}`,
+          response.status
+        );
+      }
+      
       throw new APIError(
-        text || `HTTP ${response.status} ${response.statusText}`,
+        `期望JSON响应，但收到: ${contentType}. ${text.substring(0, 200)}`,
         response.status
       );
     }
@@ -310,6 +330,12 @@ class APIRequest {
     try {
       // 从options中排除headers，避免覆盖已构建的headers（包括Token）
       const { headers: _, skipAuth: __, urlPrefix: ___, ...restOptions } = options || {};
+      
+      // 开发环境下记录请求URL以便调试
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[API Request]', 'GET', fullUrl);
+      }
+      
       const response = await fetch(fullUrl, {
         method: 'GET',
         headers,

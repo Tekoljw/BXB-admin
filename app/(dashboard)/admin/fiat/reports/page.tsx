@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { ChevronDown, ChevronRight, TrendingUp, Download, Calendar, Loader2 } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -30,26 +30,16 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { fiatReportsApis } from "@/router/fiat-reports-api"
+import type {
+  ReportsSummaryResponse,
+  DailyReportRecord,
+  MonthlyReportRecord,
+  PaginatedResponse,
+} from "@/router/fiat-reports-api"
+import { APIError } from "@/utils/api-request-util"
 
-interface ChannelProfit {
-  channelName: string
-  collectionRateProfit: number
-  collectionFixedProfit: number
-  payoutRateProfit: number
-  payoutFixedProfit: number
-  totalProfit: number
-}
-
-interface MerchantProfit {
-  merchantId: string
-  merchantName: string
-  collectionRateProfit: number
-  collectionFixedProfit: number
-  payoutRateProfit: number
-  payoutFixedProfit: number
-  totalProfit: number
-}
-
+// 统一的报表记录接口（用于显示）
 interface ReportRow {
   period: string
   activeMerchants: number
@@ -59,107 +49,7 @@ interface ReportRow {
   payoutRateProfit: number
   payoutFixedProfit: number
   totalProfit: number
-  topChannels: ChannelProfit[]
-  topMerchants: MerchantProfit[]
 }
-
-const mockDailyReports: ReportRow[] = [
-  {
-    period: "2024-11-09",
-    activeMerchants: 45,
-    activeAgents: 12,
-    collectionRateProfit: 12500.50,
-    collectionFixedProfit: 3200.00,
-    payoutRateProfit: 8900.25,
-    payoutFixedProfit: 2100.50,
-    totalProfit: 26700.25,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 5200.00, collectionFixedProfit: 1200.00, payoutRateProfit: 3500.00, payoutFixedProfit: 800.00, totalProfit: 10700.00 },
-      { channelName: "微信支付", collectionRateProfit: 4100.00, collectionFixedProfit: 900.00, payoutRateProfit: 2800.00, payoutFixedProfit: 650.00, totalProfit: 8450.00 },
-      { channelName: "银行转账", collectionRateProfit: 2300.00, collectionFixedProfit: 600.00, payoutRateProfit: 1800.00, payoutFixedProfit: 420.00, totalProfit: 5120.00 },
-      { channelName: "PIX支付", collectionRateProfit: 900.50, collectionFixedProfit: 500.00, payoutRateProfit: 800.25, payoutFixedProfit: 230.50, totalProfit: 2430.25 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 6800.00, collectionFixedProfit: 1500.00, payoutRateProfit: 4200.00, payoutFixedProfit: 1000.00, totalProfit: 13500.00 },
-      { merchantId: "M002", merchantName: "星际支付", collectionRateProfit: 3200.50, collectionFixedProfit: 900.00, payoutRateProfit: 2500.25, payoutFixedProfit: 600.50, totalProfit: 7200.25 },
-      { merchantId: "M003", merchantName: "月光商户", collectionRateProfit: 2500.00, collectionFixedProfit: 800.00, payoutRateProfit: 2200.00, payoutFixedProfit: 500.00, totalProfit: 6000.00 },
-    ]
-  },
-  {
-    period: "2024-11-08",
-    activeMerchants: 42,
-    activeAgents: 11,
-    collectionRateProfit: 11200.00,
-    collectionFixedProfit: 2900.00,
-    payoutRateProfit: 8100.50,
-    payoutFixedProfit: 1950.00,
-    totalProfit: 24150.50,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 4800.00, collectionFixedProfit: 1100.00, payoutRateProfit: 3200.00, payoutFixedProfit: 750.00, totalProfit: 9850.00 },
-      { channelName: "微信支付", collectionRateProfit: 3900.00, collectionFixedProfit: 850.00, payoutRateProfit: 2600.00, payoutFixedProfit: 600.00, totalProfit: 7950.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 6200.00, collectionFixedProfit: 1400.00, payoutRateProfit: 3900.00, payoutFixedProfit: 950.00, totalProfit: 12450.00 },
-    ]
-  },
-  {
-    period: "2024-11-07",
-    activeMerchants: 40,
-    activeAgents: 10,
-    collectionRateProfit: 10500.00,
-    collectionFixedProfit: 2700.00,
-    payoutRateProfit: 7500.00,
-    payoutFixedProfit: 1800.00,
-    totalProfit: 22500.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 4500.00, collectionFixedProfit: 1000.00, payoutRateProfit: 3000.00, payoutFixedProfit: 700.00, totalProfit: 9200.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 5800.00, collectionFixedProfit: 1300.00, payoutRateProfit: 3600.00, payoutFixedProfit: 900.00, totalProfit: 11600.00 },
-    ]
-  },
-]
-
-const mockMonthlyReports: ReportRow[] = [
-  {
-    period: "2024-11",
-    activeMerchants: 58,
-    activeAgents: 15,
-    collectionRateProfit: 385000.00,
-    collectionFixedProfit: 96000.00,
-    payoutRateProfit: 275000.00,
-    payoutFixedProfit: 65000.00,
-    totalProfit: 821000.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 165000.00, collectionFixedProfit: 38000.00, payoutRateProfit: 110000.00, payoutFixedProfit: 25000.00, totalProfit: 338000.00 },
-      { channelName: "微信支付", collectionRateProfit: 128000.00, collectionFixedProfit: 28000.00, payoutRateProfit: 88000.00, payoutFixedProfit: 20000.00, totalProfit: 264000.00 },
-      { channelName: "银行转账", collectionRateProfit: 72000.00, collectionFixedProfit: 18000.00, payoutRateProfit: 55000.00, payoutFixedProfit: 13000.00, totalProfit: 158000.00 },
-      { channelName: "PIX支付", collectionRateProfit: 20000.00, collectionFixedProfit: 12000.00, payoutRateProfit: 22000.00, payoutFixedProfit: 7000.00, totalProfit: 61000.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 210000.00, collectionFixedProfit: 48000.00, payoutRateProfit: 140000.00, payoutFixedProfit: 32000.00, totalProfit: 430000.00 },
-      { merchantId: "M002", merchantName: "星际支付", collectionRateProfit: 96000.00, collectionFixedProfit: 27000.00, payoutRateProfit: 75000.00, payoutFixedProfit: 18000.00, totalProfit: 216000.00 },
-      { merchantId: "M003", merchantName: "月光商户", collectionRateProfit: 79000.00, collectionFixedProfit: 21000.00, payoutRateProfit: 60000.00, payoutFixedProfit: 15000.00, totalProfit: 175000.00 },
-    ]
-  },
-  {
-    period: "2024-10",
-    activeMerchants: 52,
-    activeAgents: 14,
-    collectionRateProfit: 356000.00,
-    collectionFixedProfit: 89000.00,
-    payoutRateProfit: 252000.00,
-    payoutFixedProfit: 60000.00,
-    totalProfit: 757000.00,
-    topChannels: [
-      { channelName: "支付宝", collectionRateProfit: 152000.00, collectionFixedProfit: 35000.00, payoutRateProfit: 101000.00, payoutFixedProfit: 23000.00, totalProfit: 311000.00 },
-      { channelName: "微信支付", collectionRateProfit: 118000.00, collectionFixedProfit: 26000.00, payoutRateProfit: 81000.00, payoutFixedProfit: 18000.00, totalProfit: 243000.00 },
-    ],
-    topMerchants: [
-      { merchantId: "M001", merchantName: "云端收银", collectionRateProfit: 195000.00, collectionFixedProfit: 44000.00, payoutRateProfit: 128000.00, payoutFixedProfit: 29000.00, totalProfit: 396000.00 },
-    ]
-  },
-]
 
 export default function ReportsPage() {
   const [reportType, setReportType] = useState<"daily" | "monthly">("daily")
@@ -170,8 +60,246 @@ export default function ReportsPage() {
   const [endDate, setEndDate] = useState("")
   const [customDays, setCustomDays] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  
+  // API数据状态
+  const [summaryData, setSummaryData] = useState<ReportsSummaryResponse | null>(null)
+  const [dailyReports, setDailyReports] = useState<PaginatedResponse<DailyReportRecord> | null>(null)
+  const [monthlyReports, setMonthlyReports] = useState<PaginatedResponse<MonthlyReportRecord> | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize] = useState(10)
+  const [error, setError] = useState<string | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
 
-  const currentReports = reportType === "daily" ? mockDailyReports : mockMonthlyReports
+  // 转换API数据为显示格式
+  const currentReports: ReportRow[] = useMemo(() => {
+    if (reportType === "daily" && dailyReports) {
+      return dailyReports.records.map(record => ({
+        period: record.reportDate,
+        activeMerchants: record.activeMerchantCount,
+        activeAgents: record.activeAgentCount,
+        collectionRateProfit: record.collectRateProfit,
+        collectionFixedProfit: record.collectBasicProfit,
+        payoutRateProfit: record.payoutRateProfit,
+        payoutFixedProfit: record.payoutBasicProfit,
+        totalProfit: record.totalProfit,
+      }))
+    } else if (reportType === "monthly" && monthlyReports) {
+      return monthlyReports.records.map(record => ({
+        period: record.reportMonth,
+        activeMerchants: record.activeMerchantCount,
+        activeAgents: record.activeAgentCount,
+        collectionRateProfit: record.collectRateProfit,
+        collectionFixedProfit: record.collectBasicProfit,
+        payoutRateProfit: record.payoutRateProfit,
+        payoutFixedProfit: record.payoutBasicProfit,
+        totalProfit: record.totalProfit,
+      }))
+    }
+    return []
+  }, [reportType, dailyReports, monthlyReports])
+
+  // 获取查询参数
+  const getQueryParams = useCallback(() => {
+    const today = new Date()
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    let queryDate: string | undefined
+    let queryMonth: string | undefined
+
+    if (timeRange === "today") {
+      queryDate = today.toISOString().split('T')[0]
+    } else if (timeRange === "yesterday") {
+      queryDate = yesterday.toISOString().split('T')[0]
+    } else if (timeRange === "custom" && startDate && endDate) {
+      // 自定义日期范围：使用开始日期
+      queryDate = startDate
+    } else if (timeRange === "week") {
+      const weekAgo = new Date(today)
+      weekAgo.setDate(weekAgo.getDate() - 7)
+      queryDate = weekAgo.toISOString().split('T')[0]
+    } else if (timeRange === "month") {
+      const monthAgo = new Date(today)
+      monthAgo.setDate(monthAgo.getDate() - 30)
+      queryDate = monthAgo.toISOString().split('T')[0]
+    }
+
+    if (reportType === "monthly" && timeRange !== "custom") {
+      queryMonth = today.toISOString().slice(0, 7) // yyyy-MM
+    }
+
+    return { queryDate, queryMonth }
+  }, [timeRange, startDate, endDate, reportType])
+
+  // 获取概览数据
+  const fetchSummary = useCallback(async () => {
+    try {
+      const data = await fiatReportsApis.getSummary()
+      setSummaryData(data)
+      setError(null)
+    } catch (err) {
+      console.error('Failed to fetch summary:', err)
+      const errorMessage = err instanceof APIError ? err.message : '获取概览数据失败'
+      setError(errorMessage)
+      toast.error('加载失败', {
+        description: errorMessage
+      })
+    }
+  }, [])
+
+  // 获取每日报表
+  const fetchDailyReports = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const { queryDate } = getQueryParams()
+      const data = await fiatReportsApis.getDailyReports({
+        queryDate,
+        pageNumber: currentPage,
+        pageSize,
+      })
+      setDailyReports(data)
+      setError(null)
+    } catch (err) {
+      console.error('Failed to fetch daily reports:', err)
+      const errorMessage = err instanceof APIError ? err.message : '获取每日报表失败'
+      setError(errorMessage)
+      toast.error('加载失败', {
+        description: errorMessage
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [getQueryParams, currentPage, pageSize])
+
+  // 获取每月报表
+  const fetchMonthlyReports = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const { queryMonth } = getQueryParams()
+      const data = await fiatReportsApis.getMonthlyReports({
+        queryMonth,
+        pageNumber: currentPage,
+        pageSize,
+      })
+      setMonthlyReports(data)
+      setError(null)
+    } catch (err) {
+      console.error('Failed to fetch monthly reports:', err)
+      const errorMessage = err instanceof APIError ? err.message : '获取每月报表失败'
+      setError(errorMessage)
+      toast.error('加载失败', {
+        description: errorMessage
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [getQueryParams, currentPage, pageSize])
+
+  // 使用ref防止重复请求
+  const fetchingRef = useRef<string>('')
+  const prevQueryParamsRef = useRef<string>('')
+
+  // 初始化加载数据 - 只在组件挂载时执行一次
+  useEffect(() => {
+    fetchSummary()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // 空依赖数组确保只执行一次
+
+  // 加载报表数据 - 合并逻辑，避免重复请求
+  useEffect(() => {
+    // 生成查询参数的标识（不包括页码）
+    const queryParamsKey = `${reportType}-${timeRange}-${startDate}-${endDate}`
+    
+    // 如果查询参数改变了，重置页码并清除请求标识
+    if (prevQueryParamsRef.current && prevQueryParamsRef.current !== queryParamsKey) {
+      prevQueryParamsRef.current = queryParamsKey
+      fetchingRef.current = '' // 清除请求标识，允许下次请求
+      setCurrentPage(1)
+      return // 页码重置会触发下一次useEffect执行
+    }
+    
+    // 更新查询参数标识（首次加载时）
+    if (!prevQueryParamsRef.current) {
+      prevQueryParamsRef.current = queryParamsKey
+    }
+    
+    // 生成请求的唯一标识（包括页码）
+    const requestKey = `${queryParamsKey}-${currentPage}-${pageSize}`
+    
+    // 如果正在请求相同的参数，跳过
+    if (fetchingRef.current === requestKey) {
+      return
+    }
+    
+    fetchingRef.current = requestKey
+    
+    const loadReports = async () => {
+      try {
+        // 直接在useEffect中计算查询参数，避免依赖getQueryParams函数
+        const today = new Date()
+        const yesterday = new Date(today)
+        yesterday.setDate(yesterday.getDate() - 1)
+
+        let queryDate: string | undefined
+        let queryMonth: string | undefined
+
+        if (timeRange === "today") {
+          queryDate = today.toISOString().split('T')[0]
+        } else if (timeRange === "yesterday") {
+          queryDate = yesterday.toISOString().split('T')[0]
+        } else if (timeRange === "custom" && startDate && endDate) {
+          queryDate = startDate
+        } else if (timeRange === "week") {
+          const weekAgo = new Date(today)
+          weekAgo.setDate(weekAgo.getDate() - 7)
+          queryDate = weekAgo.toISOString().split('T')[0]
+        } else if (timeRange === "month") {
+          const monthAgo = new Date(today)
+          monthAgo.setDate(monthAgo.getDate() - 30)
+          queryDate = monthAgo.toISOString().split('T')[0]
+        }
+
+        if (reportType === "monthly" && timeRange !== "custom") {
+          queryMonth = today.toISOString().slice(0, 7) // yyyy-MM
+        }
+        
+        setIsLoading(true)
+        
+        if (reportType === "daily") {
+          const data = await fiatReportsApis.getDailyReports({
+            queryDate,
+            pageNumber: currentPage,
+            pageSize,
+          })
+          setDailyReports(data)
+          setError(null)
+        } else {
+          const data = await fiatReportsApis.getMonthlyReports({
+            queryMonth,
+            pageNumber: currentPage,
+            pageSize,
+          })
+          setMonthlyReports(data)
+          setError(null)
+        }
+      } catch (err) {
+        console.error('Failed to fetch reports:', err)
+        const errorMessage = err instanceof APIError ? err.message : '获取报表失败'
+        setError(errorMessage)
+        toast.error('加载失败', {
+          description: errorMessage
+        })
+      } finally {
+        setIsLoading(false)
+        // 请求完成后清除标识，允许下次请求
+        if (fetchingRef.current === requestKey) {
+          fetchingRef.current = ''
+        }
+      }
+    }
+    
+    loadReports()
+  }, [reportType, timeRange, startDate, endDate, currentPage, pageSize])
 
   const toggleRowExpansion = (period: string) => {
     const newExpanded = new Set(expandedRows)
@@ -213,8 +341,6 @@ export default function ReportsPage() {
       setShowDatePicker(true)
     } else {
       setTimeRange(value)
-      setIsLoading(true)
-      setTimeout(() => setIsLoading(false), 500)
     }
   }
 
@@ -235,135 +361,136 @@ export default function ReportsPage() {
     setCustomDays(days)
     setTimeRange("custom")
     setShowDatePicker(false)
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      toast.success("时间范围已更新", {
-        description: `已选择 ${days} 天的数据范围`
-      })
-    }, 500)
+    toast.success("时间范围已更新", {
+      description: `已选择 ${days} 天的数据范围`
+    })
   }
 
-  const topStats = useMemo(() => {
-    const getMultiplier = () => {
-      const multipliers: Record<string, number> = {
-        today: 1,
-        yesterday: 0.92,
-        week: 7,
-        month: 30,
-      }
-      if (timeRange === "custom") {
-        return customDays
-      }
-      return multipliers[timeRange] || 1
-    }
-    const multiplier = getMultiplier()
+  const handleReportTypeChange = (value: string) => {
+    setReportType(value as "daily" | "monthly")
+    setCurrentPage(1)
+  }
 
-    const baseActiveMerchants = 45
-    const baseTotalMerchants = 120
-    const baseTodayCollection = 234567.89
-    const baseTodayPayout = 189234.56
-    const baseYesterdayCollection = 212345.67
-    const baseYesterdayPayout = 178923.45
-    const baseTodayDisbursement = 156789.23
-    const baseYesterdayDisbursement = 145678.91
-    const baseMerchantAssets = 5678900.00
-    const basePaymentFunds = 2345678.00
-    const baseTodayFeeProfit = 12345.67
-    const baseTodayExchangeProfit = 8765.43
-    const baseYesterdayFeeProfit = 11234.56
-    const baseYesterdayExchangeProfit = 7654.32
-    const baseMonthlyFeeProfit = 345678.90
-    const baseMonthlyExchangeProfit = 234567.89
+  // 使用API返回的概览数据
+  const topStats = useMemo(() => {
+    if (!summaryData) {
+      return {
+        activeMerchants: 0,
+        totalMerchants: 0,
+        todayCollection: "0.00",
+        todayPayout: "0.00",
+        yesterdayCollection: "0.00",
+        yesterdayPayout: "0.00",
+        todayDisbursement: "0.00",
+        yesterdayDisbursement: "0.00",
+        merchantAssets: "0.00",
+        paymentFunds: "0.00",
+        todayFeeProfit: "0.00",
+        todayExchangeProfit: "0.00",
+        todayTotalProfit: "0.00",
+        yesterdayFeeProfit: "0.00",
+        yesterdayExchangeProfit: "0.00",
+        yesterdayTotalProfit: "0.00",
+        monthlyFeeProfit: "0.00",
+        monthlyExchangeProfit: "0.00",
+        monthlyTotalProfit: "0.00",
+      }
+    }
 
     return {
-      activeMerchants: Math.floor(baseActiveMerchants * Math.min(multiplier / 7, 1.2)),
-      totalMerchants: Math.floor(baseTotalMerchants * Math.min(multiplier / 7, 1.3)),
-      todayCollection: (baseTodayCollection * multiplier * 0.15).toFixed(2),
-      todayPayout: (baseTodayPayout * multiplier * 0.15).toFixed(2),
-      yesterdayCollection: (baseYesterdayCollection * multiplier * 0.14).toFixed(2),
-      yesterdayPayout: (baseYesterdayPayout * multiplier * 0.14).toFixed(2),
-      todayDisbursement: (baseTodayDisbursement * multiplier * 0.13).toFixed(2),
-      yesterdayDisbursement: (baseYesterdayDisbursement * multiplier * 0.12).toFixed(2),
-      merchantAssets: (baseMerchantAssets * Math.min(multiplier / 10, 1.5)).toFixed(2),
-      paymentFunds: (basePaymentFunds * Math.min(multiplier / 10, 1.5)).toFixed(2),
-      todayFeeProfit: (baseTodayFeeProfit * multiplier * 0.15).toFixed(2),
-      todayExchangeProfit: (baseTodayExchangeProfit * multiplier * 0.15).toFixed(2),
-      todayTotalProfit: ((baseTodayFeeProfit + baseTodayExchangeProfit) * multiplier * 0.15).toFixed(2),
-      yesterdayFeeProfit: (baseYesterdayFeeProfit * multiplier * 0.14).toFixed(2),
-      yesterdayExchangeProfit: (baseYesterdayExchangeProfit * multiplier * 0.14).toFixed(2),
-      yesterdayTotalProfit: ((baseYesterdayFeeProfit + baseYesterdayExchangeProfit) * multiplier * 0.14).toFixed(2),
-      monthlyFeeProfit: (baseMonthlyFeeProfit * Math.min(multiplier / 5, 1.8)).toFixed(2),
-      monthlyExchangeProfit: (baseMonthlyExchangeProfit * Math.min(multiplier / 5, 1.8)).toFixed(2),
-      monthlyTotalProfit: ((baseMonthlyFeeProfit + baseMonthlyExchangeProfit) * Math.min(multiplier / 5, 1.8)).toFixed(2),
+      activeMerchants: summaryData.merchantStats.activeCount,
+      totalMerchants: summaryData.merchantStats.totalCount,
+      todayCollection: summaryData.todayBusiness.collectAmount.toFixed(2),
+      todayPayout: summaryData.todayBusiness.payoutAmount.toFixed(2),
+      yesterdayCollection: summaryData.yesterdayBusiness.collectAmount.toFixed(2),
+      yesterdayPayout: summaryData.yesterdayBusiness.payoutAmount.toFixed(2),
+      todayDisbursement: summaryData.payoutStats.todayPayout.toFixed(2),
+      yesterdayDisbursement: summaryData.payoutStats.yesterdayPayout.toFixed(2),
+      merchantAssets: summaryData.fundsStats.merchantAssets.toFixed(2),
+      paymentFunds: summaryData.fundsStats.transferAssets.toFixed(2),
+      todayFeeProfit: summaryData.todayProfit.feeProfit.toFixed(2),
+      todayExchangeProfit: summaryData.todayProfit.exchangeProfit.toFixed(2),
+      todayTotalProfit: summaryData.todayProfit.totalProfit.toFixed(2),
+      yesterdayFeeProfit: summaryData.yesterdayProfit.feeProfit.toFixed(2),
+      yesterdayExchangeProfit: summaryData.yesterdayProfit.exchangeProfit.toFixed(2),
+      yesterdayTotalProfit: summaryData.yesterdayProfit.totalProfit.toFixed(2),
+      monthlyFeeProfit: summaryData.monthProfit.feeProfit.toFixed(2),
+      monthlyExchangeProfit: summaryData.monthProfit.exchangeProfit.toFixed(2),
+      monthlyTotalProfit: summaryData.monthProfit.totalProfit.toFixed(2),
     }
-  }, [timeRange, customDays])
+  }, [summaryData])
 
-  const handleExportCSV = () => {
-    try {
-      const timeRangeText = {
-        today: "今天",
-        yesterday: "昨天",
-        week: "最近7天",
-        month: "最近30天",
-        custom: `自定义 (${customDays}天)`
-      }[timeRange] || "全部"
+  // 计算导出日期范围
+  const getExportDateRange = (): { startDate: string; endDate: string } | null => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    let exportStartDate: Date
+    let exportEndDate: Date = new Date(today)
+    exportEndDate.setDate(exportEndDate.getDate() + 1) // 结束日期设为明天，确保包含今天
 
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0]
-      const currentTime = new Date().toLocaleString('zh-CN')
+    if (timeRange === "today") {
+      exportStartDate = new Date(today)
+    } else if (timeRange === "yesterday") {
+      exportStartDate = new Date(today)
+      exportStartDate.setDate(exportStartDate.getDate() - 1)
+      exportEndDate = new Date(today)
+    } else if (timeRange === "week") {
+      exportStartDate = new Date(today)
+      exportStartDate.setDate(exportStartDate.getDate() - 7)
+    } else if (timeRange === "month") {
+      exportStartDate = new Date(today)
+      exportStartDate.setDate(exportStartDate.getDate() - 30)
+    } else if (timeRange === "custom" && startDate && endDate) {
+      // 自定义日期范围：使用用户选择的日期
+      const customStart = new Date(startDate)
+      const customEnd = new Date(endDate)
+      if (isNaN(customStart.getTime()) || isNaN(customEnd.getTime())) {
+        return null
+      }
+      if (customEnd < customStart) {
+        return null
+      }
+      return {
+        startDate: startDate,
+        endDate: endDate
+      }
+    } else {
+      // 默认：最近30天
+      exportStartDate = new Date(today)
+      exportStartDate.setDate(exportStartDate.getDate() - 30)
+    }
 
-      let csvContent = "\uFEFF"
-      csvContent += `法币经营报表\n`
-      csvContent += `导出时间,${currentTime}\n`
-      csvContent += `时间范围,${timeRangeText}\n\n`
+    return {
+      startDate: exportStartDate.toISOString().split('T')[0],
+      endDate: exportEndDate.toISOString().split('T')[0]
+    }
+  }
 
-      csvContent += `核心指标\n`
-      csvContent += `指标名称,数值\n`
-      csvContent += `活跃商户数,${topStats.activeMerchants}\n`
-      csvContent += `总商户数,${topStats.totalMerchants}\n`
-      csvContent += `今日代收,${topStats.todayCollection} USDT\n`
-      csvContent += `今日代付,${topStats.todayPayout} USDT\n`
-      csvContent += `昨日代收,${topStats.yesterdayCollection} USDT\n`
-      csvContent += `昨日代付,${topStats.yesterdayPayout} USDT\n`
-      csvContent += `今日下发,${topStats.todayDisbursement} USDT\n`
-      csvContent += `昨日下发,${topStats.yesterdayDisbursement} USDT\n`
-      csvContent += `商户资产,${topStats.merchantAssets} USDT\n`
-      csvContent += `代付金,${topStats.paymentFunds} USDT\n`
-      csvContent += `今日手续费利润,${topStats.todayFeeProfit} USDT\n`
-      csvContent += `今日下发汇率利润,${topStats.todayExchangeProfit} USDT\n`
-      csvContent += `今日总利润,${topStats.todayTotalProfit} USDT\n`
-      csvContent += `昨日手续费利润,${topStats.yesterdayFeeProfit} USDT\n`
-      csvContent += `昨日下发利润,${topStats.yesterdayExchangeProfit} USDT\n`
-      csvContent += `昨日总利润,${topStats.yesterdayTotalProfit} USDT\n`
-      csvContent += `本月手续费利润,${topStats.monthlyFeeProfit} USDT\n`
-      csvContent += `本月下发汇率利润,${topStats.monthlyExchangeProfit} USDT\n`
-      csvContent += `本月总利润,${topStats.monthlyTotalProfit} USDT\n\n`
-
-      csvContent += `${reportType === "daily" ? "每日" : "每月"}报表详情\n`
-      csvContent += `${reportType === "daily" ? "日期" : "月份"},活跃商户数,活跃代理商数,代收费率利润,代收单笔利润,代付费率利润,代付单笔利润,总利润\n`
-      currentReports.forEach(report => {
-        csvContent += `${report.period},${report.activeMerchants},${report.activeAgents},${report.collectionRateProfit},${report.collectionFixedProfit},${report.payoutRateProfit},${report.payoutFixedProfit},${report.totalProfit}\n`
+  const handleExportCSV = async () => {
+    const dateRange = getExportDateRange()
+    
+    if (!dateRange) {
+      toast.error("日期范围错误", {
+        description: "请选择有效的日期范围"
       })
+      return
+    }
 
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-      const link = document.createElement("a")
-      const url = URL.createObjectURL(blob)
-      link.setAttribute("href", url)
-      link.setAttribute("download", `法币经营报表_${timestamp}.csv`)
-      link.style.visibility = 'hidden'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-
+    setIsExporting(true)
+    try {
+      await fiatReportsApis.exportCSV(dateRange.startDate, dateRange.endDate)
       toast.success("导出成功", {
-        description: "报表已成功导出为CSV文件"
+        description: `报表已成功导出（${dateRange.startDate} 至 ${dateRange.endDate}）`
       })
     } catch (error) {
       console.error('Export error:', error)
+      const errorMessage = error instanceof Error ? error.message : '导出过程中出现错误，请重试'
       toast.error("导出失败", {
-        description: "导出过程中出现错误，请重试"
+        description: errorMessage
       })
+    } finally {
+      setIsExporting(false)
     }
   }
 
@@ -379,9 +506,22 @@ export default function ReportsPage() {
             查看法币业务的整体经营数据和利润分析
           </p>
         </div>
-        <Button onClick={handleExportCSV} className="bg-custom-green hover:bg-green-600">
-          <Download className="w-4 h-4 mr-2" />
-          导出CSV
+        <Button 
+          onClick={handleExportCSV} 
+          className="bg-custom-green hover:bg-green-600"
+          disabled={isExporting}
+        >
+          {isExporting ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              导出中...
+            </>
+          ) : (
+            <>
+              <Download className="w-4 h-4 mr-2" />
+              导出CSV
+            </>
+          )}
         </Button>
       </div>
 
@@ -519,7 +659,7 @@ export default function ReportsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <Tabs value={reportType} onValueChange={(value) => setReportType(value as "daily" | "monthly")}>
+                <Tabs value={reportType} onValueChange={handleReportTypeChange}>
                   <TabsList className="grid w-full max-w-md grid-cols-2">
                     <TabsTrigger value="daily">每日报表</TabsTrigger>
                     <TabsTrigger value="monthly">每月报表</TabsTrigger>
@@ -603,69 +743,8 @@ export default function ReportsPage() {
                       {expandedRows.has(report.period) && (
                         <TableRow>
                           <TableCell colSpan={9} className="bg-gray-50 dark:bg-gray-900/50 p-6">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                              <div>
-                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                                  利润前10支付渠道
-                                </h3>
-                                <div className="space-y-2">
-                                  {report.topChannels.slice(0, 10).map((channel, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-                                    >
-                                      <div className="flex items-center justify-between mb-2">
-                                        <span className="font-medium text-gray-900 dark:text-white">
-                                          {idx + 1}. {channel.channelName}
-                                        </span>
-                                        <span className="font-bold text-green-700 dark:text-green-300">
-                                          {formatCurrency(channel.totalProfit)}
-                                        </span>
-                                      </div>
-                                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                        <div>代收费率: {formatCurrency(channel.collectionRateProfit)}</div>
-                                        <div>代收单笔: {formatCurrency(channel.collectionFixedProfit)}</div>
-                                        <div>代付费率: {formatCurrency(channel.payoutRateProfit)}</div>
-                                        <div>代付单笔: {formatCurrency(channel.payoutFixedProfit)}</div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              <div>
-                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                                  利润前10商户
-                                </h3>
-                                <div className="space-y-2">
-                                  {report.topMerchants.slice(0, 10).map((merchant, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-                                    >
-                                      <div className="flex items-center justify-between mb-2">
-                                        <div>
-                                          <span className="font-medium text-gray-900 dark:text-white">
-                                            {idx + 1}. {merchant.merchantName}
-                                          </span>
-                                          <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                            ({merchant.merchantId})
-                                          </span>
-                                        </div>
-                                        <span className="font-bold text-green-700 dark:text-green-300">
-                                          {formatCurrency(merchant.totalProfit)}
-                                        </span>
-                                      </div>
-                                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                        <div>代收费率: {formatCurrency(merchant.collectionRateProfit)}</div>
-                                        <div>代收单笔: {formatCurrency(merchant.collectionFixedProfit)}</div>
-                                        <div>代付费率: {formatCurrency(merchant.payoutRateProfit)}</div>
-                                        <div>代付单笔: {formatCurrency(merchant.payoutFixedProfit)}</div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
+                            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+                              暂无详细数据
                             </div>
                           </TableCell>
                         </TableRow>
@@ -676,7 +755,53 @@ export default function ReportsPage() {
               </Table>
             </div>
 
-            <DataTotal total={currentReports.length} />
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <DataTotal 
+                  total={
+                    reportType === "daily" 
+                      ? (dailyReports?.total || 0)
+                      : (monthlyReports?.total || 0)
+                  } 
+                />
+                {(() => {
+                  const totalPages = reportType === "daily" 
+                    ? (dailyReports?.pages || 0)
+                    : (monthlyReports?.pages || 0)
+                  
+                  if (totalPages <= 1) return null
+                  
+                  return (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1 || isLoading}
+                      >
+                        上一页
+                      </Button>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        第 {currentPage} / {totalPages} 页
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage >= totalPages || isLoading}
+                      >
+                        下一页
+                      </Button>
+                    </div>
+                  )
+                })()}
+              </div>
+            </div>
+            {error && (
+              <div className="p-4 text-center text-red-600 dark:text-red-400 text-sm">
+                {error}
+              </div>
+            )}
           </div>
         </>
       )}

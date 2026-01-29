@@ -397,7 +397,7 @@ export default function AdminSidebarV2({ currentModule, currentPage, onNavigate,
         
         // 无论API返回什么，都使用API数据（即使是空数组）
         if (apiData) {
-          const convertedMenu = convertMenuDataToUI(apiData)
+          const convertedMenu = convertMenuDataToUI(apiData, currentModule)
           console.log(`[Menu] Converted menu for module ${currentModule}:`, convertedMenu)
           // 存入缓存（即使是空数组也缓存，表示API已调用）
           menuCache.set(currentModule, convertedMenu)
