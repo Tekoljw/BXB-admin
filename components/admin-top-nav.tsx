@@ -3,15 +3,31 @@
 import React, { useState, useRef, useEffect } from "react"
 import { useTheme } from "@/contexts/theme-context"
 import { useAdmin } from "@/contexts/admin-context"
-import { authApis } from "@/router/auth-api"
 import { 
+  BarChart3, 
+  Users, 
+  MessageSquare, 
+  Share2, 
+  DollarSign, 
+  Shield, 
+  CreditCard, 
+  TrendingUp, 
+  Copy, 
+  PiggyBank, 
+  Percent, 
+  Wallet, 
+  Store, 
+  FileCheck,
   Sun,
   Moon,
   LogOut,
   Menu,
   ChevronLeft,
   ChevronRight,
+  Repeat,
+  Activity,
   User,
+  LineChart,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -22,8 +38,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { convertSubSystemToModule, sortSystemsByWeights, getSysCodeByModuleId } from "@/utils/module-mapping-util"
-import type { SubSystem } from "@/router/auth-api"
 
 interface AdminTopNavProps {
   currentModule: string
@@ -31,55 +45,34 @@ interface AdminTopNavProps {
   onToggleSidebar?: () => void
 }
 
-// 硬编码的模块列表（作为备用，当API失败时使用）
-const fallbackModules = [
-  { id: "permissions", label: "权限", icon: null },
-  { id: "orders", label: "财务", icon: null },
-  { id: "system", label: "审核", icon: null },
-  { id: "marketing", label: "运营", icon: null },
-  { id: "users", label: "用户", icon: null },
-  { id: "crypto", label: "Crypto", icon: null },
+const modules = [
+  { id: "permissions", label: "权限", icon: Shield },
+  { id: "orders", label: "财务", icon: Wallet },
+  { id: "system", label: "审核", icon: FileCheck },
+  { id: "marketing", label: "运营", icon: Activity },
+  { id: "users", label: "用户", icon: Users },
+  { id: "crypto", label: "Crypto", icon: Repeat },
+  { id: "fiat", label: "法币", icon: Store },
+  { id: "commission", label: "佣金", icon: Percent },
+  { id: "spot", label: "现货", icon: TrendingUp },
+  { id: "futures", label: "合约", icon: TrendingUp },
+  { id: "copytrade", label: "跟单", icon: Copy },
+  { id: "options", label: "期权", icon: LineChart },
+  { id: "c2c", label: "C2C", icon: DollarSign },
+  { id: "escrow", label: "担保", icon: Shield },
+  { id: "finance", label: "理财", icon: PiggyBank },
+  { id: "ucard", label: "U卡", icon: CreditCard },
+  { id: "social", label: "社交", icon: Share2 },
+  { id: "im", label: "IM", icon: MessageSquare },
 ]
 
 export default function AdminTopNav({ currentModule, onModuleChange, onToggleSidebar }: AdminTopNavProps) {
   const { theme, setTheme } = useTheme()
   const { logout, userInfo } = useAdmin()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const [showLeftScroll, setShowLeftScroll] = useState(false)
   const [showRightScroll, setShowRightScroll] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [modules, setModules] = useState<Array<{ id: string; label: string; icon: any; sysCode: string }>>([])
-  const [isLoadingModules, setIsLoadingModules] = useState(true)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // 从API获取系统列表
-  useEffect(() => {
-    const loadModules = async () => {
-      try {
-        setIsLoadingModules(true)
-        const systems = await authApis.getUserSys()
-        // 排除旧系统
-        const filteredSystems = systems.filter(sys => !sys.sysCode.includes('old'))
-        // 按权重排序
-        const sortedSystems = sortSystemsByWeights(filteredSystems)
-        // 转换为模块格式
-        const convertedModules = sortedSystems.map(sys => convertSubSystemToModule(sys))
-        setModules(convertedModules)
-      } catch (error) {
-        console.error('Failed to load modules from API:', error)
-        // API失败时使用备用模块
-        setModules(fallbackModules.map(m => ({ ...m, sysCode: getSysCodeByModuleId(m.id) })))
-      } finally {
-        setIsLoadingModules(false)
-      }
-    }
-    
-    loadModules()
-  }, [])
 
   const handleModuleClick = (moduleId: string) => {
     onModuleChange(moduleId)
@@ -162,35 +155,29 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           className="flex-1 flex items-center gap-1 overflow-x-auto scrollbar-hide relative"
           style={{ maxWidth: 'calc(100vw - 250px)' }}
         >
-          {isLoadingModules ? (
-            <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              加载中...
-            </div>
-          ) : (
-            modules.map((module) => {
-              const Icon = module.icon
-              const isActive = currentModule === module.id
-              
-              return (
-                <button
-                  key={module.id}
-                  onClick={() => handleModuleClick(module.id)}
-                  className={`
-                    flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0
-                    ${isActive 
-                      ? 'bg-custom-green text-white'
-                      : theme === 'dark'
-                        ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                    }
-                  `}
-                >
-                  {Icon && <Icon className="w-4 h-4" />}
-                  <span>{module.label}</span>
-                </button>
-              )
-            })
-          )}
+          {modules.map((module) => {
+            const Icon = module.icon
+            const isActive = currentModule === module.id
+
+            return (
+              <button
+                key={module.id}
+                onClick={() => handleModuleClick(module.id)}
+                className={`
+                  flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0
+                  ${isActive 
+                    ? 'bg-custom-green text-white'
+                    : theme === 'dark'
+                      ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  }
+                `}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{module.label}</span>
+              </button>
+            )
+          })}
         </div>
 
         {/* 右侧滚动按钮 */}
@@ -227,7 +214,7 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
           <Menu className="w-6 h-6" />
         </button>
         <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-          {isLoadingModules ? '加载中...' : (modules.find(m => m.id === currentModule)?.label || 'BeDAO 管理后台')}
+          {modules.find(m => m.id === currentModule)?.label || 'BeDAO 管理后台'}
         </span>
       </div>
 
@@ -334,37 +321,31 @@ export default function AdminTopNav({ currentModule, onModuleChange, onToggleSid
 
               {/* 菜单列表 */}
               <div className="flex-1 overflow-y-auto p-4">
-                {isLoadingModules ? (
-                  <div className={`text-sm text-center py-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                    加载中...
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {modules.map((module) => {
-                      const Icon = module.icon
-                      const isActive = currentModule === module.id
-                      
-                      return (
-                        <button
-                          key={module.id}
-                          onClick={() => handleModuleClick(module.id)}
-                          className={`
-                            w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
-                            ${isActive 
-                              ? 'bg-custom-green text-white'
-                              : theme === 'dark'
-                                ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                            }
-                          `}
-                        >
-                          {Icon && <Icon className="w-5 h-5" />}
-                          <span className="font-medium">{module.label}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
+                <div className="space-y-2">
+                  {modules.map((module) => {
+                    const Icon = module.icon
+                    const isActive = currentModule === module.id
+
+                    return (
+                      <button
+                        key={module.id}
+                        onClick={() => handleModuleClick(module.id)}
+                        className={`
+                          w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors
+                          ${isActive 
+                            ? 'bg-custom-green text-white'
+                            : theme === 'dark'
+                              ? 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                          }
+                        `}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="font-medium">{module.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
               {/* 底部操作按钮 */}

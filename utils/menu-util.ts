@@ -94,6 +94,18 @@ const iconMap: Record<string, any> = {
   transferHistoryExport: ArrowDownToLine,
   fundTrans: RefreshCw,
   applyExcel: FileText,
+
+  // 法币模块二级菜单（/admin/fiat/*）
+  reports: FileBarChart,
+  users: Users,
+  currencies: DollarSign,
+  suppliers: Store,
+  interfaces: Network,
+  channels: Network,
+  commission: Percent,
+  orders: ShoppingCart,
+  'freeze-records': Lock,
+  'exchange-orders': Globe,
   
   // 通用图标
   default: FileText,

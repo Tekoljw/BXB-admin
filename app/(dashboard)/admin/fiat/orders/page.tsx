@@ -1,20 +1,12 @@
 "use client"
 
-import React, { useState } from "react"
-import { Send, RefreshCw, Lock, Info, RotateCcw } from "lucide-react"
-import { DataTotal } from "@/components/data-total"
-import { SearchControls } from "@/components/admin/search-controls"
-import { useDeferredSearch } from "@/hooks/use-deferred-search"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Info, Send, RefreshCw, Lock, Unlock, RotateCcw, FileDown, Loader2, Eye } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { DataTotal } from "@/components/data-total"
 import {
   Select,
   SelectContent,
@@ -22,453 +14,542 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { payOrderApis, type PayOrder, type PaginatedResponse } from "@/router/pay-order-api"
+import { fiatApis, type FiatCurrency } from "@/router/fiat-api"
+import { payWaysApis, type PayWay } from "@/router/pay-ways-api"
 
-interface Order {
-  id: string
-  upstreamOrderId: string
-  downstreamOrderId: string
-  merchantId: string
-  currency: string
-  paymentChannel: string
-  amount: number
-  fee: number
-  createdAt: string
-  paidAt?: string
-  lastResent?: string
-  status: "pending" | "success" | "failed"
-  orderType: "collection" | "payout"
+const dl = (blob: Blob, filename: string) => {
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  window.URL.revokeObjectURL(url)
 }
 
-const mockCollectionOrders: Order[] = [
-  {
-    id: "ORD2024110601",
-    upstreamOrderId: "UP20241106001",
-    downstreamOrderId: "DOWN20241106001",
-    merchantId: "M001",
-    currency: "CNY",
-    paymentChannel: "支付宝",
-    amount: 1500.00,
-    fee: 7.50,
-    createdAt: "2024-11-06 10:30:00",
-    paidAt: "2024-11-06 10:32:15",
-    status: "success",
-    orderType: "collection"
-  },
-  {
-    id: "ORD2024110602",
-    upstreamOrderId: "UP20241106002",
-    downstreamOrderId: "DOWN20241106002",
-    merchantId: "M002",
-    currency: "CNY",
-    paymentChannel: "微信支付",
-    amount: 2800.00,
-    fee: 14.00,
-    createdAt: "2024-11-06 10:45:00",
-    paidAt: "2024-11-06 10:46:30",
-    status: "success",
-    orderType: "collection"
-  },
-  {
-    id: "ORD2024110603",
-    upstreamOrderId: "UP20241106003",
-    downstreamOrderId: "DOWN20241106003",
-    merchantId: "M001",
-    currency: "CNY",
-    paymentChannel: "银行转账",
-    amount: 5000.00,
-    fee: 15.00,
-    createdAt: "2024-11-06 11:00:00",
-    status: "pending",
-    orderType: "collection"
-  },
-  {
-    id: "ORD2024110604",
-    upstreamOrderId: "UP20241106004",
-    downstreamOrderId: "DOWN20241106004",
-    merchantId: "M003",
-    currency: "BRL",
-    paymentChannel: "PIX支付",
-    amount: 3200.00,
-    fee: 25.60,
-    createdAt: "2024-11-06 11:15:00",
-    paidAt: "2024-11-06 11:16:05",
-    status: "success",
-    orderType: "collection"
-  },
-  {
-    id: "ORD2024110605",
-    upstreamOrderId: "UP20241106005",
-    downstreamOrderId: "DOWN20241106005",
-    merchantId: "M004",
-    currency: "INR",
-    paymentChannel: "UPI支付",
-    amount: 8500.00,
-    fee: 51.00,
-    createdAt: "2024-11-06 11:30:00",
-    status: "failed",
-    orderType: "collection"
-  },
-  {
-    id: "ORD2024110606",
-    upstreamOrderId: "UP20241106006",
-    downstreamOrderId: "DOWN20241106006",
-    merchantId: "M002",
-    currency: "CNY",
-    paymentChannel: "支付宝",
-    amount: 950.00,
-    fee: 4.75,
-    createdAt: "2024-11-06 11:45:00",
-    paidAt: "2024-11-06 11:47:20",
-    status: "success",
-    orderType: "collection"
-  },
-]
-
-const mockPayoutOrders: Order[] = [
-  {
-    id: "PAYOUT2024110601",
-    upstreamOrderId: "UP20241106101",
-    downstreamOrderId: "DOWN20241106101",
-    merchantId: "M001",
-    currency: "CNY",
-    paymentChannel: "支付宝",
-    amount: 3500.00,
-    fee: 17.50,
-    createdAt: "2024-11-06 14:30:00",
-    paidAt: "2024-11-06 14:32:15",
-    status: "success",
-    orderType: "payout"
-  },
-  {
-    id: "PAYOUT2024110602",
-    upstreamOrderId: "UP20241106102",
-    downstreamOrderId: "DOWN20241106102",
-    merchantId: "M002",
-    currency: "CNY",
-    paymentChannel: "微信支付",
-    amount: 5800.00,
-    fee: 29.00,
-    createdAt: "2024-11-06 14:45:00",
-    paidAt: "2024-11-06 14:46:30",
-    status: "success",
-    orderType: "payout"
-  },
-  {
-    id: "PAYOUT2024110603",
-    upstreamOrderId: "UP20241106103",
-    downstreamOrderId: "DOWN20241106103",
-    merchantId: "M001",
-    currency: "CNY",
-    paymentChannel: "银行转账",
-    amount: 12000.00,
-    fee: 36.00,
-    createdAt: "2024-11-06 15:00:00",
-    status: "pending",
-    orderType: "payout"
-  },
-  {
-    id: "PAYOUT2024110604",
-    upstreamOrderId: "UP20241106104",
-    downstreamOrderId: "DOWN20241106104",
-    merchantId: "M003",
-    currency: "BRL",
-    paymentChannel: "PIX支付",
-    amount: 8200.00,
-    fee: 65.60,
-    createdAt: "2024-11-06 15:15:00",
-    status: "failed",
-    orderType: "payout"
-  },
-]
-
-const currencies = ["全部", "CNY", "BRL", "INR", "USD", "EUR"]
-const paymentChannelsMap: Record<string, string[]> = {
-  "全部": ["全部"],
-  "CNY": ["全部", "支付宝", "微信支付", "银行转账"],
-  "BRL": ["全部", "PIX支付"],
-  "INR": ["全部", "UPI支付"],
-  "USD": ["全部", "信用卡", "银行转账"],
-  "EUR": ["全部", "SEPA转账", "信用卡"],
+const toNum = (v: string) => {
+  const n = Number(v.trim())
+  return Number.isFinite(n) ? n : undefined
 }
 
-const getCollectionInfo = (channel: string) => {
-  const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
-    "支付宝": {
-      type: "支付宝收款",
-      details: [
-        { label: "收款账号", value: "bepay_collect@alipay.com" },
-        { label: "收款姓名", value: "BeDAO支付服务有限公司" },
-        { label: "收款二维码", value: "https://qr.alipay.com/abc123456" }
-      ]
-    },
-    "微信支付": {
-      type: "微信收款",
-      details: [
-        { label: "收款账号", value: "BeDAO-Pay" },
-        { label: "商户号", value: "1234567890" },
-        { label: "收款二维码", value: "weixin://wxpay/bizpayurl?pr=abc1234" }
-      ]
-    },
-    "银行转账": {
-      type: "银行转账收款",
-      details: [
-        { label: "收款银行", value: "中国工商银行" },
-        { label: "收款账号", value: "6222 0212 3456 7890 123" },
-        { label: "收款户名", value: "BeDAO支付服务有限公司" },
-        { label: "开户行", value: "工商银行深圳分行" }
-      ]
-    },
-    "PIX支付": {
-      type: "PIX收款",
-      details: [
-        { label: "PIX Key", value: "bepay@pix.com.br" },
-        { label: "收款人", value: "BeDAO Pagamentos Ltda" },
-        { label: "PIX QR Code", value: "00020126580014br.gov.bcb.pix..." }
-      ]
-    },
-    "UPI支付": {
-      type: "UPI收款",
-      details: [
-        { label: "UPI ID", value: "bepay@upi" },
-        { label: "收款人", value: "BeDAO Payments India" },
-        { label: "UPI QR Code", value: "upi://pay?pa=bepay@upi&pn=BeDAO" }
-      ]
-    }
-  }
-  return infoMap[channel] || {
-    type: "其他收款方式",
-    details: [{ label: "收款信息", value: "暂无详细信息" }]
-  }
+const tryJson = (v: unknown): any | undefined => {
+  if (!v) return undefined
+  if (typeof v === "object") return v
+  if (typeof v !== "string") return undefined
+  const s = v.trim()
+  if (!s) return undefined
+  try {
+    return JSON.parse(s)
+  } catch {}
+  return undefined
 }
 
-const getPaymentInfo = (channel: string) => {
-  const infoMap: Record<string, { type: string; details: { label: string; value: string }[] }> = {
-    "支付宝": {
-      type: "支付宝付款",
-      details: [
-        { label: "付款账号", value: "user_12345@alipay.com" },
-        { label: "付款姓名", value: "张三" },
-        { label: "备注信息", value: "BeDAO代付订单" }
-      ]
-    },
-    "微信支付": {
-      type: "微信付款",
-      details: [
-        { label: "付款账号", value: "微信号: wxid_abc123" },
-        { label: "付款姓名", value: "李四" },
-        { label: "备注信息", value: "BeDAO代付订单" }
-      ]
-    },
-    "银行转账": {
-      type: "银行转账付款",
-      details: [
-        { label: "收款银行", value: "中国建设银行" },
-        { label: "收款账号", value: "6217 0012 3456 7890 123" },
-        { label: "收款户名", value: "王五" },
-        { label: "开户行", value: "建设银行上海分行" }
-      ]
-    },
-    "PIX支付": {
-      type: "PIX付款",
-      details: [
-        { label: "收款PIX Key", value: "user@pix.com.br" },
-        { label: "收款人", value: "João Silva" },
-        { label: "付款备注", value: "BeDAO Payout" }
-      ]
-    },
-    "UPI支付": {
-      type: "UPI付款",
-      details: [
-        { label: "收款UPI ID", value: "user@upi" },
-        { label: "收款人", value: "Rahul Kumar" },
-        { label: "付款备注", value: "BeDAO Payout" }
-      ]
-    }
-  }
-  return infoMap[channel] || {
-    type: "其他付款方式",
-    details: [{ label: "付款信息", value: "暂无详细信息" }]
+const normalizeChannelName = (s: string) => s.replace(/支付$/g, "")
+
+const pickSearchField = (keyword: string): { payOrderId?: string; mchNo?: string } => {
+  const k = keyword.trim()
+  if (!k) return {}
+  if (/^M\d+/i.test(k)) return { mchNo: k }
+  if (/^\d{6,}$/.test(k)) return { mchNo: k }
+  return { payOrderId: k }
+}
+
+type OrderTypeTab = "collection" | "payout"
+
+const toPayType = (t: OrderTypeTab) => (t === "collection" ? "1" : "2")
+
+const stateMeta = (v: unknown) => {
+  const n = Number(v)
+  switch (n) {
+    case 0:
+      return {
+        label: "订单生成",
+        className: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+      }
+    case 1:
+      return {
+        label: "支付中",
+        className: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200",
+      }
+    case 2:
+      return {
+        label: "支付成功",
+        className: "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200",
+      }
+    case 3:
+      return {
+        label: "支付失败",
+        className: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200",
+      }
+    case 4:
+      return {
+        label: "已撤销",
+        className: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+      }
+    case 5:
+      return {
+        label: "已退款",
+        className: "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200",
+      }
+    case 6:
+      return {
+        label: "订单关闭",
+        className: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+      }
+    default:
+      return {
+        label: v === undefined || v === null ? "-" : String(v),
+        className: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200",
+      }
   }
 }
 
 export default function FiatOrdersPage() {
-  const [orderTypeTab, setOrderTypeTab] = useState<"collection" | "payout">("collection")
-  const [collectionOrders, setCollectionOrders] = useState<Order[]>(mockCollectionOrders)
-  const [payoutOrders, setPayoutOrders] = useState<Order[]>(mockPayoutOrders)
-  const { searchInput, setSearchInput, searchTerm, handleSearch, handleReset } = useDeferredSearch()
-  const [selectedCurrency, setSelectedCurrency] = useState("全部")
-  const [selectedChannel, setSelectedChannel] = useState("全部")
-  const [selectedStatus, setSelectedStatus] = useState("全部")
-  const [isResendDialogOpen, setIsResendDialogOpen] = useState(false)
-  const [isReverifyDialogOpen, setIsReverifyDialogOpen] = useState(false)
-  const [isFreezeDialogOpen, setIsFreezeDialogOpen] = useState(false)
-  const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
-  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
-  const [currentOrder, setCurrentOrder] = useState<Order | null>(null)
-  const [actionMessage, setActionMessage] = useState<string | null>(null)
+  const [orderTypeTab, setOrderTypeTab] = useState<OrderTypeTab>("collection")
 
-  const orders = orderTypeTab === "collection" ? collectionOrders : payoutOrders
-  const setOrders = orderTypeTab === "collection" ? setCollectionOrders : setPayoutOrders
+  const [currencyTab, setCurrencyTab] = useState("all")
+  const [wayCodeTab, setWayCodeTab] = useState("all")
+  const [state, setState] = useState("all")
+  const [searchKeyword, setSearchKeyword] = useState("")
 
-  const availableChannels = paymentChannelsMap[selectedCurrency] || ["全部"]
+  const [current, setCurrent] = useState(1)
+  const size = 10
 
-  const handleCurrencyChange = (currency: string) => {
-    setSelectedCurrency(currency)
-    setSelectedChannel("全部")
-  }
+  const [data, setData] = useState<PaginatedResponse<PayOrder> | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
-  const handleOrderTypeChange = (value: string) => {
-    setOrderTypeTab(value as "collection" | "payout")
-    setSelectedCurrency("全部")
-    setSelectedChannel("全部")
-    setSelectedStatus("全部")
-    handleReset()
-  }
+  const [enabledCurrencies, setEnabledCurrencies] = useState<string[]>([])
+  const [payWayCurrencies, setPayWayCurrencies] = useState<string[]>([])
+  const [wayOptions, setWayOptions] = useState<Array<{ wayCode: string; wayName?: string }>>([])
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = 
-      order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.upstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.downstreamOrderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.merchantId.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesCurrency = selectedCurrency === "全部" || order.currency === selectedCurrency
-    const matchesChannel = selectedChannel === "全部" || order.paymentChannel === selectedChannel
-    const matchesStatus = selectedStatus === "全部" || 
-      (selectedStatus === "待支付" && order.status === "pending") ||
-      (selectedStatus === "成功" && order.status === "success") ||
-      (selectedStatus === "失败" && order.status === "failed")
-    
-    return matchesSearch && matchesCurrency && matchesChannel && matchesStatus
-  })
+  const [applied, setApplied] = useState<{
+    orderType: OrderTypeTab
+    currency: string
+    wayCode: string
+    state: string
+    keyword: string
+  }>({ orderType: "collection", currency: "all", wayCode: "all", state: "all", keyword: "" })
 
-  const handleResend = () => {
-    if (currentOrder) {
-      const updatedOrders = orders.map(order => {
-        if (order.id === currentOrder.id) {
-          return { ...order, lastResent: new Date().toLocaleString('zh-CN') }
-        }
-        return order
+  const fetchList = useCallback(async () => {
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
+    setLoading(true)
+    setError(null)
+
+    const k = pickSearchField(applied.keyword)
+    try {
+      const payType = toPayType(applied.orderType)
+      const res = await payOrderApis.getPayOrders({
+        pageNumber: current,
+        pageSize: size,
+        payType,
+        currency: applied.currency === "all" ? undefined : applied.currency,
+        wayCode: applied.wayCode === "all" ? undefined : applied.wayCode,
+        state: applied.state === "all" ? undefined : applied.state,
+        ...k,
+        signal: abortRef.current.signal,
       })
-      setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 的通知已补发`)
-      setTimeout(() => setActionMessage(null), 3000)
-      setIsResendDialogOpen(false)
-      setCurrentOrder(null)
+      if (abortRef.current.signal.aborted) return
+      setData(res)
+    } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") return
+      setError(e instanceof Error ? e.message : "加载失败")
+      setData(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [applied, current])
+
+  useEffect(() => {
+    fetchList()
+    return () => abortRef.current?.abort()
+  }, [fetchList])
+
+  const records = data?.records ?? []
+  const total = data?.total ?? 0
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(total / size)), [total, size])
+
+  useEffect(() => {
+    const ac = new AbortController()
+    ;(async () => {
+      try {
+        const enabled: FiatCurrency[] = []
+        let page = 1
+        for (;;) {
+          const res = await fiatApis.getFiatList({ pageNumber: page, pageSize: 500, signal: ac.signal })
+          if (ac.signal.aborted) return
+          enabled.push(...(res.records || []))
+          if (!res.hasNext) break
+          page += 1
+          if (page > 50) break
+        }
+
+        const set = new Set<string>()
+        for (const r of enabled) {
+          const code = String(r.currencyCode || "").trim()
+          if (!code) continue
+          if (r.isShow && !r.deleted) set.add(code)
+        }
+        setEnabledCurrencies(Array.from(set))
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return
+        if (ac.signal.aborted) return
+        setEnabledCurrencies([])
+      }
+    })()
+    return () => ac.abort()
+  }, [])
+
+  useEffect(() => {
+    const ac = new AbortController()
+    ;(async () => {
+      try {
+        const all: PayWay[] = []
+        let page = 1
+        const payType = toPayType(orderTypeTab)
+        for (;;) {
+          const res = await payWaysApis.getPayWays({ payType, pageNumber: page, pageSize: 500, signal: ac.signal })
+          if (ac.signal.aborted) return
+          all.push(...(res.records || []))
+          if (!res.hasNext) break
+          page += 1
+          if (page > 50) break
+        }
+
+        const set = new Set<string>()
+        for (const r of all) {
+          const c = String((r as any).currency || "").trim()
+          if (c) set.add(c)
+        }
+        setPayWayCurrencies(Array.from(set))
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return
+        if (ac.signal.aborted) return
+        setPayWayCurrencies([])
+      }
+    })()
+    return () => ac.abort()
+  }, [orderTypeTab])
+
+  const currencyOptions = useMemo(() => {
+    const enabledSet = new Set(enabledCurrencies)
+    const paySet = new Set(payWayCurrencies)
+    const list: string[] = []
+    if (enabledSet.size && paySet.size) {
+      for (const c of enabledSet) if (paySet.has(c)) list.push(c)
+    } else if (enabledSet.size) {
+      list.push(...enabledCurrencies)
+    } else if (paySet.size) {
+      list.push(...payWayCurrencies)
+    }
+    return ["all", ...Array.from(new Set(list))]
+  }, [enabledCurrencies, payWayCurrencies])
+
+  useEffect(() => {
+    if (currencyTab !== "all" && !currencyOptions.includes(currencyTab)) {
+      setCurrencyTab("all")
+      setWayCodeTab("all")
+      setCurrent(1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyOptions.join("|")])
+
+  useEffect(() => {
+    const ac = new AbortController()
+    ;(async () => {
+      try {
+        if (currencyTab === "all") {
+          setWayOptions([])
+          return
+        }
+        const payType = toPayType(orderTypeTab)
+        const all: PayWay[] = []
+        let page = 1
+        const currency = currencyTab
+        for (;;) {
+          const res = await payWaysApis.getPayWays({
+            payType,
+            currency,
+            pageNumber: page,
+            pageSize: 500,
+            signal: ac.signal,
+          })
+          if (ac.signal.aborted) return
+          all.push(...(res.records || []))
+          if (!res.hasNext) break
+          page += 1
+          if (page > 50) break
+        }
+
+        const m = new Map<string, { wayCode: string; wayName?: string }>()
+        for (const r of all) {
+          const code = String((r as any).wayCode || "").trim()
+          if (!code) continue
+          if (!m.has(code)) m.set(code, { wayCode: code, wayName: (r as any).wayName })
+        }
+        setWayOptions(Array.from(m.values()))
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return
+        if (ac.signal.aborted) return
+        setWayOptions([])
+      }
+    })()
+    return () => ac.abort()
+  }, [orderTypeTab, currencyTab])
+
+  const wayCodes = useMemo(() => {
+    return ["all", ...wayOptions.map((x) => x.wayCode)]
+  }, [wayOptions])
+
+  const wayLabel = useMemo(() => {
+    const m = new Map<string, string>()
+    for (const x of wayOptions) {
+      const code = String(x.wayCode || "").trim()
+      if (!code) continue
+      const name = String(x.wayName || "").trim()
+      if (name) m.set(code, name)
+    }
+    return m
+  }, [wayOptions])
+
+  const onSearch = () => {
+    setCurrent(1)
+    setApplied({
+      orderType: orderTypeTab,
+      currency: currencyTab,
+      wayCode: wayCodeTab,
+      state,
+      keyword: searchKeyword.trim(),
+    })
+  }
+
+  const onReset = () => {
+    setOrderTypeTab("collection")
+    setCurrencyTab("all")
+    setWayCodeTab("all")
+    setState("all")
+    setSearchKeyword("")
+    setCurrent(1)
+    setApplied({ orderType: "collection", currency: "all", wayCode: "all", state: "all", keyword: "" })
+  }
+
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [detailError, setDetailError] = useState<string | null>(null)
+  const [detail, setDetail] = useState<PayOrder | null>(null)
+  const [detailRow, setDetailRow] = useState<PayOrder | null>(null)
+  const detailAbortRef = useRef<AbortController | null>(null)
+
+  const openDetail = async (row: PayOrder) => {
+    const id = String((row as any).payOrderId || (row as any).id || "")
+    if (!id) return
+    setDetailOpen(true)
+    setDetail(null)
+    setDetailError(null)
+    setDetailRow(row)
+    detailAbortRef.current?.abort()
+    detailAbortRef.current = new AbortController()
+    setDetailLoading(true)
+    try {
+      const res = await payOrderApis.getPayOrderDetail(id, { signal: detailAbortRef.current.signal })
+      if (detailAbortRef.current.signal.aborted) return
+      setDetail(res)
+    } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") return
+      setDetailError(e instanceof Error ? e.message : "加载失败")
+    } finally {
+      setDetailLoading(false)
     }
   }
 
-  const handleReverify = () => {
-    if (currentOrder) {
-      const updatedOrders = orders.map(order => {
-        if (order.id === currentOrder.id && order.status === "failed") {
-          return { ...order, status: "success" as const, paidAt: new Date().toLocaleString('zh-CN') }
-        }
-        return order
-      })
-      setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 已重新校验并更新为成功状态`)
-      setTimeout(() => setActionMessage(null), 3000)
-      setIsReverifyDialogOpen(false)
-      setCurrentOrder(null)
+  const infoDetails = useMemo(() => {
+    const src: any = detail || detailRow || {}
+    const wayName = String(src.wayName || src.paymentChannel || src.wayCode || "").trim()
+    const base = wayName ? normalizeChannelName(wayName) : "其他"
+    const type = orderTypeTab === "collection" ? `${base}收款` : `${base}付款`
+
+    const ifParamsObj = tryJson(src.ifParams) || tryJson(src.channelParams) || tryJson(src.payParams) || {}
+    const pick = (keys: string[]) => {
+      for (const k of keys) {
+        const v = (ifParamsObj as any)?.[k]
+        if (v === undefined || v === null) continue
+        const s = String(v).trim()
+        if (s) return s
+      }
+      return ""
+    }
+
+    const isCollection = orderTypeTab === "collection"
+    const account = pick(["account", "payAccount", "accountNo", "acct", "userName", "loginName"])
+    const mchId = pick(["mchId", "merchantNo", "merchantId", "partnerId", "pid"])
+    const qr = pick(["qrCode", "qrcode", "payUrl", "url", "qr", "codeUrl"])
+
+    const details: { label: string; value: string }[] = []
+    if (account) details.push({ label: isCollection ? "收款账号" : "付款账号", value: account })
+    if (mchId) details.push({ label: isCollection ? "商户号" : "商户号", value: mchId })
+    if (qr) details.push({ label: isCollection ? "收款二维码" : "付款信息", value: qr })
+
+    if (!details.length) {
+      const mchNo = String(src.mchNo || "").trim()
+      const payOrderId = String(src.payOrderId || src.id || "").trim()
+      if (mchNo) details.push({ label: "商户号", value: mchNo })
+      if (wayName) details.push({ label: "支付通道", value: wayName })
+      if (payOrderId) details.push({ label: "订单号", value: payOrderId })
+      if (!details.length) details.push({ label: isCollection ? "收款信息" : "付款信息", value: "暂无详细信息" })
+    }
+
+    return { type, details }
+  }, [detail, detailRow, orderTypeTab])
+
+  type ActionType = "notify" | "reissue" | "manual_freeze" | "manual_unfreeze" | "manual_refund" | "refunds"
+  const [actionOpen, setActionOpen] = useState(false)
+  const [actionType, setActionType] = useState<ActionType>("notify")
+  const [actionRow, setActionRow] = useState<PayOrder | null>(null)
+  const [actionMchNo, setActionMchNo] = useState("")
+  const [refundAmount, setRefundAmount] = useState("")
+  const [refundReason, setRefundReason] = useState("")
+  const [acting, setActing] = useState(false)
+  const [actionErr, setActionErr] = useState<string | null>(null)
+
+  const openAction = (t: ActionType, row: PayOrder) => {
+    setActionType(t)
+    setActionRow(row)
+    setActionErr(null)
+    setRefundAmount("")
+    setRefundReason("")
+    setActionMchNo(String((row as any).mchNo || ""))
+    setActionOpen(true)
+  }
+
+  const doAction = async () => {
+    if (!actionRow) return
+    const id = String((actionRow as any).payOrderId || (actionRow as any).id || "")
+    if (!id) return
+    setActing(true)
+    setActionErr(null)
+    try {
+      if (actionType === "notify") await payOrderApis.manualNotify(id)
+      if (actionType === "reissue") await payOrderApis.reissueManualOrder(id)
+      if (actionType === "manual_freeze") {
+        if (!actionMchNo.trim()) throw new Error("mchNo 必填")
+        await payOrderApis.manualFreeze(id, actionMchNo.trim())
+      }
+      if (actionType === "manual_unfreeze") {
+        if (!actionMchNo.trim()) throw new Error("mchNo 必填")
+        await payOrderApis.manualUnfreeze(id, actionMchNo.trim())
+      }
+      if (actionType === "manual_refund") {
+        if (!actionMchNo.trim()) throw new Error("mchNo 必填")
+        await payOrderApis.manualRefund(id, actionMchNo.trim())
+      }
+      if (actionType === "refunds") {
+        const amt = toNum(refundAmount)
+        if (amt === undefined) throw new Error("refundAmount 必填")
+        await payOrderApis.refunds(id, amt, refundReason.trim() || undefined)
+      }
+
+      setActionOpen(false)
+      await fetchList()
+    } catch (e) {
+      setActionErr(e instanceof Error ? e.message : "操作失败")
+    } finally {
+      setActing(false)
     }
   }
 
-  const handleFreeze = () => {
-    if (currentOrder) {
-      const updatedOrders = orders.map(order => {
-        if (order.id === currentOrder.id) {
-          return { ...order, status: "failed" as const }
-        }
-        return order
+  const [exporting, setExporting] = useState(false)
+  const exportOrders = async () => {
+    setExporting(true)
+    try {
+      const k = pickSearchField(applied.keyword)
+      const payType = toPayType(applied.orderType)
+      const { blob, filename } = await payOrderApis.download({
+        payType,
+        currency: applied.currency === "all" ? undefined : applied.currency,
+        wayCode: applied.wayCode === "all" ? undefined : applied.wayCode,
+        state: applied.state === "all" ? undefined : applied.state,
+        ...k,
       })
-      setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 已冻结`)
-      setTimeout(() => setActionMessage(null), 3000)
-      setIsFreezeDialogOpen(false)
-      setCurrentOrder(null)
+      dl(blob, filename)
+    } finally {
+      setExporting(false)
     }
-  }
-
-  const handleRefund = () => {
-    if (currentOrder) {
-      const updatedOrders = orders.map(order => {
-        if (order.id === currentOrder.id) {
-          return { ...order, status: "failed" as const }
-        }
-        return order
-      })
-      setOrders(updatedOrders)
-      setActionMessage(`订单 ${currentOrder.id} 已退款，金额 $${currentOrder.amount.toFixed(2)} 已退回用户账户`)
-      setTimeout(() => setActionMessage(null), 3000)
-      setIsRefundDialogOpen(false)
-      setCurrentOrder(null)
-    }
-  }
-
-  const openResendDialog = (order: Order) => {
-    setCurrentOrder(order)
-    setIsResendDialogOpen(true)
-  }
-
-  const openReverifyDialog = (order: Order) => {
-    setCurrentOrder(order)
-    setIsReverifyDialogOpen(true)
-  }
-
-  const openFreezeDialog = (order: Order) => {
-    setCurrentOrder(order)
-    setIsFreezeDialogOpen(true)
-  }
-
-  const openRefundDialog = (order: Order) => {
-    setCurrentOrder(order)
-    setIsRefundDialogOpen(true)
-  }
-
-  const openInfoDialog = (order: Order) => {
-    setCurrentOrder(order)
-    setIsInfoDialogOpen(true)
-  }
-
-  const getInfoDetails = () => {
-    if (!currentOrder) return { type: "", details: [] }
-    return orderTypeTab === "collection" 
-      ? getCollectionInfo(currentOrder.paymentChannel)
-      : getPaymentInfo(currentOrder.paymentChannel)
   }
 
   return (
     <div className="p-6 space-y-6">
-      {actionMessage && (
-        <div className="bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg">
-          {actionMessage}
-        </div>
-      )}
-
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">法币订单管理</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            管理平台的代收订单和代付订单
-          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">支付订单</p>
         </div>
-        <Tabs value={orderTypeTab} onValueChange={handleOrderTypeChange}>
-          <TabsList>
-            <TabsTrigger value="collection">代收订单</TabsTrigger>
-            <TabsTrigger value="payout">代付订单</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={fetchList} disabled={loading}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            刷新
+          </Button>
+          <Button onClick={exportOrders} disabled={exporting} className="bg-custom-green hover:bg-custom-green/90 text-white">
+            <FileDown className="w-4 h-4 mr-2" />
+            导出
+          </Button>
+          <Tabs
+            value={orderTypeTab}
+            onValueChange={(v) => {
+              const ot = v as OrderTypeTab
+              setOrderTypeTab(ot)
+              setCurrencyTab("all")
+              setWayCodeTab("all")
+              setCurrent(1)
+              setApplied({
+                orderType: ot,
+                currency: "all",
+                wayCode: "all",
+                state,
+                keyword: searchKeyword.trim(),
+              })
+            }}
+          >
+            <TabsList>
+              <TabsTrigger value="collection">代收订单</TabsTrigger>
+              <TabsTrigger value="payout">代付订单</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </div>
 
       <div className="space-y-4">
         <div>
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">币种筛选</label>
-          <Tabs value={selectedCurrency} onValueChange={handleCurrencyChange}>
-            <TabsList className="grid grid-cols-6 w-full max-w-2xl">
-              {currencies.map(currency => (
-                <TabsTrigger key={currency} value={currency}>
-                  {currency}
+          <Tabs
+            value={currencyTab}
+            onValueChange={(v) => {
+              setCurrencyTab(v)
+              setWayCodeTab("all")
+              setCurrent(1)
+              setApplied({
+                orderType: orderTypeTab,
+                currency: v,
+                wayCode: "all",
+                state,
+                keyword: searchKeyword.trim(),
+              })
+            }}
+          >
+            <TabsList className="flex-wrap h-auto">
+              {currencyOptions.map((c) => (
+                <TabsTrigger key={c} value={c}>
+                  {c === "all" ? "全部" : c}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -477,40 +558,68 @@ export default function FiatOrdersPage() {
 
         <div>
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">支付通道筛选</label>
-          <Tabs value={selectedChannel} onValueChange={setSelectedChannel}>
-            <TabsList className={`grid w-full max-w-3xl`} style={{ gridTemplateColumns: `repeat(${availableChannels.length}, minmax(0, 1fr))` }}>
-              {availableChannels.map(channel => (
-                <TabsTrigger key={channel} value={channel}>
-                  {channel}
+          <Tabs
+            value={wayCodeTab}
+            onValueChange={(v) => {
+              setWayCodeTab(v)
+              setCurrent(1)
+              setApplied({
+                orderType: orderTypeTab,
+                currency: currencyTab,
+                wayCode: v,
+                state,
+                keyword: searchKeyword.trim(),
+              })
+            }}
+          >
+            <TabsList className="flex-wrap h-auto">
+              {wayCodes.map((w) => (
+                <TabsTrigger key={w} value={w}>
+                  {w === "all" ? "全部" : (wayLabel.get(w) || w)}
                 </TabsTrigger>
               ))}
             </TabsList>
           </Tabs>
         </div>
 
-        <div className="flex gap-4 items-center">
-          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="全部">全部</SelectItem>
-              <SelectItem value="待支付">待支付</SelectItem>
-              <SelectItem value="成功">成功</SelectItem>
-              <SelectItem value="失败">失败</SelectItem>
-            </SelectContent>
-          </Select>
+        <Card className="p-4">
+          <div className="flex flex-col md:flex-row gap-3 md:items-center">
+            <Select value={state} onValueChange={setState}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="状态" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全部</SelectItem>
+              <SelectItem value="0">订单生成</SelectItem>
+              <SelectItem value="1">支付中</SelectItem>
+              <SelectItem value="2">支付成功</SelectItem>
+              <SelectItem value="3">支付失败</SelectItem>
+              <SelectItem value="4">已撤销</SelectItem>
+              <SelectItem value="5">已退款</SelectItem>
+              <SelectItem value="6">订单关闭</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <div className="flex-1">
-            <SearchControls
+            <Input
               placeholder="搜索订单号、商户ID..."
-              value={searchInput}
-              onChange={setSearchInput}
-              onSearch={handleSearch}
-              onReset={handleReset}
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") onSearch()
+              }}
+              className="flex-1"
             />
+
+            <div className="flex items-center gap-2">
+              <Button onClick={onSearch} className="bg-custom-green hover:bg-custom-green/90 text-white" disabled={loading}>
+                搜索
+              </Button>
+              <Button onClick={onReset} variant="outline" disabled={loading}>
+                重置
+              </Button>
+            </div>
           </div>
-        </div>
+        </Card>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -518,240 +627,200 @@ export default function FiatOrdersPage() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  订单信息
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  商户
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  支付信息
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  金额
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  时间
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  状态
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  操作
-                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">订单信息</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">商户</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">支付信息</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">金额</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">时间</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">状态</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="px-4 py-3 text-sm">
-                    <div className="font-medium text-gray-900 dark:text-white">{order.id}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">上游: {order.upstreamOrderId}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs">下游: {order.downstreamOrderId}</div>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                    {order.merchantId}
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
-                        {order.currency}
+              {records.map((r, idx) => {
+                const id = String((r as any).payOrderId || (r as any).id || idx)
+                const mch = String((r as any).mchNo || (r as any).merchantId || "-")
+                const currency = String((r as any).currency || "-")
+                const way = String((r as any).wayCode || "-")
+                const ifCode = String((r as any).ifCode || "-")
+                const amount = (r as any).amount
+                const fee = (r as any).fee
+                const createdAt = String((r as any).createdAt || "-").replace("T", " ")
+                const st = stateMeta((r as any).state)
+
+                return (
+                  <tr key={id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="px-4 py-3 text-sm">
+                      <div className="font-medium text-gray-900 dark:text-white">{String((r as any).payOrderId || (r as any).id || "-")}</div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{ifCode}</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">{mch}</td>
+                    <td className="px-4 py-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
+                          {currency}
+                        </span>
+                        <span className="text-gray-900 dark:text-gray-300 text-xs">{way}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <div className="text-gray-900 dark:text-white font-medium">{amount !== undefined ? `$${Number(amount).toFixed(2)}` : "-"}</div>
+                      <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">{fee !== undefined ? `费: $${Number(fee).toFixed(2)}` : "-"}</div>
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      <div className="text-gray-900 dark:text-gray-300 text-xs">{createdAt}</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${st.className}`}>
+                        {st.label}
                       </span>
-                      <span className="text-gray-900 dark:text-gray-300 text-xs">{order.paymentChannel}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="text-gray-900 dark:text-white font-medium">${order.amount.toFixed(2)}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">费: ${order.fee.toFixed(2)}</div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="text-gray-900 dark:text-gray-300 text-xs">{order.createdAt}</div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-                      {order.paidAt ? `付: ${order.paidAt}` : "-"}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      order.status === "success"
-                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                        : order.status === "pending"
-                        ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                        : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
-                    }`}>
-                      {order.status === "success" ? "已成功" : order.status === "pending" ? "等待付款" : "已失效"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openInfoDialog(order)}
-                        className="text-purple-600 hover:text-purple-800 dark:text-purple-400"
-                        title={orderTypeTab === "collection" ? "收款信息" : "付款信息"}
-                      >
-                        <Info className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openResendDialog(order)}
-                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="补发通知"
-                        disabled={order.status !== "success"}
-                      >
-                        <Send className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openReverifyDialog(order)}
-                        className="text-green-600 hover:text-green-800 dark:text-green-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="重新校验"
-                        disabled={order.status !== "failed"}
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openFreezeDialog(order)}
-                        className="text-orange-600 hover:text-orange-800 dark:text-orange-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="冻结订单"
-                        disabled={order.status !== "success"}
-                      >
-                        <Lock className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openRefundDialog(order)}
-                        className="text-red-600 hover:text-red-800 dark:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="订单退款"
-                        disabled={order.status !== "success"}
-                      >
-                        <RotateCcw className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <div className="flex items-center gap-1">
+                        <Button variant="ghost" size="sm" onClick={() => openDetail(r)} title="详情" className="text-purple-600">
+                          <Info className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("notify", r)} title="补发通知" className="text-blue-600">
+                          <Send className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("reissue", r)} title="手动补单" className="text-green-600">
+                          <RefreshCw className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("manual_freeze", r)} title="手动冻结" className="text-orange-600">
+                          <Lock className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("manual_unfreeze", r)} title="手动解冻" className="text-orange-600">
+                          <Unlock className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("manual_refund", r)} title="手动退款" className="text-red-600">
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => openAction("refunds", r)} title="发起退款" className="text-red-600">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
 
-        {filteredOrders.length === 0 && (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            暂无数据
+        {loading && (
+          <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+            <span className="inline-flex items-center">
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              加载中...
+            </span>
           </div>
         )}
 
-        {filteredOrders.length > 0 && (
-          <DataTotal total={filteredOrders.length} />
+        {!loading && records.length === 0 && (
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">暂无数据</div>
+        )}
+
+        <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
+          <DataTotal total={total} />
+          <div className="p-4 flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setCurrent((p) => Math.max(1, p - 1))} disabled={loading || current <= 1}>
+              上一页
+            </Button>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              第 {current} / {totalPages} 页
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrent((p) => Math.min(totalPages, p + 1))}
+              disabled={loading || current >= totalPages || !(data?.hasNext ?? false)}
+            >
+              下一页
+            </Button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="p-4 text-center text-red-600 dark:text-red-400 text-sm border-t border-gray-200 dark:border-gray-700">
+            {error}
+          </div>
         )}
       </div>
 
-      <Dialog open={isResendDialogOpen} onOpenChange={setIsResendDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>补发通知</DialogTitle>
-            <DialogDescription>
-              确定要补发订单 "{currentOrder?.id}" 的通知吗？
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsResendDialogOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={handleResend} className="bg-blue-600 hover:bg-blue-700">
-              补发
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isReverifyDialogOpen} onOpenChange={setIsReverifyDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>重新校验</DialogTitle>
-            <DialogDescription>
-              确定要重新校验订单 "{currentOrder?.id}" 吗？
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsReverifyDialogOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={handleReverify} className="bg-green-600 hover:bg-green-700">
-              校验
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isFreezeDialogOpen} onOpenChange={setIsFreezeDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>冻结订单</DialogTitle>
-            <DialogDescription>
-              确定要冻结订单 "{currentOrder?.id}" 吗？冻结后将暂停该订单的所有操作。
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsFreezeDialogOpen(false)}>
-              取消
-            </Button>
-            <Button onClick={handleFreeze} className="bg-orange-600 hover:bg-orange-700">
-              冻结
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isRefundDialogOpen} onOpenChange={setIsRefundDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>订单退款</DialogTitle>
-            <DialogDescription>
-              确定要退款订单 "{currentOrder?.id}" 吗？金额 ${currentOrder?.amount.toFixed(2)} 将退回到用户账户。此操作不可撤销。
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRefundDialogOpen(false)}>
-              取消
-            </Button>
-            <Button variant="destructive" onClick={handleRefund}>
-              确认退款
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
+      <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>{orderTypeTab === "collection" ? "收款信息" : "付款信息"}</DialogTitle>
             <DialogDescription>
-              订单 "{currentOrder?.id}" 的{orderTypeTab === "collection" ? "收款" : "付款"}账户详情
+              订单 "{String((detailRow as any)?.payOrderId || (detailRow as any)?.id || "-")}" 的{orderTypeTab === "collection" ? "收款" : "付款"}账户详情
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
-              <div className="text-sm font-medium text-purple-900 dark:text-purple-300 mb-3">
-                {getInfoDetails().type}
-              </div>
-              <div className="space-y-3">
-                {getInfoDetails().details.map((detail, index) => (
-                  <div key={index} className="flex flex-col">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">{detail.label}</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white break-all">{detail.value}</span>
-                  </div>
-                ))}
+          {detailLoading ? (
+            <div className="py-10 text-center text-sm text-gray-500 dark:text-gray-400">
+              <span className="inline-flex items-center">
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                加载中...
+              </span>
+            </div>
+          ) : detailError ? (
+            <div className="py-6 text-sm text-red-600">{detailError}</div>
+          ) : (
+            <div className="space-y-4 py-4">
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                <div className="text-sm font-medium text-purple-900 dark:text-purple-300 mb-3">{infoDetails.type}</div>
+                <div className="space-y-3">
+                  {infoDetails.details.map((d, idx) => (
+                    <div key={idx} className="flex flex-col">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">{d.label}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white break-all">{d.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={actionOpen} onOpenChange={setActionOpen}>
+        <DialogContent className="sm:max-w-[560px]">
+          <DialogHeader>
+            <DialogTitle>订单操作</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <div className="text-sm text-gray-500 dark:text-gray-400">{String((actionRow as any)?.payOrderId || (actionRow as any)?.id || "-")}</div>
+
+            {(actionType === "manual_refund" || actionType === "manual_freeze" || actionType === "manual_unfreeze") && (
+              <Input placeholder="mchNo" value={actionMchNo} onChange={(e) => setActionMchNo(e.target.value)} />
+            )}
+
+            {actionType === "refunds" && (
+              <>
+                <Input placeholder="refundAmount" value={refundAmount} onChange={(e) => setRefundAmount(e.target.value)} />
+                <Input placeholder="refundReason" value={refundReason} onChange={(e) => setRefundReason(e.target.value)} />
+              </>
+            )}
+
+            {actionErr && <div className="text-sm text-red-600">{actionErr}</div>}
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setActionOpen(false)} disabled={acting}>
+              取消
+            </Button>
+            <Button onClick={doAction} className="bg-custom-green hover:bg-custom-green/90" disabled={acting}>
+              {acting ? (
+                <span className="inline-flex items-center">
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  处理中
+                </span>
+              ) : (
+                "确认"
+              )}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
     </div>
   )
 }
+

@@ -34,8 +34,8 @@ export interface PaginatedResponse<T> {
 
 export interface GetFiatListParams {
   currencyCode?: string;
-  current?: number;
-  size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface CreateFiatRequest {
@@ -193,11 +193,11 @@ class FiatAPI {
     if (params?.currencyCode) {
       queryParams.append('currencyCode', params.currencyCode);
     }
-    if (params?.current !== undefined) {
-      queryParams.append('current', params.current.toString());
+    if (params?.pageNumber !== undefined) {
+      queryParams.append('pageNumber', params.pageNumber.toString());
     }
-    if (params?.size !== undefined) {
-      queryParams.append('size', params.size.toString());
+    if (params?.pageSize !== undefined) {
+      queryParams.append('pageSize', params.pageSize.toString());
     }
 
     const queryString = queryParams.toString();

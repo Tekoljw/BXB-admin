@@ -1,0 +1,187 @@
+import { storageUtils } from '../utils/storage-util';
+
+export type AgentRankType = 'today' | 'yesterday' | 'month' | 'total' | 'merchantCount';
+
+export interface AgentSummary {
+  mchNo: string;
+  mchName?: string;
+  userId?: string;
+  email?: string;
+  phone?: string;
+  state?: number;
+  merchantCount?: number;
+  todayCommission?: number;
+  yesterdayCommission?: number;
+  monthCommission?: number;
+  totalCommission?: number;
+  [key: string]: any;
+}
+
+export interface AgentCommissionRate {
+  [key: string]: any;
+}
+
+export interface AgentCommissionRecord {
+  [key: string]: any;
+}
+
+export interface AgentsPageResponse<T> {
+  records: T[];
+  total: number;
+  pageNumber?: number;
+  pageSize?: number;
+  current?: number;
+  size?: number;
+  pages?: number;
+  hasNext?: boolean;
+  [key: string]: any;
+}
+
+export interface GetAgentsParams {
+  rankType?: AgentRankType;
+  keyword?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  signal?: AbortSignal;
+}
+
+export interface GetAgentRecordsParams {
+  mchNo: string;
+  startDate?: string;
+  endDate?: string;
+  subMchNo?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  signal?: AbortSignal;
+}
+
+class FiatCommissionAPI {
+  private getPaymentApiBaseUrl(): string {
+    const paymentApiBaseUrl = process.env.NEXT_PUBLIC_PAYMENT_API_BASE_URL || 'http://pay.ubtai.biz/manager';
+    if (
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ) {
+      return paymentApiBaseUrl;
+    }
+    return paymentApiBaseUrl;
+  }
+
+  private getAccessToken(): string {
+    if (typeof window === 'undefined') return '';
+
+    try {
+      let token = storageUtils.disk.get<string>('accessToken', '');
+      if (token) return token;
+
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const trimmed = cookie.trim();
+        if (!trimmed) continue;
+
+        const eqIndex = trimmed.indexOf('=');
+        if (eqIndex === -1) continue;
+
+        const cookieName = trimmed.substring(0, eqIndex).trim();
+        const cookieValue = trimmed.substring(eqIndex + 1).trim();
+
+        if (cookieName === 'token' && cookieValue) {
+          try {
+            const decoded = decodeURIComponent(cookieValue);
+            return decoded || cookieValue;
+          } catch {
+            return cookieValue;
+          }
+        }
+      }
+
+      token = sessionStorage.getItem('accessToken') || '';
+      if (token) return token;
+
+      token = localStorage.getItem('admin.accessToken') || '';
+      if (token) return token;
+    } catch {
+      // ignore
+    }
+
+    return '';
+  }
+
+  private async paymentApiRequest<T>(
+    url: string,
+    options?: { method?: 'GET' | 'POST'; body?: any; signal?: AbortSignal }
+  ): Promise<T> {
+    const baseURL = this.getPaymentApiBaseUrl();
+    const fullUrl = `${baseURL}${url}`;
+
+    const token = this.getAccessToken();
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const response = await fetch(fullUrl, {
+      method: options?.method || 'GET',
+      headers,
+      body: options?.body !== undefined ? JSON.stringify(options.body) : undefined,
+      signal: options?.signal,
+    });
+
+    if (!response.ok) {
+      const text = await response.text().catch(() => '');
+      throw new Error(`HTTP ${response.status}: ${text || response.statusText}`);
+    }
+
+    const result = await response.json();
+    if (result.code !== undefined && result.code !== 0) {
+      throw new Error(result.msg || '请求失败');
+    }
+    return result.data !== undefined ? result.data : result;
+  }
+
+  async getAgents(params?: GetAgentsParams): Promise<AgentsPageResponse<AgentSummary>> {
+    const qs = new URLSearchParams();
+    if (params?.rankType) qs.append('rankType', params.rankType);
+    if (params?.keyword) qs.append('keyword', params.keyword);
+    if (params?.pageNumber !== undefined) qs.append('pageNumber', String(params.pageNumber));
+    if (params?.pageSize !== undefined) qs.append('pageSize', String(params.pageSize));
+    const q = qs.toString();
+    return await this.paymentApiRequest<AgentsPageResponse<AgentSummary>>(
+      `/api/fiat/commission/agents${q ? `?${q}` : ''}`,
+      { signal: params?.signal }
+    );
+  }
+
+  async getAgentCommissionRates(mchNo: string, options?: { signal?: AbortSignal }): Promise<AgentCommissionRate[]> {
+    return await this.paymentApiRequest<AgentCommissionRate[]>(
+      `/api/fiat/commission/agents/${encodeURIComponent(mchNo)}/commissionRates`,
+      { signal: options?.signal }
+    );
+  }
+
+  async getAgentRecords(params: GetAgentRecordsParams): Promise<AgentsPageResponse<AgentCommissionRecord>> {
+    const qs = new URLSearchParams();
+    if (params.startDate) qs.append('startDate', params.startDate);
+    if (params.endDate) qs.append('endDate', params.endDate);
+    if (params.subMchNo) qs.append('subMchNo', params.subMchNo);
+    if (params.pageNumber !== undefined) qs.append('pageNumber', String(params.pageNumber));
+    if (params.pageSize !== undefined) qs.append('pageSize', String(params.pageSize));
+    const q = qs.toString();
+    return await this.paymentApiRequest<AgentsPageResponse<AgentCommissionRecord>>(
+      `/api/fiat/commission/agents/${encodeURIComponent(params.mchNo)}/records${q ? `?${q}` : ''}`,
+      { signal: params.signal }
+    );
+  }
+
+  async updateAgentState(mchNo: string, state: 0 | 1, options?: { signal?: AbortSignal }): Promise<void> {
+    return await this.paymentApiRequest<void>(`/api/fiat/commission/agents/${encodeURIComponent(mchNo)}/state`, {
+      method: 'POST',
+      body: { state },
+      signal: options?.signal,
+    });
+  }
+}
+
+export const fiatCommissionApis = new FiatCommissionAPI();
+

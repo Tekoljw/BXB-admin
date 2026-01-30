@@ -74,8 +74,8 @@ export default function SuppliersPage() {
         providerNo: applied.providerNo || undefined,
         providerName: applied.providerName || undefined,
         state: applied.state === "all" ? undefined : Number(applied.state),
-        current,
-        size,
+        pageNumber: current,
+        pageSize: size,
         signal: abortRef.current.signal,
       })
       if (abortRef.current.signal.aborted) return

@@ -281,8 +281,8 @@ export default function CurrenciesPage() {
       abortControllerRef.current = new AbortController()
 
       const response = await fiatApis.getFiatList({ 
-        current: 1, 
-        size,
+        pageNumber: 1,
+        pageSize: size,
         signal: abortControllerRef.current.signal
       })
       
@@ -335,8 +335,8 @@ export default function CurrenciesPage() {
         setError(null)
 
         const response = await fiatApis.getFiatList({ 
-          current: 1, 
-          size: 1000,
+          pageNumber: 1,
+          pageSize: 1000,
           signal
         })
         

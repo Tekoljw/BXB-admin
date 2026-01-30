@@ -52,8 +52,8 @@ export interface GetMchInfoListParams {
   mchName?: string;
   type?: number;
   state?: number;
-  current?: number;
-  size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface CreateMchInfoRequest {
@@ -237,11 +237,11 @@ class MchInfoAPI {
     if (params?.state !== undefined) {
       queryParams.append('state', params.state.toString());
     }
-    if (params?.current !== undefined) {
-      queryParams.append('current', params.current.toString());
+    if (params?.pageNumber !== undefined) {
+      queryParams.append('pageNumber', params.pageNumber.toString());
     }
-    if (params?.size !== undefined) {
-      queryParams.append('size', params.size.toString());
+    if (params?.pageSize !== undefined) {
+      queryParams.append('pageSize', params.pageSize.toString());
     }
 
     const queryString = queryParams.toString();

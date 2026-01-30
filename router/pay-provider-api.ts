@@ -25,8 +25,8 @@ export interface GetPayProviderListParams {
   providerNo?: string;
   providerName?: string;
   state?: number;
-  current?: number;
-  size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface CreatePayProviderRequest {
@@ -162,8 +162,8 @@ class PayProviderAPI {
     if (params?.providerNo) queryParams.append('providerNo', params.providerNo);
     if (params?.providerName) queryParams.append('providerName', params.providerName);
     if (params?.state !== undefined) queryParams.append('state', String(params.state));
-    if (params?.current !== undefined) queryParams.append('current', String(params.current));
-    if (params?.size !== undefined) queryParams.append('size', String(params.size));
+    if (params?.pageNumber !== undefined) queryParams.append('pageNumber', String(params.pageNumber));
+    if (params?.pageSize !== undefined) queryParams.append('pageSize', String(params.pageSize));
 
     const qs = queryParams.toString();
     const url = `/api/payProvider${qs ? `?${qs}` : ''}`;

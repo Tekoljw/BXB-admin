@@ -83,8 +83,8 @@ export default function FiatUsersPage() {
         mchName: applied.mchName || undefined,
         type: applied.type === "all" ? undefined : Number(applied.type),
         state: applied.state === "all" ? undefined : Number(applied.state),
-        current,
-        size,
+        pageNumber: current,
+        pageSize: size,
         signal: abortRef.current.signal,
       })
       if (abortRef.current.signal.aborted) return
